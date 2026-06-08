@@ -1,0 +1,383 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Press+Start+2P&display=swap');
+
+/* ===== RESET & BASE ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --yellow: #FFE500;
+  --pink: #FF006E;
+  --blue: #00D4FF;
+  --green: #39FF14;
+  --purple: #BF5FFF;
+  --orange: #FF6B00;
+  --dark: #0a0a0a;
+  --card: #111827;
+  --card2: #1a1a2e;
+  --border: rgba(255,255,255,0.08);
+  --white: #ffffff;
+  --ts-primary: #1e3a5f;
+  --ts-secondary: #e85d04;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Comic Sans MS', 'Comic Sans', cursive;
+  background-color: var(--dark);
+  color: var(--white);
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* ===== CUSTOM CURSOR ===== */
+.custom-cursor {
+  width: 24px; height: 24px;
+  position: fixed;
+  top: 0; left: 0;
+  pointer-events: none;
+  z-index: 99999;
+  font-size: 22px;
+  transform: translate(-50%, -50%);
+  transition: transform 0.05s;
+}
+.cursor-trail {
+  position: fixed;
+  pointer-events: none;
+  z-index: 99998;
+  font-size: 16px;
+  animation: trailFade 0.8s forwards;
+}
+@keyframes trailFade {
+  0% { opacity: 1; transform: scale(1) translateY(0); }
+  100% { opacity: 0; transform: scale(0.3) translateY(-30px); }
+}
+
+/* ===== MEME TICKER ===== */
+.ticker-wrap {
+  background: linear-gradient(90deg, var(--pink), var(--yellow), var(--blue), var(--green), var(--pink));
+  background-size: 300% 100%;
+  animation: tickerGradient 3s linear infinite;
+  padding: 6px 0;
+  overflow: hidden;
+  white-space: nowrap;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+@keyframes tickerGradient {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 300% 50%; }
+}
+.ticker-content {
+  display: inline-block;
+  animation: tickerScroll 30s linear infinite;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 10px;
+  color: #000;
+  font-weight: 900;
+}
+@keyframes tickerScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ===== NAVBAR ===== */
+.meme-nav {
+  background: rgba(0,0,0,0.95);
+  backdrop-filter: blur(20px);
+  border-bottom: 2px solid var(--yellow);
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 70px;
+  position: sticky;
+  top: 28px;
+  z-index: 999;
+  box-shadow: 0 4px 30px rgba(255,229,0,0.2);
+}
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+.nav-logo svg {
+  fill: var(--yellow);
+  width: 120px;
+  animation: logoWobble 3s ease-in-out infinite;
+}
+@keyframes logoWobble {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-2deg) scale(1.02); }
+  75% { transform: rotate(2deg) scale(0.98); }
+}
+.nav-logo-badge {
+  background: var(--pink);
+  color: white;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 7px;
+  padding: 3px 6px;
+  border-radius: 4px;
+  animation: badgePulse 1s ease-in-out infinite;
+}
+@keyframes badgePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+.nav-links {
+  display: flex;
+  gap: 1.5rem;
+  list-style: none;
+  align-items: center;
+}
+.nav-links a {
+  color: var(--white);
+  text-decoration: none;
+  font-family: 'Comic Sans MS', cursive;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+  position: relative;
+}
+.nav-links a:hover {
+  color: var(--yellow);
+  transform: rotate(-3deg) scale(1.1);
+}
+.nav-links a.active {
+  color: var(--yellow);
+}
+.nav-cta {
+  background: linear-gradient(135deg, var(--pink), var(--orange));
+  color: white !important;
+  padding: 8px 18px;
+  border-radius: 8px;
+  font-weight: bold;
+  font-family: 'Bebas Neue', cursive !important;
+  font-size: 1rem !important;
+  letter-spacing: 1px;
+  transition: all 0.3s !important;
+  box-shadow: 0 0 15px rgba(255,0,110,0.4);
+}
+.nav-cta:hover {
+  transform: scale(1.05) rotate(0deg) !important;
+  box-shadow: 0 0 30px rgba(255,0,110,0.8);
+}
+
+/* ===== IMPACT TEXT (classic meme style) ===== */
+.impact {
+  font-family: Impact, 'Bebas Neue', 'Arial Black', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+.impact-outlined {
+  font-family: Impact, 'Bebas Neue', 'Arial Black', sans-serif;
+  text-transform: uppercase;
+  color: white;
+  -webkit-text-stroke: 3px black;
+  text-shadow: 3px 3px 0 black, -3px -3px 0 black, 3px -3px 0 black, -3px 3px 0 black;
+  letter-spacing: 3px;
+}
+
+/* ===== SECTION STYLES ===== */
+.section-title {
+  font-family: 'Bebas Neue', Impact, cursive;
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  letter-spacing: 3px;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+.section-subtitle {
+  text-align: center;
+  color: rgba(255,255,255,0.6);
+  font-size: 0.9rem;
+  margin-bottom: 3rem;
+}
+section { padding: 5rem 2rem; }
+.container { max-width: 1200px; margin: 0 auto; }
+
+/* ===== GLITCH EFFECT ===== */
+.glitch {
+  position: relative;
+}
+.glitch::before, .glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+}
+.glitch::before {
+  color: var(--pink);
+  animation: glitch1 3s infinite;
+  clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
+}
+.glitch::after {
+  color: var(--blue);
+  animation: glitch2 3s infinite;
+  clip-path: polygon(0 65%, 100% 65%, 100% 100%, 0 100%);
+}
+@keyframes glitch1 {
+  0%, 90%, 100% { transform: none; }
+  92% { transform: translateX(-5px); }
+  94% { transform: translateX(5px); }
+  96% { transform: translateX(-3px); }
+  98% { transform: translateX(3px); }
+}
+@keyframes glitch2 {
+  0%, 85%, 100% { transform: none; }
+  87% { transform: translateX(5px); }
+  89% { transform: translateX(-5px); }
+  91% { transform: translateX(3px); }
+  93% { transform: translateX(-3px); }
+}
+
+/* ===== NEON GLOW ===== */
+.glow-yellow { text-shadow: 0 0 10px var(--yellow), 0 0 30px var(--yellow), 0 0 60px var(--yellow); color: var(--yellow); }
+.glow-pink { text-shadow: 0 0 10px var(--pink), 0 0 30px var(--pink), 0 0 60px var(--pink); color: var(--pink); }
+.glow-blue { text-shadow: 0 0 10px var(--blue), 0 0 30px var(--blue), 0 0 60px var(--blue); color: var(--blue); }
+.glow-green { text-shadow: 0 0 10px var(--green), 0 0 30px var(--green), 0 0 60px var(--green); color: var(--green); }
+
+/* ===== MEME CARD ===== */
+.meme-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.3s;
+  position: relative;
+}
+.meme-card:hover {
+  transform: translateY(-8px) rotate(0.5deg);
+  border-color: var(--yellow);
+  box-shadow: 0 20px 60px rgba(255,229,0,0.2);
+}
+
+/* ===== SPIN ANIMATION ===== */
+.spin { animation: spin360 4s linear infinite; }
+@keyframes spin360 { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+/* ===== BOUNCE ANIMATION ===== */
+.bounce { animation: bounceAnim 1s ease-in-out infinite; }
+@keyframes bounceAnim {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+/* ===== SHAKE ===== */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 90% { transform: translateX(-5px); }
+  20%, 80% { transform: translateX(5px); }
+  30%, 70% { transform: translateX(-8px); }
+  40%, 60% { transform: translateX(8px); }
+  50% { transform: translateX(-3px); }
+}
+.shake { animation: shake 0.5s; }
+
+/* ===== PROGRESS BAR (meme stats) ===== */
+.stat-bar {
+  background: rgba(255,255,255,0.1);
+  border-radius: 100px;
+  height: 8px;
+  overflow: hidden;
+  margin: 4px 0;
+}
+.stat-fill {
+  height: 100%;
+  border-radius: 100px;
+  animation: fillBar 1.5s ease-out forwards;
+}
+@keyframes fillBar {
+  from { width: 0 !important; }
+}
+
+/* ===== RAINBOW TEXT ===== */
+.rainbow {
+  background: linear-gradient(90deg, var(--pink), var(--yellow), var(--green), var(--blue), var(--purple));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200% 100%;
+  animation: rainbowShift 3s linear infinite;
+}
+@keyframes rainbowShift {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+/* ===== FOOTER ===== */
+.meme-footer {
+  background: #000;
+  border-top: 2px solid var(--yellow);
+  padding: 3rem 2rem;
+  text-align: center;
+}
+.meme-footer p {
+  color: rgba(255,255,255,0.4);
+  font-size: 0.8rem;
+  margin: 0.3rem 0;
+}
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin: 1rem 0;
+  flex-wrap: wrap;
+}
+.footer-links a {
+  color: var(--yellow);
+  text-decoration: none;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+}
+.footer-links a:hover { color: var(--pink); transform: scale(1.1) rotate(-3deg); display: inline-block; }
+
+/* ===== MEME POPUP ===== */
+.meme-popup {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: var(--card);
+  border: 2px solid var(--yellow);
+  border-radius: 16px;
+  padding: 1rem 1.5rem;
+  max-width: 300px;
+  z-index: 9999;
+  animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 10px 40px rgba(255,229,0,0.3);
+  display: none;
+}
+.meme-popup.visible { display: block; }
+@keyframes popIn {
+  from { transform: scale(0) translateY(100px); opacity: 0; }
+  to { transform: scale(1) translateY(0); opacity: 1; }
+}
+.popup-close {
+  position: absolute;
+  top: 8px; right: 12px;
+  background: none;
+  border: none;
+  color: var(--white);
+  cursor: pointer;
+  font-size: 1.2rem;
+}
+
+/* ===== EMOJI RAIN ===== */
+.emoji-rain {
+  position: fixed;
+  top: -50px;
+  pointer-events: none;
+  z-index: 9990;
+  animation: emojiRainFall linear forwards;
+  font-size: 1.5rem;
+  user-select: none;
+}
+@keyframes emojiRainFall {
+  to { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  section { padding: 3rem 1rem; }
+  .meme-popup { right: 10px; bottom: 10px; max-width: calc(100vw - 20px); }
+}

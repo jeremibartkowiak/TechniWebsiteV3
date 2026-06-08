@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Techni Schools 🔥 | Zostań Koderem (albo nie, idc)</title>
+  <meta name="description" content="Techni Schools - jedyne technikum gdzie nauczyciele też się boją matury. Aplikuj teraz. Błagamy.">
+  <link rel="stylesheet" href="meme.css">
+  <style>
+    /* ========== HERO ========== */
+    .hero {
+      min-height: 100vh;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      padding: 0;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('./Technikum Programistyczne Warszawa Lublin Wrocław_files/Kopia-TechniSchools-146_uid_643e4b61487a2.jpg');
+      background-size: cover;
+      background-position: center;
+      filter: brightness(0.25) saturate(1.5) hue-rotate(200deg);
+      animation: heroBgPulse 8s ease-in-out infinite;
+    }
+    @keyframes heroBgPulse {
+      0%, 100% { filter: brightness(0.25) saturate(1.5) hue-rotate(200deg); }
+      50% { filter: brightness(0.3) saturate(2) hue-rotate(220deg); }
+    }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: 
+        radial-gradient(ellipse at 20% 50%, rgba(255,0,110,0.2) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 50%, rgba(0,212,255,0.2) 0%, transparent 60%),
+        radial-gradient(ellipse at 50% 100%, rgba(255,229,0,0.1) 0%, transparent 50%);
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 2rem;
+      max-width: 1000px;
+    }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(255,229,0,0.15);
+      border: 1px solid var(--yellow);
+      color: var(--yellow);
+      font-family: 'Press Start 2P', cursive;
+      font-size: 9px;
+      padding: 8px 16px;
+      border-radius: 100px;
+      margin-bottom: 1.5rem;
+      animation: badgeGlow 2s ease-in-out infinite;
+    }
+    @keyframes badgeGlow {
+      0%, 100% { box-shadow: 0 0 10px rgba(255,229,0,0.3); }
+      50% { box-shadow: 0 0 30px rgba(255,229,0,0.7); }
+    }
+    .hero-title {
+      font-size: clamp(3.5rem, 12vw, 8rem);
+      line-height: 0.9;
+      margin-bottom: 1rem;
+    }
+    .hero-subtitle {
+      font-size: clamp(1rem, 2.5vw, 1.5rem);
+      color: rgba(255,255,255,0.75);
+      max-width: 600px;
+      margin: 0 auto 2rem;
+      line-height: 1.6;
+    }
+    .hero-subtitle em {
+      color: var(--yellow);
+      font-style: normal;
+    }
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn-meme {
+      display: inline-block;
+      padding: 14px 32px;
+      border-radius: 12px;
+      font-family: 'Bebas Neue', Impact, cursive;
+      font-size: 1.3rem;
+      letter-spacing: 2px;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--pink), var(--orange));
+      color: white;
+      box-shadow: 0 0 30px rgba(255,0,110,0.5);
+    }
+    .btn-primary:hover {
+      box-shadow: 0 0 60px rgba(255,0,110,0.8);
+      transform: translateY(-3px) scale(1.05);
+    }
+    .btn-secondary {
+      background: rgba(255,255,255,0.1);
+      color: white;
+      border: 2px solid rgba(255,255,255,0.3);
+      backdrop-filter: blur(10px);
+    }
+    .btn-secondary:hover {
+      background: rgba(255,255,255,0.2);
+      border-color: var(--yellow);
+      transform: translateY(-3px);
+    }
+    .hero-scroll-hint {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      color: rgba(255,255,255,0.5);
+      font-size: 0.75rem;
+      text-align: center;
+      animation: scrollHint 2s ease-in-out infinite;
+    }
+    @keyframes scrollHint {
+      0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.5; }
+      50% { transform: translateX(-50%) translateY(8px); opacity: 1; }
+    }
+
+    /* ========== LIVE STATS BAR ========== */
+    .stats-bar {
+      background: linear-gradient(135deg, #111827, #1a1a2e);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 1.5rem 2rem;
+    }
+    .stats-bar-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      text-align: center;
+    }
+    .stat-item {}
+    .stat-number {
+      font-family: 'Bebas Neue', Impact, cursive;
+      font-size: 3rem;
+      line-height: 1;
+      display: block;
+    }
+    .stat-label {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.5);
+      display: block;
+      margin-top: 2px;
+    }
+    .stat-sub {
+      font-size: 0.65rem;
+      color: rgba(255,255,255,0.3);
+      display: block;
+      font-style: italic;
+    }
+    @media (max-width: 600px) {
+      .stats-bar-inner { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    /* ========== WHY US ========== */
+    .why-us { background: linear-gradient(180deg, var(--dark) 0%, #0d1117 100%); }
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .why-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s;
+    }
+    .why-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--card-accent, var(--yellow));
+    }
+    .why-card:hover {
+      transform: translateY(-10px) rotate(-1deg);
+      border-color: var(--card-accent, var(--yellow));
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+    .why-icon {
+      font-size: 3.5rem;
+      display: block;
+      margin-bottom: 1rem;
+      animation: iconFloat 3s ease-in-out infinite;
+    }
+    @keyframes iconFloat {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-8px) rotate(5deg); }
+    }
+    .why-title {
+      font-family: 'Bebas Neue', Impact, cursive;
+      font-size: 1.5rem;
+      letter-spacing: 1px;
+      margin-bottom: 0.5rem;
+      color: var(--card-accent, var(--yellow));
+    }
+    .why-desc {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.6);
+      line-height: 1.6;
+    }
+    .why-fine-print {
+      font-size: 0.65rem;
+      color: rgba(255,255,255,0.2);
+      margin-top: 0.5rem;
+      font-style: italic;
+    }
+
+    /* ========== COMPARISON SECTION ========== */
+    .comparison { background: #0d1117; }
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    @media (max-width: 600px) { .comparison-grid { grid-template-columns: 1fr; } }
+    .comp-card {
+      border-radius: 20px;
+      padding: 2rem;
+      text-align: center;
+    }
+    .comp-card.bad {
+      background: rgba(255,59,48,0.1);
+      border: 2px solid rgba(255,59,48,0.3);
+    }
+    .comp-card.good {
+      background: rgba(57,255,20,0.1);
+      border: 2px solid rgba(57,255,20,0.3);
+      animation: goodCardPulse 2s ease-in-out infinite;
+    }
+    @keyframes goodCardPulse {
+      0%, 100% { box-shadow: 0 0 20px rgba(57,255,20,0.2); }
+      50% { box-shadow: 0 0 50px rgba(57,255,20,0.4); }
+    }
+    .comp-face {
+      font-size: 5rem;
+      display: block;
+      margin: 1rem 0;
+    }
+    .comp-label {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 1.8rem;
+      letter-spacing: 2px;
+    }
+    .comp-list {
+      list-style: none;
+      margin-top: 1rem;
+      text-align: left;
+      font-size: 0.85rem;
+    }
+    .comp-list li {
+      padding: 5px 0;
+      color: rgba(255,255,255,0.7);
+    }
+    .comp-list li::before { margin-right: 8px; }
+    .bad .comp-list li::before { content: '❌'; }
+    .good .comp-list li::before { content: '✅'; }
+
+    /* ========== GALLERY ========== */
+    .gallery-section { background: var(--dark); }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-auto-rows: 220px;
+      gap: 12px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    @media (max-width: 768px) {
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 160px; }
+    }
+    .gallery-item {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .gallery-item:nth-child(1) { grid-column: span 2; }
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: all 0.5s;
+      filter: saturate(1.2);
+    }
+    .gallery-item:hover img {
+      transform: scale(1.1);
+      filter: saturate(2) brightness(1.1);
+    }
+    .gallery-item-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 60%);
+      display: flex;
+      align-items: flex-end;
+      padding: 1rem;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .gallery-item:hover .gallery-item-overlay { opacity: 1; }
+    .gallery-caption {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 1.2rem;
+      color: var(--yellow);
+      letter-spacing: 1px;
+    }
+    .gallery-caption small {
+      display: block;
+      font-family: 'Comic Sans MS', cursive;
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.7);
+      letter-spacing: normal;
+    }
+
+    /* ========== PARTNERS ========== */
+    .partners-section { background: #0d1117; }
+    .partners-label {
+      text-align: center;
+      color: rgba(255,255,255,0.3);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      margin-bottom: 2.5rem;
+    }
+    .partners-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .partner-item {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.2rem 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s;
+      min-width: 130px;
+    }
+    .partner-item:hover {
+      background: rgba(255,229,0,0.08);
+      border-color: var(--yellow);
+      transform: translateY(-5px) rotate(-2deg);
+    }
+    .partner-item img {
+      max-width: 100px;
+      max-height: 40px;
+      object-fit: contain;
+      filter: brightness(0) invert(1);
+      opacity: 0.6;
+      transition: opacity 0.3s;
+    }
+    .partner-item:hover img { opacity: 1; }
+    .partner-meme-tag {
+      font-size: 0.65rem;
+      color: rgba(255,255,255,0.3);
+      font-style: italic;
+      text-align: center;
+    }
+
+    /* ========== CTA SECTION ========== */
+    .cta-section {
+      background: linear-gradient(135deg, #0d1117 0%, #1a0a2e 50%, #0a1a2e 100%);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(255,0,110,0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .cta-title {
+      font-size: clamp(2rem, 6vw, 4.5rem);
+      position: relative;
+    }
+    .cta-sub {
+      font-size: 1rem;
+      color: rgba(255,255,255,0.5);
+      margin: 1rem 0 2rem;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .cta-fine {
+      font-size: 0.65rem;
+      color: rgba(255,255,255,0.2);
+      margin-top: 1rem;
+      font-style: italic;
+    }
+    .btn-escape {
+      position: fixed;
+      bottom: 100px;
+      right: 30px;
+      z-index: 5000;
+      background: linear-gradient(135deg, var(--pink), var(--orange));
+      color: white;
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-family: 'Bebas Neue', cursive;
+      font-size: 1.2rem;
+      letter-spacing: 2px;
+      cursor: pointer;
+      border: none;
+      box-shadow: 0 0 30px rgba(255,0,110,0.5);
+      transition: all 0.1s;
+      text-decoration: none;
+      display: block;
+    }
+
+    /* ========== STONKS SECTION ========== */
+    .stonks-section {
+      background: var(--dark);
+      text-align: center;
+    }
+    .stonks-img {
+      font-size: 5rem;
+      display: block;
+      margin-bottom: 1rem;
+    }
+    .stonks-chart {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 2rem;
+      background: rgba(57,255,20,0.05);
+      border: 1px solid rgba(57,255,20,0.2);
+      border-radius: 20px;
+    }
+    .chart-bars {
+      display: flex;
+      align-items: flex-end;
+      gap: 12px;
+      height: 150px;
+      justify-content: center;
+    }
+    .chart-bar {
+      background: linear-gradient(to top, var(--green), rgba(57,255,20,0.3));
+      border-radius: 6px 6px 0 0;
+      width: 40px;
+      animation: barGrow 1s ease-out forwards;
+      transform-origin: bottom;
+    }
+    @keyframes barGrow {
+      from { transform: scaleY(0); }
+      to { transform: scaleY(1); }
+    }
+    .chart-bar:nth-child(1) { height: 30%; animation-delay: 0.1s; }
+    .chart-bar:nth-child(2) { height: 45%; animation-delay: 0.2s; }
+    .chart-bar:nth-child(3) { height: 60%; animation-delay: 0.3s; }
+    .chart-bar:nth-child(4) { height: 70%; animation-delay: 0.4s; }
+    .chart-bar:nth-child(5) { height: 85%; animation-delay: 0.5s; }
+    .chart-bar:nth-child(6) { height: 95%; animation-delay: 0.6s; }
+    .chart-bar:nth-child(7) { height: 100%; animation-delay: 0.7s; }
+    .chart-bar.going-up {
+      background: linear-gradient(to top, var(--yellow), rgba(255,229,0,0.3));
+      animation-delay: 0.8s;
+      height: 120%;
+    }
+  </style>
+</head>
+<body>
+
+<!-- CUSTOM CURSOR -->
+<div class="custom-cursor" id="cursor">💻</div>
+
+<!-- MEME TICKER -->
+<div class="ticker-wrap" role="marquee" aria-label="Live updates">
+  <div class="ticker-content">
+    🔥 TECHNI SCHOOLS - ZOSTAŃ KODEREM ALBO ZOSTAŃ FRAJEREM &nbsp;&nbsp;|&nbsp;&nbsp;
+    ⚡ 420 UCZNIÓW. WSZYSCY PIJĄ RED BULLA &nbsp;&nbsp;|&nbsp;&nbsp;
+    🧠 SZTUCZNA INTELIGENCJA UCZY SIĘ OD NASZYCH UCZNIÓW &nbsp;&nbsp;|&nbsp;&nbsp;
+    💀 MATEMATYKA: PRZEŻYJESZ (MOŻE) &nbsp;&nbsp;|&nbsp;&nbsp;
+    🚀 PRACA W IT PO SZKOLE. TRUST ME BRO &nbsp;&nbsp;|&nbsp;&nbsp;
+    😤 WARSZAWA • LUBLIN • WROCŁAW &nbsp;&nbsp;|&nbsp;&nbsp;
+    🎮 GRY TO BADANIE RYNKU. MAMA JUŻ NIE MOŻE NARZEKAĆ &nbsp;&nbsp;|&nbsp;&nbsp;
+    💻 PRINT("HELLO WORLD") ZMIENIŁ MOJE ŻYCIE &nbsp;&nbsp;|&nbsp;&nbsp;
+    🔒 CYBERBEZPIECZEŃSTWO: ZAMKNIJ TEN INCOGNITO &nbsp;&nbsp;|&nbsp;&nbsp;
+    📚 REKRUTACJA TRWA. BŁAGAMY. &nbsp;&nbsp;|&nbsp;&nbsp;
+    🔥 TECHNI SCHOOLS - ZOSTAŃ KODEREM ALBO ZOSTAŃ FRAJEREM &nbsp;&nbsp;|&nbsp;&nbsp;
+    ⚡ 420 UCZNIÓW. WSZYSCY PIJĄ RED BULLA &nbsp;&nbsp;|&nbsp;&nbsp;
+    🧠 SZTUCZNA INTELIGENCJA UCZY SIĘ OD NASZYCH UCZNIÓW &nbsp;&nbsp;|&nbsp;&nbsp;
+    💀 MATEMATYKA: PRZEŻYJESZ (MOŻE) &nbsp;&nbsp;|&nbsp;&nbsp;
+    🚀 PRACA W IT PO SZKOLE. TRUST ME BRO &nbsp;&nbsp;|&nbsp;&nbsp;
+  </div>
+</div>
+
+<!-- NAVBAR -->
+<nav class="meme-nav">
+  <a href="index.html" class="nav-logo" aria-label="Strona główna">
+    <svg data-name="ts_logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 857.03 304.17">
+      <path d="M13.14 46v239h240V46Zm224 223h-49v-17h33v-16H78v16h94.14v17h-143v-73h17v56h16v-91h-16v19h-17V62h144v15h-96v16h128v96h16V77h-32V62h48Z"></path>
+      <path d="M162 145v16h-18.14v59H78.14V110H128v16H94.14v78h33.72v-43H110v-16h52z"></path>
+      <path d="M221 204v16h-63v-16h14.14v-78h-29.26v-16H188v12h.14v82H221zM46.14 77h16v68h-16zM373.64 69.34h-31.08v89h-24.62v-89H287v-20h86.63ZM453.66 158.33h-65.35v-109h62.85v20h-38.3v24.25h35.64v19.91h-35.64v24.93h40.8ZM549.26 154.46q-11.93 5.78-31.15 5.77-25.08 0-39.44-14.74T464.3 106.2q0-26.15 16.15-42.41t41.91-16.26q16 0 26.9 4v23.66a47.7 47.7 0 0 0-24.92-6.53q-15.36 0-24.78 9.65t-9.42 26.14q0 15.81 8.89 25.19T523 139a51 51 0 0 0 26.29-7ZM662.57 158.33H638V114h-45.19v44.38h-24.55v-109h24.55v43.44H638V49.36h24.62ZM785.53 158.33h-24.78l-44.91-68.47a99.83 99.83 0 0 1-5.47-9h-.3q.6 5.78.61 17.63v59.88H687.5v-109h26.44l43.24 66.34q3 4.48 5.47 8.89h.35a115.42 115.42 0 0 1-.61-15V49.36h23.18ZM835 158.33h-24.55v-109H835ZM292.63 277.93v-15a23.43 23.43 0 0 0 4.81 3.32 38 38 0 0 0 5.92 2.48 46.18 46.18 0 0 0 6.26 1.56 33.09 33.09 0 0 0 5.76.56q9.21 0 13.71-3.07a10.09 10.09 0 0 0 4.51-8.89 9.7 9.7 0 0 0-1.5-5.43 15.7 15.7 0 0 0-4.21-4.2 43.51 43.51 0 0 0-6.34-3.65c-2.44-1.17-5-2.39-7.82-3.65q-4.49-2.4-8.35-4.85a35.52 35.52 0 0 1-6.71-5.43 22.66 22.66 0 0 1-4.48-6.71 22 22 0 0 1-1.62-8.77 20.28 20.28 0 0 1 2.79-10.77 23.54 23.54 0 0 1 7.36-7.54 33.51 33.51 0 0 1 10.39-4.42A49.44 49.44 0 0 1 325 192q13.8 0 20.12 3.13v14.41q-7.49-5.4-19.26-5.4a34.42 34.42 0 0 0-6.47.62 19.3 19.3 0 0 0-5.77 2 12.64 12.64 0 0 0-4.14 3.62 8.89 8.89 0 0 0-1.59 5.34 10.07 10.07 0 0 0 1.23 5.09 13 13 0 0 0 3.58 3.92 37.06 37.06 0 0 0 5.77 3.47q3.4 1.68 7.88 3.65 4.61 2.38 8.68 5a41.44 41.44 0 0 1 7.18 5.82 25.58 25.58 0 0 1 4.9 7.09 20.75 20.75 0 0 1 1.81 8.86 20.81 20.81 0 0 1-10 18.77 32.54 32.54 0 0 1-10.52 4.17 59.28 59.28 0 0 1-12.58 1.29 52.3 52.3 0 0 1-5.43-.34q-3.21-.33-6.59-1a62 62 0 0 1-6.38-1.56 20.22 20.22 0 0 1-4.79-2.02ZM426.4 277.75q-9.94 5.14-24.72 5.15-19.14 0-30.67-12.08t-11.53-31.71q0-21.11 13-34.11t32.79-13q12.75 0 21.16 3.62v14.47a37.82 37.82 0 0 0-19.63-5.27q-14.29 0-23.15 9.14t-8.87 24.41q0 14.53 8.28 23.15t21.78 8.62q12.45 0 21.59-5.89ZM513.74 281.43h-14.66v-38.15h-41.4v38.15h-14.6v-88h14.6v37h41.4v-37h14.66ZM571.7 282.9q-19 0-30.45-12.33t-11.44-32.08q0-21.23 11.65-33.85T573.11 192q18.52 0 29.84 12.27t11.32 32.08q0 21.53-11.59 34T571.7 282.9Zm.68-78.08a24.44 24.44 0 0 0-19.66 9q-7.58 9-7.58 23.73t7.36 23.62a23.74 23.74 0 0 0 19.26 8.95q12.65 0 19.94-8.52t7.3-23.86q0-15.76-7.09-24.35t-19.53-8.57ZM666.65 282.9q-19 0-30.45-12.33t-11.44-32.08q0-21.23 11.65-33.85T668.06 192q18.53 0 29.84 12.27t11.31 32.08q0 21.53-11.59 34t-30.97 12.55Zm.67-78.08a24.46 24.46 0 0 0-19.66 9q-7.57 9-7.57 23.73t7.36 23.62a23.74 23.74 0 0 0 19.26 8.95q12.63 0 19.93-8.52t7.3-23.86q0-15.76-7.08-24.35t-19.54-8.57ZM774.05 281.43h-48.7v-88h14.59v75.67h34.11ZM782.69 277.93v-15a23.51 23.51 0 0 0 4.82 3.32 37.63 37.63 0 0 0 5.92 2.48 46 46 0 0 0 6.25 1.56 33.29 33.29 0 0 0 5.77.56q9.19 0 13.71-3.07a10.11 10.11 0 0 0 4.51-8.89 9.71 9.71 0 0 0-1.51-5.43 15.51 15.51 0 0 0-4.2-4.2 43.13 43.13 0 0 0-6.35-3.65q-3.65-1.76-7.82-3.65-4.47-2.4-8.34-4.85a35.52 35.52 0 0 1-6.71-5.43 22.47 22.47 0 0 1-4.48-6.71 21.79 21.79 0 0 1-1.63-8.77 20.28 20.28 0 0 1 2.79-10.77 23.65 23.65 0 0 1 7.36-7.54 33.67 33.67 0 0 1 10.4-4.42 49.38 49.38 0 0 1 11.9-1.44q13.8 0 20.12 3.13v14.41q-7.49-5.4-19.26-5.4a34.34 34.34 0 0 0-6.47.62 19.3 19.3 0 0 0-5.77 2 12.44 12.44 0 0 0-4.14 3.62 8.89 8.89 0 0 0-1.59 5.34 10.17 10.17 0 0 0 1.22 5.09 13.15 13.15 0 0 0 3.59 3.92 36.59 36.59 0 0 0 5.77 3.47c2.27 1.12 4.89 2.34 7.88 3.65q4.61 2.38 8.68 5a41 41 0 0 1 7.17 5.82 25.62 25.62 0 0 1 4.91 7.09 20.75 20.75 0 0 1 1.81 8.86 20.79 20.79 0 0 1-10 18.77 32.36 32.36 0 0 1-10.52 4.17 59.12 59.12 0 0 1-12.57 1.29 52.3 52.3 0 0 1-5.43-.34q-3.21-.33-6.59-1a61.4 61.4 0 0 1-6.38-1.56 20.5 20.5 0 0 1-4.82-2.05Z"></path>
+    </svg>
+    <span class="nav-logo-badge">V.MEME</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html" class="active">🏠 Główna</a></li>
+    <li><a href="teachers.html">👨‍🏫 Nauczyciele</a></li>
+    <li><a href="#why-us">🤔 Dlaczego My</a></li>
+    <li><a href="#gallery">📸 Galeria</a></li>
+    <li><a href="#partners">🤝 Sponsorzy</a></li>
+    <li><a href="teachers.html" class="nav-cta">APLIKUJ TERAZ 🔥</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-badge">🔥 REKRUTACJA 2025/2026 - ILOŚĆ MIEJSC OGRANICZONA (serio tym razem)</div>
+    <h1 class="hero-title">
+      <span class="impact-outlined glitch" data-text="TECHNI">TECHNI</span><br>
+      <span class="impact-outlined rainbow">SCHOOLS</span>
+    </h1>
+    <p class="hero-subtitle">
+      Jedyna szkoła gdzie <em>nauczysz się kodować</em>, przeżyjesz maturę<br>
+      i zrozumiesz dlaczego Twój router mruga. <em>W Warszawie, Lublinie i Wrocławiu!</em><br>
+      <span style="font-size:0.75em; color:rgba(255,255,255,0.4);">(i może gdzieś indziej, kto wie)</span>
+    </p>
+    <div class="hero-buttons">
+      <a href="teachers.html" class="btn-meme btn-primary" id="apply-btn">
+        🚀 APLIKUJ TERAZ
+      </a>
+      <a href="#why-us" class="btn-meme btn-secondary">
+        🤔 DLACZEGO MY?
+      </a>
+    </div>
+  </div>
+  <div class="hero-scroll-hint">
+    ⬇️ SCROLLUJ W DÓŁ ⬇️<br>
+    <span style="font-size:0.6rem;">(nie ma nic specjalnego ale i tak scrolluj)</span>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar" id="stats">
+  <div class="stats-bar-inner">
+    <div class="stat-item">
+      <span class="stat-number glow-yellow" id="counter-students">0</span>
+      <span class="stat-label">UCZNIÓW 👨‍💻</span>
+      <span class="stat-sub">(z czego 420 pije energetyki)</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-number glow-green" id="counter-years">0</span>
+      <span class="stat-label">LAT DOŚWIADCZENIA 🧑‍🏫</span>
+      <span class="stat-sub">(czujemy się jak 100)</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-number glow-pink" id="counter-jobs">0</span>
+      <span class="stat-label">% PRACA W IT 📈</span>
+      <span class="stat-sub">(trust me bro)</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-number glow-blue">∞</span>
+      <span class="stat-label">GODZIN NA STACK OVERFLOW ☕</span>
+      <span class="stat-sub">(bez copy-paste to 0)</span>
+    </div>
+  </div>
+</div>
+
+<!-- WHY US -->
+<section class="why-us" id="why-us">
+  <div class="container">
+    <h2 class="section-title rainbow">DLACZEGO TECHNI SCHOOLS? 🤔</h2>
+    <p class="section-subtitle">bo inne szkoły uczyły cię historii zamiast git commit -m "fix: everything"</p>
+    <div class="why-grid">
+      <div class="why-card" style="--card-accent: var(--yellow);">
+        <span class="why-icon">🧠</span>
+        <div class="why-title">PROGRAMOWANIE</div>
+        <p class="why-desc">Nauczysz się kodować od podstaw do "to już działa, nie wiem dlaczego" w mniej niż 4 lata</p>
+        <p class="why-fine-print">*wyniki mogą się różnić. nie gwarantujemy że będziesz wiedział co robisz</p>
+      </div>
+      <div class="why-card" style="--card-accent: var(--blue);">
+        <span class="why-icon">🔒</span>
+        <div class="why-title">CYBERBEZPIECZEŃSTWO</div>
+        <p class="why-desc">Nauczymy Cię jak być haxx0rem. Ale legalnym. Prawie. Czytaj regulamin szkoły.</p>
+        <p class="why-fine-print">*techni schools nie odpowiada za zhakowanie routera rodziców</p>
+      </div>
+      <div class="why-card" style="--card-accent: var(--green);">
+        <span class="why-icon">🤖</span>
+        <div class="why-title">SZTUCZNA INTELIGENCJA</div>
+        <p class="why-desc">ChatGPT nie zrobi za Ciebie egzaminu. Ale my Cię nauczymy jak zrobić własne ChatGPT 😏</p>
+        <p class="why-fine-print">*jeszcze gorzej działające</p>
+      </div>
+      <div class="why-card" style="--card-accent: var(--pink);">
+        <span class="why-icon">💼</span>
+        <div class="why-title">PRACA PO SZKOLE</div>
+        <p class="why-desc">Nasi absolwenci pracują w prawdziwych firmach. Niektórzy nawet dostają wynagrodzenie.</p>
+        <p class="why-fine-print">*inne wykonują projekty za kawę i "doświadczenie"</p>
+      </div>
+      <div class="why-card" style="--card-accent: var(--purple);">
+        <span class="why-icon">☕</span>
+        <div class="why-title">KULTURA PRACY</div>
+        <p class="why-desc">Stand-upy, code review, praca w zespole. Wszystko co będziesz nienawidził w pracy ale tutaj za darmo.</p>
+        <p class="why-fine-print">*energetyki nie wliczone w czesne</p>
+      </div>
+      <div class="why-card" style="--card-accent: var(--orange);">
+        <span class="why-icon">🎮</span>
+        <div class="why-title">GRASZ W GIERKI?</div>
+        <p class="why-desc">Zrób własną grę zamiast grać cudzą. Mama będzie mniej wkurzona. Trochę. Może.</p>
+        <p class="why-fine-print">*mama nadal będzie wkurzona</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STONKS -->
+<section class="stonks-section">
+  <div class="container">
+    <h2 class="section-title glow-green">NASZE WYNIKI 📈</h2>
+    <p class="section-subtitle">liczby nie kłamią (ale mogą wprowadzać w błąd)</p>
+    <div class="stonks-chart">
+      <div style="font-family:'Press Start 2P',cursive; font-size:10px; color:var(--green); margin-bottom:1rem;">
+        📊 ILOŚĆ SUKCESU ABSOLWENTÓW (2021-2025)
+      </div>
+      <div class="chart-bars">
+        <div class="chart-bar"></div>
+        <div class="chart-bar"></div>
+        <div class="chart-bar"></div>
+        <div class="chart-bar"></div>
+        <div class="chart-bar"></div>
+        <div class="chart-bar"></div>
+        <div class="chart-bar"></div>
+        <div class="chart-bar going-up"></div>
+      </div>
+      <div style="display:flex; justify-content:space-between; margin-top:8px; font-size:0.65rem; color:rgba(255,255,255,0.3);">
+        <span>2021</span><span>2022</span><span>2023</span><span>2024</span><span>2025</span><span>∞</span>
+      </div>
+      <div style="margin-top:1.5rem; font-size:0.85rem; color:var(--green);">
+        📈 STONKS +420% YoY (źródło: zaufaj mi)
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARISON -->
+<section class="comparison" id="comparison">
+  <div class="container">
+    <h2 class="section-title"><span class="glow-pink">MY</span> VS <span style="color:rgba(255,255,255,0.4);">ONI</span></h2>
+    <p class="section-subtitle">obiektywne i bezstronne porównanie (zupełnie)</p>
+    <div class="comparison-grid">
+      <div class="comp-card bad">
+        <span style="font-family:'Bebas Neue',cursive; font-size:1rem; color:rgba(255,59,48,0.8);">ZWYKŁA SZKOŁA</span>
+        <span class="comp-face">😭</span>
+        <ul class="comp-list">
+          <li>Historia starożytna przez 4 lata</li>
+          <li>PE gdzie płaczesz przy siłce</li>
+          <li>Nauczyciel nie wie co to Git</li>
+          <li>Absolwent: kelner (nie ma w tym nic złego)</li>
+          <li>Matematyka bez zastosowań</li>
+          <li>Brak energetyków w kantynie</li>
+        </ul>
+      </div>
+      <div class="comp-card good">
+        <span style="font-family:'Bebas Neue',cursive; font-size:1rem; color:var(--green);">TECHNI SCHOOLS 😎</span>
+        <span class="comp-face">🗿</span>
+        <ul class="comp-list">
+          <li>Programowanie od pierwszego dnia</li>
+          <li>PE gdzie i tak nie chodziłbyś</li>
+          <li>Nauczyciel hakuje dla zabawy</li>
+          <li>Absolwent: senior dev (po 2 latach lol)</li>
+          <li>Matematyka używana w algorytmach</li>
+          <li>Kafejka z kawą 😤</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gallery-section" id="gallery">
+  <div class="container">
+    <h2 class="section-title"><span class="rainbow">GALERIA</span> 📸</h2>
+    <p class="section-subtitle">dowód że istniejemy (i że to nie jest scam)</p>
+    <div class="gallery-grid">
+      <div class="gallery-item">
+        <img src="./Technikum Programistyczne Warszawa Lublin Wrocław_files/Kopia-TechniSchools-146_uid_643e4b61487a2.jpg" alt="Techni Schools główne zdjęcie" loading="lazy">
+        <div class="gallery-item-overlay">
+          <div class="gallery-caption">TO MY 😎
+            <small>wyglądamy poważnie. nie jesteśmy.</small>
+          </div>
+        </div>
+      </div>
+      <div class="gallery-item">
+        <img src="./Technikum Programistyczne Warszawa Lublin Wrocław_files/DSC04363_uid_672b749857fc9.jpg" alt="Wydarzenie" loading="lazy">
+        <div class="gallery-item-overlay">
+          <div class="gallery-caption">KONFERENCJA
+            <small>wszyscy udają że rozumieją</small>
+          </div>
+        </div>
+      </div>
+      <div class="gallery-item">
+        <img src="./Technikum Programistyczne Warszawa Lublin Wrocław_files/DSC04382_uid_672b7498a2258.jpg" alt="Uczniowie" loading="lazy">
+        <div class="gallery-item-overlay">
+          <div class="gallery-caption">UCZNIOWIE
+            <small>zamiast scrollować TikTok scrollują kod</small>
+          </div>
+        </div>
+      </div>
+      <div class="gallery-item">
+        <img src="./Technikum Programistyczne Warszawa Lublin Wrocław_files/DSC_8847_uid_672b74eed485d.jpg" alt="Szkoła" loading="lazy">
+        <div class="gallery-item-overlay">
+          <div class="gallery-caption">ZAJĘCIA
+            <small>nikt nie śpi (kłamstwo)</small>
+          </div>
+        </div>
+      </div>
+      <div class="gallery-item">
+        <img src="./Technikum Programistyczne Warszawa Lublin Wrocław_files/IMG_1675_uid_672b74868f197.jpg" alt="Event" loading="lazy">
+        <div class="gallery-item-overlay">
+          <div class="gallery-caption">EVENT 🔥
+            <small>pizza była zimna ale nikt nie narzekał</small>
+          </div>
+        </div>
+      </div>
+      <div class="gallery-item">
+        <img src="./Technikum Programistyczne Warszawa Lublin Wrocław_files/IMG-20241021-WA0002_uid_672b35a8a6269.jpg" alt="Warsztaty" loading="lazy">
+        <div class="gallery-item-overlay">
+          <div class="gallery-caption">WARSZTATY
+            <small>działa na moim komputerze™</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PARTNERS -->
+<section class="partners-section" id="partners">
+  <div class="container">
+    <h2 class="section-title">SPONSORZY 🤝</h2>
+    <p class="partners-label">oni nam ufają (mniej więcej)</p>
+    <div class="partners-grid">
+      <div class="partner-item">
+        <img src="./Technikum Programistyczne Warszawa Lublin Wrocław_files/1280px-Empik.png" alt="Empik" loading="lazy">
+        <span class="partner-meme-tag">"kupujcie w nas książki"</span>
+      </div>
+      <div class="partner-item">
+        <img src="./Technikum Programistyczne Warszawa Lublin Wrocław_files/Allegro.png" alt="Allegro" loading="lazy">
+        <span class="partner-meme-tag">"ebay ale po polsku"</span>
+      </div>
+      <div class="partner-item">
+        <img src="./Technikum Programistyczne Warszawa Lublin Wrocław_files/Cloudware-logo-czarne-1_uid_6486febc164b4.png" alt="Cloudware" loading="lazy">
+        <span class="partner-meme-tag">"chmura? tak"</span>
+      </div>
+      <div class="partner-item">
+        <img src="./Technikum Programistyczne Warszawa Lublin Wrocław_files/predica-logo-screen_uid_6486fe736e9d5.png" alt="Predica" loading="lazy">
+        <span class="partner-meme-tag">"cool nazwa"</span>
+      </div>
+      <div class="partner-item">
+        <img src="./Technikum Programistyczne Warszawa Lublin Wrocław_files/centrum-metal_uid_67bc4f463d435.png" alt="Centrum Metal" loading="lazy">
+        <span class="partner-meme-tag">"metal 🤘"</span>
+      </div>
+      <div class="partner-item">
+        <img src="./Technikum Programistyczne Warszawa Lublin Wrocław_files/DataArt-ProggyBuggy-Towel-1200x6302x-3_uid_6a0dba2e03eec.jpg" alt="DataArt" style="max-height:55px; object-fit:cover;" loading="lazy">
+        <span class="partner-meme-tag">"data go brrr"</span>
+      </div>
+    </div>
+    <p style="text-align:center; margin-top:2rem; font-size:0.65rem; color:rgba(255,255,255,0.15);">* logo użyte za zgodą. chyba. jeśli nie - prosimy o maila zamiast prawnika</p>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="container" style="position:relative; z-index:1;">
+    <h2 class="section-title cta-title">
+      GOTOWY NA<br>
+      <span class="rainbow">ZOSTANIE KODEREM?</span><br>
+      🔥
+    </h2>
+    <p class="cta-sub">
+      Rekrutacja trwa. Miejsca się kończą. Mama czeka. Twój przyszły szef też czeka.<br>
+      Przeznaczenie samo się nie wypełni.
+    </p>
+    <a href="teachers.html" class="btn-meme btn-primary" style="font-size:1.8rem; padding:20px 50px; display:inline-block;">
+      💻 DOŁĄCZ TERAZ
+    </a>
+    <p class="cta-fine">* Klikając "Dołącz teraz" zgadzasz się na spędzenie najbliższych 4 lat przy komputerze. I tak byś to robił.</p>
+    <div style="margin-top:3rem; display:flex; justify-content:center; gap:3rem; flex-wrap:wrap;">
+      <div style="text-align:center;">
+        <div style="font-size:2rem;">🏙️</div>
+        <div style="font-family:'Bebas Neue',cursive; font-size:1.3rem; color:var(--yellow);">Warszawa</div>
+        <div style="font-size:0.7rem; color:rgba(255,255,255,0.4);">najdroższe miasto 💸</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-size:2rem;">🏘️</div>
+        <div style="font-family:'Bebas Neue',cursive; font-size:1.3rem; color:var(--blue);">Lublin</div>
+        <div style="font-size:0.7rem; color:rgba(255,255,255,0.4);">spokojnie, tu też mamy wifi</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-size:2rem;">🌉</div>
+        <div style="font-family:'Bebas Neue',cursive; font-size:1.3rem; color:var(--green);">Wrocław</div>
+        <div style="font-size:0.7rem; color:rgba(255,255,255,0.4);">to miasto ma krasnale idk</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TEACHERS TEASER -->
+<section style="background:#0d1117; padding:4rem 2rem; text-align:center;">
+  <h2 class="section-title glow-yellow">POZNAJ NASZYCH NAUCZYCIELI 👨‍🏫</h2>
+  <p style="color:rgba(255,255,255,0.5); margin-bottom:2rem; font-size:0.9rem;">30+ prawdziwych ludzi (zweryfikowanych). Każdy ma PhD albo przynajmniej udaje.</p>
+  <a href="teachers.html" class="btn-meme btn-primary" style="display:inline-block;">
+    🔥 KLIKNIJ I POZNAJ ICH SEKRETY
+  </a>
+</section>
+
+<!-- FOOTER -->
+<footer class="meme-footer">
+  <div style="font-size:2rem; margin-bottom:1rem;">🎓</div>
+  <div style="font-family:'Bebas Neue',cursive; font-size:1.5rem; color:var(--yellow); letter-spacing:3px;">TECHNI SCHOOLS</div>
+  <div style="font-size:0.7rem; color:rgba(255,255,255,0.3); margin:0.5rem 0 1.5rem;">Warszawa • Lublin • Wrocław • (może gdzieś indziej wkrótce idk)</div>
+  <div class="footer-links">
+    <a href="index.html">🏠 Strona Główna</a>
+    <a href="teachers.html">👨‍🏫 Nauczyciele</a>
+    <a href="https://technischools.com" target="_blank">🔗 Prawdziwa Strona</a>
+    <a href="#hero">⬆️ Na Górę</a>
+  </div>
+  <p>© 2025 Techni Schools | Ta strona jest meme-ową parodią stworzoną z 💛</p>
+  <p>Zrobione przez kogoś kto nie spał od 3 dni | Wszystkie prawa zarezerwowane (chyba)</p>
+  <p style="margin-top:1rem; font-size:0.6rem; color:rgba(255,255,255,0.1);">
+    Naciśnij ↑↑↓↓←→←→BA dla niespodzianki 👀
+  </p>
+</footer>
+
+<!-- MEME POPUP -->
+<div class="meme-popup" id="memePopup">
+  <button class="popup-close" onclick="document.getElementById('memePopup').classList.remove('visible')" aria-label="Zamknij">✕</button>
+  <div style="font-size:1.5rem; margin-bottom:0.5rem;" id="popupEmoji">🎓</div>
+  <div style="font-family:'Bebas Neue',cursive; font-size:1.1rem; color:var(--yellow); margin-bottom:0.3rem;" id="popupTitle">HEJO!</div>
+  <div style="font-size:0.8rem; color:rgba(255,255,255,0.7);" id="popupText">Wciąż tu jesteś? Może aplikuj? 👀</div>
+</div>
+
+<!-- FLOATING APPLY BUTTON -->
+<a href="teachers.html" class="btn-escape" id="floatBtn">💻 APLIKUJ!</a>
+
+<script>
+// ===== CUSTOM CURSOR =====
+const cursor = document.getElementById('cursor');
+const emojis = ['💻', '🔥', '⚡', '🧠', '🚀', '😤', '👾', '⌨️', '🎮', '📱'];
+let cursorEmoji = 0;
+const trailEmojis = ['✨', '⭐', '💫', '🌟', '❄️'];
+
+document.addEventListener('mousemove', (e) => {
+  cursor.style.left = e.clientX + 'px';
+  cursor.style.top = e.clientY + 'px';
+  
+  if (Math.random() < 0.15) {
+    const trail = document.createElement('div');
+    trail.className = 'cursor-trail';
+    trail.style.left = e.clientX + 'px';
+    trail.style.top = e.clientY + 'px';
+    trail.textContent = trailEmojis[Math.floor(Math.random() * trailEmojis.length)];
+    trail.style.transform = 'translate(-50%, -50%)';
+    document.body.appendChild(trail);
+    setTimeout(() => trail.remove(), 800);
+  }
+});
+
+document.addEventListener('click', () => {
+  cursorEmoji = (cursorEmoji + 1) % emojis.length;
+  cursor.textContent = emojis[cursorEmoji];
+  cursor.style.animation = 'none';
+  void cursor.offsetWidth;
+  cursor.style.animation = '';
+});
+
+// ===== COUNTERS =====
+function animateCounter(el, target, duration) {
+  let start = 0;
+  const step = (timestamp) => {
+    if (!start) start = timestamp;
+    const progress = Math.min((timestamp - start) / duration, 1);
+    el.textContent = Math.floor(progress * target) + (el.id === 'counter-jobs' ? '%' : '+');
+    if (progress < 1) requestAnimationFrame(step);
+    else el.textContent = target + (el.id === 'counter-jobs' ? '%' : '+');
+  };
+  requestAnimationFrame(step);
+}
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      animateCounter(document.getElementById('counter-students'), 420, 2000);
+      animateCounter(document.getElementById('counter-years'), 5, 1500);
+      animateCounter(document.getElementById('counter-jobs'), 69, 2500);
+      observer.disconnect();
+    }
+  });
+}, { threshold: 0.3 });
+observer.observe(document.getElementById('stats'));
+
+// ===== MEME POPUPS =====
+const popups = [
+  { emoji: '🎓', title: 'PSSST!', text: 'Aplikuj do Techni Schools. Twoje przyszłe "ja" z 15k/msc podziękuje.' },
+  { emoji: '☕', title: 'CIEKAWOSTKA:', text: 'Przeciętny programista wypija 3 kawy dziennie. U nas 5. Achievement unlocked.' },
+  { emoji: '🐛', title: 'DEBUG INFO:', text: 'Znaleziono 0 błędów na tej stronie. (kłamstwo)' },
+  { emoji: '🤓', title: 'FAKTOID:', text: 'Czy wiedziałeś że HTML to nie jest język programowania? Wiedziałeś. Ale i tak tu jesteś.' },
+  { emoji: '💀', title: 'OSTRZEŻENIE:', text: 'Matematyka jest tutaj obowiązkowa. Przepraszamy. (nie przepraszamy)' },
+  { emoji: '🚀', title: 'REKRUTACJA TRWA!', text: 'Miejsca się kończą szybciej niż WiFi na lekcji z 30 uczniami.' },
+];
+
+let popupShown = false;
+setTimeout(() => {
+  if (!popupShown) showPopup();
+}, 15000);
+
+setInterval(() => {
+  showPopup();
+}, 45000);
+
+function showPopup() {
+  const p = popups[Math.floor(Math.random() * popups.length)];
+  document.getElementById('popupEmoji').textContent = p.emoji;
+  document.getElementById('popupTitle').textContent = p.title;
+  document.getElementById('popupText').textContent = p.text;
+  const popup = document.getElementById('memePopup');
+  popup.classList.remove('visible');
+  void popup.offsetWidth;
+  popup.classList.add('visible');
+  popupShown = true;
+  setTimeout(() => popup.classList.remove('visible'), 8000);
+}
+
+// ===== EMOJI RAIN =====
+function createEmojiRain() {
+  const rainEmojis = ['💻', '🔥', '⚡', '🧠', '🚀', '👾', '⌨️', '🎮', '📱', '🐛', '☕', '💡'];
+  const emoji = document.createElement('div');
+  emoji.className = 'emoji-rain';
+  emoji.textContent = rainEmojis[Math.floor(Math.random() * rainEmojis.length)];
+  emoji.style.left = Math.random() * 100 + 'vw';
+  emoji.style.animationDuration = (Math.random() * 3 + 4) + 's';
+  emoji.style.animationDelay = Math.random() * 2 + 's';
+  document.body.appendChild(emoji);
+  setTimeout(() => emoji.remove(), 8000);
+}
+setInterval(createEmojiRain, 800);
+
+// ===== FLOATING BUTTON (runs away) =====
+const floatBtn = document.getElementById('floatBtn');
+floatBtn.addEventListener('mouseenter', () => {
+  const maxX = window.innerWidth - 120;
+  const maxY = window.innerHeight - 60;
+  const newX = Math.max(10, Math.random() * maxX);
+  const newY = Math.max(10, Math.random() * maxY);
+  floatBtn.style.right = 'auto';
+  floatBtn.style.bottom = 'auto';
+  floatBtn.style.left = newX + 'px';
+  floatBtn.style.top = newY + 'px';
+  floatBtn.style.position = 'fixed';
+});
+
+// ===== KONAMI CODE EASTER EGG =====
+let konamiSequence = [];
+const konamiCode = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+document.addEventListener('keydown', (e) => {
+  konamiSequence.push(e.key);
+  if (konamiSequence.length > konamiCode.length) konamiSequence.shift();
+  if (JSON.stringify(konamiSequence) === JSON.stringify(konamiCode)) {
+    document.body.style.animation = 'rainbowShift 0.5s linear infinite';
+    for (let i = 0; i < 50; i++) setTimeout(createEmojiRain, i * 100);
+    showPopup();
+    document.getElementById('popupEmoji').textContent = '🎉';
+    document.getElementById('popupTitle').textContent = 'CHEAT CODE AKTYWOWANY!';
+    document.getElementById('popupText').textContent = 'Grasz w life na hard mode. Techni Schools to easy mode do IT. Aplikuj!';
+    document.getElementById('memePopup').classList.add('visible');
+    setTimeout(() => document.body.style.animation = '', 5000);
+  }
+});
+
+// ===== SHAKE ON SCROLL =====
+let lastScroll = 0;
+window.addEventListener('scroll', () => {
+  const currentScroll = window.scrollY;
+  if (Math.abs(currentScroll - lastScroll) > 300) {
+    document.querySelector('.meme-nav').classList.add('shake');
+    setTimeout(() => document.querySelector('.meme-nav').classList.remove('shake'), 500);
+  }
+  lastScroll = currentScroll;
+});
+</script>
+</body>
+</html>

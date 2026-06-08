@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nauczyciele 👨‍🏫 | Techni Schools Meme Edition</title>
+  <meta name="description" content="Poznaj naszych nauczycieli. Niektórzy z nich to prawdziwi ludzie. Większość wie co robi. Prawie.">
+  <link rel="stylesheet" href="meme.css">
+  <style>
+    /* ========== TEACHERS HERO ========== */
+    .teachers-hero {
+      background: linear-gradient(135deg, #0a0a0a 0%, #0d1b2e 50%, #1a0a2e 100%);
+      padding: 5rem 2rem 3rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      border-bottom: 1px solid rgba(255,229,0,0.2);
+    }
+    .teachers-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, rgba(255,0,110,0.1) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-emoji-grid {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      opacity: 0.04;
+      font-size: 1.5rem;
+      line-height: 2.5rem;
+      overflow: hidden;
+      pointer-events: none;
+      user-select: none;
+    }
+    .teachers-hero h1 {
+      font-size: clamp(3rem, 10vw, 7rem);
+      line-height: 1;
+      position: relative;
+      z-index: 1;
+    }
+    .teachers-hero .sub {
+      color: rgba(255,255,255,0.55);
+      font-size: 1rem;
+      margin: 1rem 0 2rem;
+      position: relative;
+      z-index: 1;
+    }
+    .teachers-hero .sub em { color: var(--yellow); font-style: normal; }
+
+    /* ========== FILTER TABS ========== */
+    .filter-bar {
+      background: rgba(255,255,255,0.03);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 2rem;
+      display: flex;
+      gap: 0.75rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      position: sticky;
+      top: 98px;
+      z-index: 50;
+      backdrop-filter: blur(20px);
+    }
+    .filter-btn {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border);
+      color: rgba(255,255,255,0.7);
+      padding: 8px 20px;
+      border-radius: 100px;
+      font-family: 'Comic Sans MS', cursive;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .filter-btn:hover, .filter-btn.active {
+      background: var(--yellow);
+      color: #000;
+      border-color: var(--yellow);
+      transform: translateY(-2px) scale(1.05);
+      font-weight: bold;
+    }
+    .filter-btn.active { box-shadow: 0 0 20px rgba(255,229,0,0.4); }
+
+    /* ========== SEARCH BAR ========== */
+    .search-wrap {
+      max-width: 400px;
+      margin: 0 auto 0.5rem;
+      position: relative;
+    }
+    .search-input {
+      width: 100%;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid var(--border);
+      color: white;
+      padding: 10px 20px 10px 44px;
+      border-radius: 100px;
+      font-family: 'Comic Sans MS', cursive;
+      font-size: 0.9rem;
+      outline: none;
+      transition: all 0.3s;
+    }
+    .search-input:focus { border-color: var(--yellow); background: rgba(255,229,0,0.05); }
+    .search-input::placeholder { color: rgba(255,255,255,0.3); }
+    .search-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); font-size: 1.1rem; pointer-events: none; }
+
+    /* ========== TEACHERS GRID ========== */
+    .teachers-section { padding: 3rem 2rem 5rem; }
+    .teachers-count {
+      text-align: center;
+      color: rgba(255,255,255,0.3);
+      font-size: 0.8rem;
+      margin-bottom: 2rem;
+    }
+    #teachers-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    /* ========== TEACHER CARD ========== */
+    .teacher-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      cursor: pointer;
+    }
+    .teacher-card:hover {
+      transform: translateY(-10px) rotate(0.5deg);
+      border-color: var(--card-color, var(--yellow));
+      box-shadow: 0 25px 60px rgba(0,0,0,0.6), 0 0 30px rgba(255,229,0,0.15);
+    }
+    .teacher-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--card-color, var(--yellow));
+      z-index: 2;
+    }
+    .teacher-photo-wrap {
+      position: relative;
+      height: 260px;
+      overflow: hidden;
+    }
+    .teacher-photo-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+      transition: all 0.5s;
+      filter: grayscale(15%) saturate(1.1);
+    }
+    .teacher-card:hover .teacher-photo-wrap img {
+      transform: scale(1.08);
+      filter: grayscale(0%) saturate(1.4) brightness(1.1);
+    }
+    .photo-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.2) 40%, transparent 70%);
+    }
+    .meme-caption {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 1rem;
+      z-index: 3;
+      transform: translateY(60px);
+      opacity: 0;
+      transition: all 0.4s;
+    }
+    .teacher-card:hover .meme-caption {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    .meme-caption-text {
+      font-family: Impact, 'Bebas Neue', cursive;
+      font-size: 1rem;
+      text-transform: uppercase;
+      color: var(--yellow);
+      -webkit-text-stroke: 0.5px black;
+      text-shadow: 1px 1px 0 black;
+      text-align: center;
+      letter-spacing: 1px;
+    }
+    .city-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: rgba(255,255,255,0.85);
+      font-size: 0.65rem;
+      padding: 4px 10px;
+      border-radius: 100px;
+      z-index: 3;
+      font-family: 'Comic Sans MS', cursive;
+    }
+    .power-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: var(--card-color, var(--yellow));
+      color: #000;
+      font-family: 'Bebas Neue', Impact, cursive;
+      font-size: 0.8rem;
+      letter-spacing: 1px;
+      padding: 4px 10px;
+      border-radius: 6px;
+      z-index: 3;
+    }
+
+    /* ========== CARD BODY ========== */
+    .teacher-info {
+      padding: 1.2rem;
+    }
+    .teacher-name {
+      font-family: 'Bebas Neue', Impact, cursive;
+      font-size: 1.4rem;
+      letter-spacing: 1px;
+      color: var(--white);
+      margin-bottom: 2px;
+      line-height: 1.1;
+    }
+    .teacher-subject {
+      font-family: 'Comic Sans MS', cursive;
+      font-size: 0.78rem;
+      color: var(--card-color, var(--yellow));
+      margin-bottom: 0.7rem;
+    }
+    .teacher-quote {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.55);
+      font-style: italic;
+      line-height: 1.4;
+      margin-bottom: 1rem;
+      border-left: 2px solid var(--card-color, var(--yellow));
+      padding-left: 8px;
+    }
+
+    /* Stat bars */
+    .stats-section { margin-bottom: 1rem; }
+    .stat-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 5px 0;
+    }
+    .stat-name {
+      font-size: 0.62rem;
+      color: rgba(255,255,255,0.4);
+      width: 90px;
+      flex-shrink: 0;
+    }
+    .stat-bar { flex: 1; }
+    .stat-val {
+      font-size: 0.62rem;
+      color: rgba(255,255,255,0.5);
+      width: 30px;
+      text-align: right;
+    }
+
+    /* Card footer */
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 0.8rem;
+      padding-top: 0.8rem;
+      border-top: 1px solid var(--border);
+    }
+    .tag-badge {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid var(--border);
+      color: rgba(255,255,255,0.6);
+      font-size: 0.65rem;
+      padding: 3px 10px;
+      border-radius: 100px;
+      font-family: 'Comic Sans MS', cursive;
+    }
+    .emoji-rating { font-size: 0.9rem; letter-spacing: -2px; }
+
+    /* ========== NO RESULTS ========== */
+    #no-results {
+      display: none;
+      text-align: center;
+      padding: 5rem 2rem;
+      font-size: 1rem;
+      color: rgba(255,255,255,0.4);
+    }
+    #no-results .big { font-size: 4rem; display: block; margin-bottom: 1rem; }
+
+    /* ========== RANDOM SHAKE ON CARD ========== */
+    @keyframes cardWiggle {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(-3deg) scale(1.02); }
+      75% { transform: rotate(3deg) scale(1.02); }
+    }
+    .card-wiggle { animation: cardWiggle 0.4s ease-in-out; }
+
+    /* ========== FOOTER TOP ========== */
+    .meme-disclaimer {
+      background: rgba(255,229,0,0.05);
+      border: 1px solid rgba(255,229,0,0.1);
+      border-radius: 12px;
+      padding: 1rem 1.5rem;
+      max-width: 700px;
+      margin: 0 auto 3rem;
+      text-align: center;
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.3);
+    }
+  </style>
+</head>
+<body>
+
+<!-- CUSTOM CURSOR -->
+<div class="custom-cursor" id="cursor">👨‍🏫</div>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-content">
+    👨‍🏫 NASI NAUCZYCIELE SĄ PRAWDZIWYMI LUDŹMI. PRAWIE. &nbsp;|&nbsp;
+    🧠 ŁĄCZNIE IQ KADRY: DUŻO (nie liczyliśmy) &nbsp;|&nbsp;
+    💻 KAŻDY NAUCZYCIEL PRZYNAJMNIEJ RAZ NAPISAŁ "Hello World" &nbsp;|&nbsp;
+    ☕ ŚREDNIE SPOŻYCIE KAWY NA NAUCZYCIELA: 4.2 DZIENNIE &nbsp;|&nbsp;
+    🔥 TECHNI SCHOOLS - KADRA ZBUDOWANA INACZEJ &nbsp;|&nbsp;
+    📚 LEKTURY SĄ OPCJONALNE (kłamstwo) &nbsp;|&nbsp;
+    🎓 WSZYSCY MAJĄ DYPLOMY. WIĘKSZOŚĆ POKAZAŁA. &nbsp;|&nbsp;
+    👨‍🏫 NASI NAUCZYCIELE SĄ PRAWDZIWYMI LUDŹMI. PRAWIE. &nbsp;|&nbsp;
+    🧠 ŁĄCZNIE IQ KADRY: DUŻO (nie liczyliśmy) &nbsp;|&nbsp;
+    💻 KAŻDY NAUCZYCIEL PRZYNAJMNIEJ RAZ NAPISAŁ "Hello World" &nbsp;|&nbsp;
+    ☕ ŚREDNIE SPOŻYCIE KAWY NA NAUCZYCIELA: 4.2 DZIENNIE &nbsp;|&nbsp;
+  </div>
+</div>
+
+<!-- NAV -->
+<nav class="meme-nav">
+  <a href="index.html" class="nav-logo">
+    <svg data-name="ts_logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 857.03 304.17">
+      <path d="M13.14 46v239h240V46Zm224 223h-49v-17h33v-16H78v16h94.14v17h-143v-73h17v56h16v-91h-16v19h-17V62h144v15h-96v16h128v96h16V77h-32V62h48Z"></path>
+      <path d="M162 145v16h-18.14v59H78.14V110H128v16H94.14v78h33.72v-43H110v-16h52z"></path>
+      <path d="M221 204v16h-63v-16h14.14v-78h-29.26v-16H188v12h.14v82H221zM46.14 77h16v68h-16zM373.64 69.34h-31.08v89h-24.62v-89H287v-20h86.63ZM453.66 158.33h-65.35v-109h62.85v20h-38.3v24.25h35.64v19.91h-35.64v24.93h40.8ZM549.26 154.46q-11.93 5.78-31.15 5.77-25.08 0-39.44-14.74T464.3 106.2q0-26.15 16.15-42.41t41.91-16.26q16 0 26.9 4v23.66a47.7 47.7 0 0 0-24.92-6.53q-15.36 0-24.78 9.65t-9.42 26.14q0 15.81 8.89 25.19T523 139a51 51 0 0 0 26.29-7ZM662.57 158.33H638V114h-45.19v44.38h-24.55v-109h24.55v43.44H638V49.36h24.62ZM785.53 158.33h-24.78l-44.91-68.47a99.83 99.83 0 0 1-5.47-9h-.3q.6 5.78.61 17.63v59.88H687.5v-109h26.44l43.24 66.34q3 4.48 5.47 8.89h.35a115.42 115.42 0 0 1-.61-15V49.36h23.18ZM835 158.33h-24.55v-109H835ZM292.63 277.93v-15a23.43 23.43 0 0 0 4.81 3.32 38 38 0 0 0 5.92 2.48 46.18 46.18 0 0 0 6.26 1.56 33.09 33.09 0 0 0 5.76.56q9.21 0 13.71-3.07a10.09 10.09 0 0 0 4.51-8.89 9.7 9.7 0 0 0-1.5-5.43 15.7 15.7 0 0 0-4.21-4.2 43.51 43.51 0 0 0-6.34-3.65c-2.44-1.17-5-2.39-7.82-3.65q-4.49-2.4-8.35-4.85a35.52 35.52 0 0 1-6.71-5.43 22.66 22.66 0 0 1-4.48-6.71 22 22 0 0 1-1.62-8.77 20.28 20.28 0 0 1 2.79-10.77 23.54 23.54 0 0 1 7.36-7.54 33.51 33.51 0 0 1 10.39-4.42A49.44 49.44 0 0 1 325 192q13.8 0 20.12 3.13v14.41q-7.49-5.4-19.26-5.4a34.42 34.42 0 0 0-6.47.62 19.3 19.3 0 0 0-5.77 2 12.64 12.64 0 0 0-4.14 3.62 8.89 8.89 0 0 0-1.59 5.34 10.07 10.07 0 0 0 1.23 5.09 13 13 0 0 0 3.58 3.92 37.06 37.06 0 0 0 5.77 3.47q3.4 1.68 7.88 3.65 4.61 2.38 8.68 5a41.44 41.44 0 0 1 7.18 5.82 25.58 25.58 0 0 1 4.9 7.09 20.75 20.75 0 0 1 1.81 8.86 20.81 20.81 0 0 1-10 18.77 32.54 32.54 0 0 1-10.52 4.17 59.28 59.28 0 0 1-12.58 1.29 52.3 52.3 0 0 1-5.43-.34q-3.21-.33-6.59-1a62 62 0 0 1-6.38-1.56 20.22 20.22 0 0 1-4.79-2.02ZM426.4 277.75q-9.94 5.14-24.72 5.15-19.14 0-30.67-12.08t-11.53-31.71q0-21.11 13-34.11t32.79-13q12.75 0 21.16 3.62v14.47a37.82 37.82 0 0 0-19.63-5.27q-14.29 0-23.15 9.14t-8.87 24.41q0 14.53 8.28 23.15t21.78 8.62q12.45 0 21.59-5.89ZM513.74 281.43h-14.66v-38.15h-41.4v38.15h-14.6v-88h14.6v37h41.4v-37h14.66ZM571.7 282.9q-19 0-30.45-12.33t-11.44-32.08q0-21.23 11.65-33.85T573.11 192q18.52 0 29.84 12.27t11.32 32.08q0 21.53-11.59 34T571.7 282.9Zm.68-78.08a24.44 24.44 0 0 0-19.66 9q-7.58 9-7.58 23.73t7.36 23.62a23.74 23.74 0 0 0 19.26 8.95q12.65 0 19.94-8.52t7.3-23.86q0-15.76-7.09-24.35t-19.53-8.57ZM666.65 282.9q-19 0-30.45-12.33t-11.44-32.08q0-21.23 11.65-33.85T668.06 192q18.53 0 29.84 12.27t11.31 32.08q0 21.53-11.59 34t-30.97 12.55Zm.67-78.08a24.46 24.46 0 0 0-19.66 9q-7.57 9-7.57 23.73t7.36 23.62a23.74 23.74 0 0 0 19.26 8.95q12.63 0 19.93-8.52t7.3-23.86q0-15.76-7.08-24.35t-19.54-8.57ZM774.05 281.43h-48.7v-88h14.59v75.67h34.11ZM782.69 277.93v-15a23.51 23.51 0 0 0 4.82 3.32 37.63 37.63 0 0 0 5.92 2.48 46 46 0 0 0 6.25 1.56 33.29 33.29 0 0 0 5.77.56q9.19 0 13.71-3.07a10.11 10.11 0 0 0 4.51-8.89 9.71 9.71 0 0 0-1.51-5.43 15.51 15.51 0 0 0-4.2-4.2 43.13 43.13 0 0 0-6.35-3.65q-3.65-1.76-7.82-3.65-4.47-2.4-8.34-4.85a35.52 35.52 0 0 1-6.71-5.43 22.47 22.47 0 0 1-4.48-6.71 21.79 21.79 0 0 1-1.63-8.77 20.28 20.28 0 0 1 2.79-10.77 23.65 23.65 0 0 1 7.36-7.54 33.67 33.67 0 0 1 10.4-4.42 49.38 49.38 0 0 1 11.9-1.44q13.8 0 20.12 3.13v14.41q-7.49-5.4-19.26-5.4a34.34 34.34 0 0 0-6.47.62 19.3 19.3 0 0 0-5.77 2 12.44 12.44 0 0 0-4.14 3.62 8.89 8.89 0 0 0-1.59 5.34 10.17 10.17 0 0 0 1.22 5.09 13.15 13.15 0 0 0 3.59 3.92 36.59 36.59 0 0 0 5.77 3.47c2.27 1.12 4.89 2.34 7.88 3.65q4.61 2.38 8.68 5a41 41 0 0 1 7.17 5.82 25.62 25.62 0 0 1 4.91 7.09 20.75 20.75 0 0 1 1.81 8.86 20.79 20.79 0 0 1-10 18.77 32.36 32.36 0 0 1-10.52 4.17 59.12 59.12 0 0 1-12.57 1.29 52.3 52.3 0 0 1-5.43-.34q-3.21-.33-6.59-1a61.4 61.4 0 0 1-6.38-1.56 20.5 20.5 0 0 1-4.82-2.05Z"></path>
+    </svg>
+    <span class="nav-logo-badge">V.MEME</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">🏠 Główna</a></li>
+    <li><a href="teachers.html" class="active">👨‍🏫 Nauczyciele</a></li>
+    <li><a href="index.html#why-us">🤔 Dlaczego My</a></li>
+    <li><a href="index.html#gallery">📸 Galeria</a></li>
+    <li><a href="index.html#partners">🤝 Sponsorzy</a></li>
+    <li><a href="index.html#hero" class="nav-cta">APLIKUJ TERAZ 🔥</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="teachers-hero">
+  <div class="hero-emoji-grid" aria-hidden="true" id="emojiGrid"></div>
+  <h1 class="impact-outlined glitch" data-text="NAUCZYCIELE">NAUCZYCIELE</h1>
+  <p class="sub">
+    Poznaj <em>44 prawdziwych ludzi</em> którzy wybrali nauczanie zamiast normalnej pracy w IT.<br>
+    Każdy ma historię. Większość jest ciekawa. Wszystkie są prawdziwe. <em>Chyba.</em>
+  </p>
+  <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; margin-bottom:1rem;">
+    <div style="text-align:center; font-size:0.8rem; color:rgba(255,255,255,0.4);">
+      <span style="font-family:'Bebas Neue',cursive; font-size:2rem; color:var(--yellow); display:block;" id="total-count">44</span>
+      Nauczycieli
+    </div>
+    <div style="text-align:center; font-size:0.8rem; color:rgba(255,255,255,0.4);">
+      <span style="font-family:'Bebas Neue',cursive; font-size:2rem; color:var(--blue); display:block;">3</span>
+      Miasta
+    </div>
+    <div style="text-align:center; font-size:0.8rem; color:rgba(255,255,255,0.4);">
+      <span style="font-family:'Bebas Neue',cursive; font-size:2rem; color:var(--green); display:block;">∞</span>
+      Kaw Dziennie
+    </div>
+    <div style="text-align:center; font-size:0.8rem; color:rgba(255,255,255,0.4);">
+      <span style="font-family:'Bebas Neue',cursive; font-size:2rem; color:var(--pink); display:block;">0</span>
+      Leniuchów
+    </div>
+  </div>
+</div>
+
+<!-- FILTERS -->
+<div class="filter-bar">
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" class="search-input" id="searchInput" placeholder="Szukaj nauczyciela..." autocomplete="off">
+  </div>
+</div>
+<div class="filter-bar" style="top:148px; padding:0.5rem 2rem;">
+  <button class="filter-btn active" data-city="all" onclick="filterTeachers('all', this)">🌍 Wszyscy (<span id="all-count">44</span>)</button>
+  <button class="filter-btn" data-city="warszawa" onclick="filterTeachers('warszawa', this)">🏙️ Warszawa</button>
+  <button class="filter-btn" data-city="lublin" onclick="filterTeachers('lublin', this)">🏘️ Lublin</button>
+  <button class="filter-btn" data-city="wroclaw" onclick="filterTeachers('wroclaw', this)">🌉 Wrocław</button>
+  <button class="filter-btn" data-city="sigmas" onclick="filterTeachers('sigmas', this)">🗿 Sigma &gt;80%</button>
+  <button class="filter-btn" data-city="memes" onclick="filterTeachers('memes', this)">🤣 Meme &gt;80%</button>
+</div>
+
+<!-- TEACHERS SECTION -->
+<section class="teachers-section">
+  <div class="container">
+    <p class="teachers-count" id="showing-count">Wyświetlam wszystkich <strong>44</strong> nauczycieli (wszystkich prawdziwych ludzi)</p>
+    <div id="teachers-grid"></div>
+    <div id="no-results">
+      <span class="big">😭</span>
+      Nie znaleziono nauczyciela o tym imieniu.<br>
+      <span style="font-size:0.75rem;">Może wpisałeś złe imię. Albo ten nauczyciel uciekł z kraju. Trudno powiedzieć.</span>
+    </div>
+    <div class="meme-disclaimer">
+      ⚠️ <strong>Disclaimer:</strong> Wszystkie cytaty, statystyki i opisy są fikcyjne i stworzone w celach humorystycznych.
+      Nasi nauczyciele są profesjonalni, kompetentni i prawdopodobnie nie hakują routerów (w godzinach pracy).
+      Strona stworzona z miłością i Comic Sansem. 💛
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="meme-footer">
+  <div style="font-size:2rem; margin-bottom:1rem;">👨‍🏫</div>
+  <div style="font-family:'Bebas Neue',cursive; font-size:1.5rem; color:var(--yellow); letter-spacing:3px;">TECHNI SCHOOLS</div>
+  <div style="font-size:0.7rem; color:rgba(255,255,255,0.3); margin:0.5rem 0 1.5rem;">Warszawa • Lublin • Wrocław</div>
+  <div class="footer-links">
+    <a href="index.html">🏠 Strona Główna</a>
+    <a href="teachers.html">👨‍🏫 Nauczyciele</a>
+    <a href="https://technischools.com" target="_blank">🔗 Prawdziwa Strona</a>
+    <a href="#top">⬆️ Na Górę</a>
+  </div>
+  <p>© 2025 Techni Schools Meme Edition | Żaden nauczyciel nie ucierpiał podczas tworzenia tej strony</p>
+  <p style="margin-top:0.5rem; font-size:0.65rem; color:rgba(255,255,255,0.1);">* "Sigma rating" nie jest oficjalną miarą pedagogiczną. Jeszcze.</p>
+</footer>
+
+<!-- MEME POPUP -->
+<div class="meme-popup" id="memePopup">
+  <button class="popup-close" onclick="document.getElementById('memePopup').classList.remove('visible')">✕</button>
+  <div style="font-size:1.5rem; margin-bottom:0.5rem;" id="popupEmoji">👨‍🏫</div>
+  <div style="font-family:'Bebas Neue',cursive; font-size:1.1rem; color:var(--yellow); margin-bottom:0.3rem;" id="popupTitle">CIEKAWOSTKA!</div>
+  <div style="font-size:0.8rem; color:rgba(255,255,255,0.7);" id="popupText">Hover na kartę nauczyciela żeby zobaczyć jego sekret 👀</div>
+</div>
+
+<script>
+// ===== TEACHER DATA =====
+const TEACHERS = [
+  {
+    name: "Mateusz Kozłowski",
+    subject: "🤖 AI • Programowanie • Cyberbezpieczeństwo",
+    photo: "./Nauczyciele _ Techni Schools_files/mateusz-kozowski_uid_646f36ad0d446.jpg",
+    quote: '"Twój router nie jest tak bezpieczny jak myślisz. Porozmawiajmy po lekcjach."',
+    memeCaption: "WILL HACK YOU FOR SCIENCE",
+    hard: 65, meme: 95, sigma: 85,
+    tag: "🔐 will hack you",
+    rating: "🔥🔥🔥🔥🔥",
+    color: "#00D4FF",
+    power: "LEGENDARY",
+    city: "warszawa"
+  },
+  {
+    name: "Paweł Powęzka",
+    subject: "💪 Wychowanie Fizyczne",
+    photo: "./Nauczyciele _ Techni Schools_files/p-pow196153zka_uid_64477cf12d6ef.jpg",
+    quote: '"50 pompek albo siedzisz po lekcjach. Nie interesuje mnie że twój kod się kompiluje."',
+    memeCaption: "LITERALLY NOT A PROGRAMMER BUT OK",
+    hard: 95, meme: 40, sigma: 55,
+    tag: "💪 gym enjoyer",
+    rating: "💪💪💪💪💪",
+    color: "#FF6B00",
+    power: "CHAD",
+    city: "lublin"
+  },
+  {
+    name: "Paweł Nowak",
+    subject: "👾 Podstawy Programowania",
+    photo: "./Nauczyciele _ Techni Schools_files/p-nowak_uid_64477cf07e253.jpg",
+    quote: '"print(\"Hello World\") napisałem 3000 razy. Każdy raz był wyjątkowy. Serio."',
+    memeCaption: "PRINT() CHANGED MY LIFE",
+    hard: 50, meme: 80, sigma: 65,
+    tag: "🐣 print enjoyer",
+    rating: "💻💻💻💻",
+    color: "#39FF14",
+    power: "BASED",
+    city: "wroclaw"
+  },
+  {
+    name: "Piotr Brodzik",
+    subject: "🔢 Matematyka",
+    photo: "./Nauczyciele _ Techni Schools_files/p-brodzik_uid_64477cefc942d.jpg",
+    quote: '"x² nie ugryzie. Chyba że jest na egzaminie końcoworocznym w piątek."',
+    memeCaption: "MATH IS EASY (it is not)",
+    hard: 80, meme: 60, sigma: 70,
+    tag: "∑ euler fan",
+    rating: "🔢🔢🔢🔢🔢",
+    color: "#BF5FFF",
+    power: "SIGMA",
+    city: "lublin"
+  },
+  {
+    name: "Monika Krzykała",
+    subject: "🧠 Filozofia • Etyka",
+    photo: "./Nauczyciele _ Techni Schools_files/m-krzyka197130a_uid_64477cee70b61.jpg",
+    quote: '"A czy ty w ogóle istniejesz? Udowodnij to w 3 zdaniach. Na jutro."',
+    memeCaption: "COGITO ERGO SUFFER",
+    hard: 75, meme: 90, sigma: 100,
+    tag: "🌌 galaxy brain",
+    rating: "🧠🧠🧠🧠🧠",
+    color: "#FF006E",
+    power: "200 IQ",
+    city: "lublin"
+  },
+  {
+    name: "Kamil Zieliński",
+    subject: "📐 Projektowanie Oprogramowania",
+    photo: "./Nauczyciele _ Techni Schools_files/k-zieli197132ski_uid_64477ced206b2.jpg",
+    quote: '"Ten diagram UML wygląda jak mój pierwszy związek. Skomplikowany i źle zaprojektowany."',
+    memeCaption: "UML OR DEATH",
+    hard: 60, meme: 75, sigma: 70,
+    tag: "📐 UML enjoyer",
+    rating: "📐📐📐📐",
+    color: "#FFE500",
+    power: "BASED",
+    city: "warszawa"
+  },
+  {
+    name: "Karol Piekut",
+    subject: "🇬🇧 Język Angielski • Angielski Zawodowy",
+    photo: "./Nauczyciele _ Techni Schools_files/k-piekut_uid_64477cebc7fc6.jpg",
+    quote: '"Your grammar is not bussin fr fr no cap. Also write a 2-page essay by Monday."',
+    memeCaption: "GRAMMAR POLICE 🚨",
+    hard: 70, meme: 88, sigma: 90,
+    tag: "🇬🇧 rizz teacher",
+    rating: "🗣️🗣️🗣️🗣️🗣️",
+    color: "#00D4FF",
+    power: "RIZZ",
+    city: "warszawa"
+  },
+  {
+    name: "Beata Zatorska-Słoboda",
+    subject: "📚 Język Polski",
+    photo: "./Nauczyciele _ Techni Schools_files/Nauczyciele-25_uid_66eaa3b08157b.jpg",
+    quote: '"Mickiewicz nie jest memem. To niestety. Ale Anhelli na pewno by tweetował."',
+    memeCaption: "LEKTURY: THE FINAL BOSS",
+    hard: 85, meme: 45, sigma: 60,
+    tag: "📚 lektury enjoyer",
+    rating: "📖📖📖",
+    color: "#FF6B00",
+    power: "SERIOUS",
+    city: "warszawa"
+  },
+  {
+    name: "Grzegorz Szramowiat",
+    subject: "🛡️ Edukacja dla Bezpieczeństwa",
+    photo: "./Nauczyciele _ Techni Schools_files/g-szramowiat_uid_64477ce90b55b.jpg",
+    quote: '"Wiem gdzie mieszkasz. To jest część programu edukacyjnego. Prawie."',
+    memeCaption: "CERTIFIED SCARY GUY",
+    hard: 88, meme: 72, sigma: 80,
+    tag: "🛡️ certified scary",
+    rating: "⚔️⚔️⚔️⚔️",
+    color: "#39FF14",
+    power: "TERRIFYING",
+    city: "warszawa"
+  },
+  {
+    name: "Ewa Kozłowska",
+    subject: "🗃️ Bazy Danych",
+    photo: "./Nauczyciele _ Techni Schools_files/e-kryczka_uid_64477ce85b3bf.jpg",
+    quote: '"SELECT * FROM studenci WHERE uwaga > 0; -- zwraca pustą tabelę co tydzień."',
+    memeCaption: "NULL TOLERANCE POLICY",
+    hard: 65, meme: 82, sigma: 75,
+    tag: "🗃️ NULL or nothing",
+    rating: "🗄️🗄️🗄️🗄️",
+    color: "#BF5FFF",
+    power: "INDEXED",
+    city: "warszawa"
+  },
+  {
+    name: "A. Sałata",
+    subject: "🌐 Sieci Komputerowe",
+    photo: "./Nauczyciele _ Techni Schools_files/a-sa197130o_uid_64477ce70c8ec.jpg",
+    quote: '"Ping 1ms. Moje serce 0ms kiedy ktoś pyta po co TCP/IP."',
+    memeCaption: "ROUTER WHISPERER 📡",
+    hard: 60, meme: 72, sigma: 65,
+    tag: "📡 router whisperer",
+    rating: "🌐🌐🌐🌐",
+    color: "#00D4FF",
+    power: "CONNECTED",
+    city: "warszawa"
+  },
+  {
+    name: "A. Dejnek",
+    subject: "📜 Historia",
+    photo: "./Nauczyciele _ Techni Schools_files/a-dejnek_uid_64477ce63cd1d.jpg",
+    quote: '"Historia kołem się toczy. Jak pętla while(true). Bez break."',
+    memeCaption: "ANALOG IN DIGITAL WORLD",
+    hard: 55, meme: 68, sigma: 60,
+    tag: "📜 analog enjoyer",
+    rating: "⏳⏳⏳",
+    color: "#FF6B00",
+    power: "VETERAN",
+    city: "lublin"
+  },
+  {
+    name: "Adrian Łukasik",
+    subject: "🐧 Systemy Operacyjne",
+    photo: "./Nauczyciele _ Techni Schools_files/Adrian-ukasik_uid_66f12b26530aa.jpg",
+    quote: '"Btw I use Arch. To nie jest opcjonalna informacja. To jest tożsamość."',
+    memeCaption: "BTW I USE ARCH 🐧",
+    hard: 72, meme: 88, sigma: 82,
+    tag: "🐧 btw I use arch",
+    rating: "🐧🐧🐧🐧🐧",
+    color: "#39FF14",
+    power: "LINUX GOD",
+    city: "warszawa"
+  },
+  {
+    name: "Agnieszka Kierys",
+    subject: "⚗️ Chemia Stosowana",
+    photo: "./Nauczyciele _ Techni Schools_files/Agnieszka-Kierys_uid_65cf3b095d812.jpg",
+    quote: '"NaCl + H₂O = łzy na egzaminie. Katalizator: brak przygotowania."',
+    memeCaption: "CHEMISTRY IS CODING BUT WET",
+    hard: 75, meme: 62, sigma: 70,
+    tag: "⚗️ periodic table stan",
+    rating: "🧪🧪🧪🧪",
+    color: "#FF006E",
+    power: "CHEMICAL",
+    city: "warszawa"
+  },
+  {
+    name: "Artur Ciszewski",
+    subject: "💻 Języki Programowania",
+    photo: "./Nauczyciele _ Techni Schools_files/Artur-Ciszewski_uid_691715514f477.jpg",
+    quote: '"Python, C++, Java, Rust. Każdy z nich cię skrzywdzi inaczej. Przyjemnie."',
+    memeCaption: "MULTI-LANGUAGE DESTROYER",
+    hard: 80, meme: 82, sigma: 86,
+    tag: "🦀 Rust evangelist",
+    rating: "💻💻💻💻💻",
+    color: "#BF5FFF",
+    power: "POLYGLOT",
+    city: "wroclaw"
+  },
+  {
+    name: "Bartłomiej Jasiński",
+    subject: "🎨 Frontend Development",
+    photo: "./Nauczyciele _ Techni Schools_files/Bartomiej-Jasiski_uid_66f12b2476d90.jpg",
+    quote: '"CSS to nie język. To psychologiczny eksperyment. I ja jestem wynikiem."',
+    memeCaption: "FLEXBOX CHANGED ME",
+    hard: 65, meme: 92, sigma: 76,
+    tag: "🎨 CSS survivor",
+    rating: "🎨🎨🎨🎨",
+    color: "#FFE500",
+    power: "FLEXED",
+    city: "wroclaw"
+  },
+  {
+    name: "Cezary Szymanowski",
+    subject: "⚙️ Backend Development",
+    photo: "./Nauczyciele _ Techni Schools_files/Cezary-Szymanowski_uid_65cf3b0d1d043.jpg",
+    quote: '"REST API spokojny? Nie. Nie jest. Nigdy nie jest. To iluzja."',
+    memeCaption: "STATUS 500: INTERNAL SERVER CHAOS",
+    hard: 70, meme: 78, sigma: 80,
+    tag: "⚙️ JSON parser",
+    rating: "⚙️⚙️⚙️⚙️",
+    color: "#00D4FF",
+    power: "BACKEND",
+    city: "lublin"
+  },
+  {
+    name: "Dagmara Bałabaniak",
+    subject: "💬 Pedagogika • Doradztwo",
+    photo: "./Nauczyciele _ Techni Schools_files/Dagmara-Baabaniak_uid_66f12b230805c.jpg",
+    quote: '"Twoje problemy mnie nie zaskakują. Ale opowiedz mi więcej. Słucham."',
+    memeCaption: "MAIN CHARACTER ENERGY",
+    hard: 50, meme: 72, sigma: 88,
+    tag: "💬 life debugger",
+    rating: "💛💛💛💛💛",
+    color: "#FF006E",
+    power: "EMPATHY",
+    city: "warszawa"
+  },
+  {
+    name: "Emilia Kasprzak",
+    subject: "🖥️ Grafika • UX Design",
+    photo: "./Nauczyciele _ Techni Schools_files/Emilia-Kasprzak_uid_68cc07e2ab27f.png",
+    quote: '"To nie jest ładne. Zaprojektuj to jeszcze raz. Tak. Jeszcze raz. Raz jeszcze."',
+    memeCaption: "PIXEL PERFECTIONIST 🎯",
+    hard: 76, meme: 82, sigma: 86,
+    tag: "🎯 pixel perfectionist",
+    rating: "🎨🎨🎨🎨🎨",
+    color: "#BF5FFF",
+    power: "AESTHETIC",
+    city: "warszawa"
+  },
+  {
+    name: "Janeczek A.",
+    subject: "⚡ Fizyka",
+    photo: "./Nauczyciele _ Techni Schools_files/Janeczek-A.jpg",
+    quote: '"Grawitacja jest bezpłatna i nieuchronna. Podobnie jak mój egzamin poprawkowy."',
+    memeCaption: "F = MA AND I WILL TEST YOU",
+    hard: 82, meme: 66, sigma: 72,
+    tag: "⚡ Newton's cousin",
+    rating: "⚡⚡⚡⚡",
+    color: "#FFE500",
+    power: "PHYSICAL",
+    city: "lublin"
+  },
+  {
+    name: "Joanna Łaboklicka",
+    subject: "🌍 WOS • Wiedza o Społeczeństwie",
+    photo: "./Nauczyciele _ Techni Schools_files/Joanna-aboklicka_uid_66f12b230bae2.jpg",
+    quote: '"Społeczeństwo działa jak algorytm napisany w latach 80. Działa. Jakoś."',
+    memeCaption: "SOCIETY OBSERVER 👁️",
+    hard: 60, meme: 76, sigma: 65,
+    tag: "🌍 society watcher",
+    rating: "🌍🌍🌍🌍",
+    color: "#39FF14",
+    power: "AWARE",
+    city: "wroclaw"
+  },
+  {
+    name: "Aleksandra Mysiak",
+    subject: "🧘 Psychologia • Wsparcie",
+    photo: "./Nauczyciele _ Techni Schools_files/Kadra---Aleksandra-Mysiak-1-1_uid_6683ebf63bc08.png",
+    quote: '"Twój impostor syndrome jest valid. Ale też trochę jest syndromem kogoś kto nie uczył się."',
+    memeCaption: "MENTAL HEALTH BUFF ACTIVATED",
+    hard: 55, meme: 82, sigma: 92,
+    tag: "🧘 mind debugger",
+    rating: "💙💙💙💙💙",
+    color: "#00D4FF",
+    power: "SUPPORTIVE",
+    city: "warszawa"
+  },
+  {
+    name: "Kamil Rolek",
+    subject: "🔄 Algorytmy i Struktury Danych",
+    photo: "./Nauczyciele _ Techni Schools_files/Kamil-Rolek_uid_65cf3b0a09360.jpg",
+    quote: '"O(n²) to nie jest rozwiązanie. To wyznanie winy. Napisz to lepiej."',
+    memeCaption: "BIG O OR BIG NO",
+    hard: 86, meme: 88, sigma: 92,
+    tag: "🔄 Big O supremacist",
+    rating: "🏆🏆🏆🏆🏆",
+    color: "#FF006E",
+    power: "OPTIMAL",
+    city: "warszawa"
+  },
+  {
+    name: "Katarzyna Gościniowa",
+    subject: "🇩🇪 Język Obcy",
+    photo: "./Nauczyciele _ Techni Schools_files/Katarzyna-Gociniak_uid_66f12b245fda5.jpg",
+    quote: '"Ja, nein, doch. Trzy słowa wystarczą. Resztę napisz w kodzie."',
+    memeCaption: "MULTILINGUAL DESTROYER 🗣️",
+    hard: 70, meme: 65, sigma: 75,
+    tag: "🌐 polyglot mode",
+    rating: "🇩🇪🇩🇪🇩🇪🇩🇪",
+    color: "#FFE500",
+    power: "SPRACHEN",
+    city: "warszawa"
+  },
+  {
+    name: "Marcin Stefanowicz",
+    subject: "🏗️ Architektura Systemów",
+    photo: "./Nauczyciele _ Techni Schools_files/Marcin-Stefanowicz_uid_65cf3b0a9b10d.jpg",
+    quote: '"Microservices albo monolith. Obie opcje spędza ci sen z powiek. Z różnych powodów."',
+    memeCaption: "ARCHITECT OF CONTROLLED CHAOS",
+    hard: 86, meme: 82, sigma: 88,
+    tag: "🏗️ architect mode",
+    rating: "🏗️🏗️🏗️🏗️🏗️",
+    color: "#BF5FFF",
+    power: "ARCHITECT",
+    city: "warszawa"
+  },
+  {
+    name: "Marzena Wolska",
+    subject: "💰 Ekonomia • Rachunkowość",
+    photo: "./Nauczyciele _ Techni Schools_files/Marzena-Wolska_uid_66f12b2452db0.jpg",
+    quote: '"Twój portfel = {balance: 0} po kupnie RTX 4090 zamiast laptopa do szkoły."',
+    memeCaption: "STONKS TEACHER 📈",
+    hard: 70, meme: 78, sigma: 72,
+    tag: "📈 stonks expert",
+    rating: "💰💰💰💰",
+    color: "#39FF14",
+    power: "FINANCIAL",
+    city: "lublin"
+  },
+  {
+    name: "Tajemniczy Nauczyciel",
+    subject: "❓ Przedmiot Nieznany",
+    photo: "./Nauczyciele _ Techni Schools_files/Nauczyciele-23_uid_66eaa3b097f4d.jpg",
+    quote: '"Tajemniczy jak undefined w JavaScript. Istnieje. Ale nie wiadomo dlaczego."',
+    memeCaption: "typeof teacher === 'undefined'",
+    hard: 50, meme: 55, sigma: 50,
+    tag: "❓ undefined person",
+    rating: "❓❓❓",
+    color: "rgba(255,255,255,0.3)",
+    power: "MYSTERY",
+    city: "wroclaw"
+  },
+  {
+    name: "Patrycja Sawicka",
+    subject: "🎮 Projektowanie Gier",
+    photo: "./Nauczyciele _ Techni Schools_files/Patrycja-Sawicka-tesr_uid_66f127698e579.jpg",
+    quote: '"Unity się zawiesił po raz 17. Ship it. Bugs to features. Zawsze."',
+    memeCaption: "UNITY CRASHED AGAIN, SHIP IT",
+    hard: 75, meme: 96, sigma: 82,
+    tag: "🎮 game dev goblin",
+    rating: "🎮🎮🎮🎮🎮",
+    color: "#FF006E",
+    power: "GAMER",
+    city: "wroclaw"
+  },
+  {
+    name: "Paweł Łukowski",
+    subject: "🔧 Administracja Sieciami",
+    photo: "./Nauczyciele _ Techni Schools_files/Pawe-ukowski_uid_66f12b2458c15.jpg",
+    quote: '"Have you tried turning it off and on again? (pytam poważnie, rób to częściej)"',
+    memeCaption: "CTRL+Z MAGICIAN ✨",
+    hard: 65, meme: 87, sigma: 76,
+    tag: "🔧 IT crowd vibes",
+    rating: "🖧🖧🖧🖧",
+    color: "#00D4FF",
+    power: "SYSADMIN",
+    city: "warszawa"
+  },
+  {
+    name: "Robert Rogala",
+    subject: "⚖️ Prawo IT • RODO",
+    photo: "./Nauczyciele _ Techni Schools_files/Robert-Rogala_uid_6917155159028.jpg",
+    quote: '"GDPR, RODO, cookies consent. Słowa które obudzą cię w środku nocy za 10 lat."',
+    memeCaption: "COMPLIANCE IS NOT OPTIONAL",
+    hard: 80, meme: 72, sigma: 76,
+    tag: "⚖️ law enjoyer",
+    rating: "⚖️⚖️⚖️⚖️",
+    color: "#BF5FFF",
+    power: "LEGAL",
+    city: "warszawa"
+  },
+  {
+    name: "Sebastian Tyda",
+    subject: "🤖 Systemy Wbudowane",
+    photo: "./Nauczyciele _ Techni Schools_files/Sebasrian-Tyda_uid_65cf3b0c72d4a.jpg",
+    quote: '"Arduino to jak programowanie ale z prądem. Nie dotykaj czerwonego kabla. TERAZ."',
+    memeCaption: "DO NOT TOUCH THE RED WIRE",
+    hard: 82, meme: 82, sigma: 80,
+    tag: "⚡ hardware whisperer",
+    rating: "🤖🤖🤖🤖🤖",
+    color: "#FFE500",
+    power: "EMBEDDED",
+    city: "lublin"
+  },
+  {
+    name: "Wiktoria Benedykciuk",
+    subject: "🚀 Nowe Technologie",
+    photo: "./Nauczyciele _ Techni Schools_files/Wiktoria-Benedykciuk_uid_691722e54b78e.png",
+    quote: '"Web3, VR, AI, Blockchain. Uczymy tego zanim to mainstream. Trochę zbyt wcześnie."',
+    memeCaption: "EARLY ADOPTER ENERGY ⚡",
+    hard: 65, meme: 92, sigma: 86,
+    tag: "🚀 early adopter",
+    rating: "🚀🚀🚀🚀🚀",
+    color: "#39FF14",
+    power: "FUTURISTIC",
+    city: "warszawa"
+  },
+  {
+    name: "Adrian Trębka",
+    subject: "📱 Programowanie Mobilne",
+    photo: "./Nauczyciele _ Techni Schools_files/adrian-trbka_uid_646f36abebdfd.jpg",
+    quote: '"Android vs iOS: dwa kody, dwa płacze, jeden nauczyciel. To ja."',
+    memeCaption: "CROSS-PLATFORM ENJOYER",
+    hard: 70, meme: 86, sigma: 76,
+    tag: "📱 mobile dev",
+    rating: "📱📱📱📱",
+    color: "#FF006E",
+    power: "MOBILE",
+    city: "wroclaw"
+  },
+  {
+    name: "Barbara Daśkevič",
+    subject: "🌍 Języki Obce",
+    photo: "./Nauczyciele _ Techni Schools_files/barbara-daskevic_uid_646f36b044f9f.jpg",
+    quote: '"Код это код na każdym języku. Ale błędy składniowe są uniwersalne."',
+    memeCaption: "INTERNATIONAL VIBES ONLY 🌍",
+    hard: 65, meme: 72, sigma: 70,
+    tag: "🌍 multilingual mode",
+    rating: "🌍🌍🌍🌍",
+    color: "#00D4FF",
+    power: "GLOBAL",
+    city: "wroclaw"
+  },
+  {
+    name: "Dariusz Wardecki",
+    subject: "🚢 DevOps • CI/CD",
+    photo: "./Nauczyciele _ Techni Schools_files/dariusz-wardecki_uid_646f36ac563bb.jpg",
+    quote: '"CI/CD lub śmierć. Deploy w piątek o 16:59. Żegnam wszystkich."',
+    memeCaption: "DEPLOY ON FRIDAY MAN 💀",
+    hard: 92, meme: 88, sigma: 93,
+    tag: "🚢 friday deployer",
+    rating: "💀💀💀💀💀",
+    color: "#FF006E",
+    power: "DEVOPS",
+    city: "warszawa"
+  },
+  {
+    name: "Jacek Wieczorek",
+    subject: "🐛 Testowanie Oprogramowania",
+    photo: "./Nauczyciele _ Techni Schools_files/jacek-wieczorek_uid_646f36aeef08f.jpg",
+    quote: '"QA engineer to jedyna osoba która sprawdza czy twój kod działa. Zazwyczaj nie działa."',
+    memeCaption: "BUG HUNTER EXTRAORDINAIRE",
+    hard: 76, meme: 82, sigma: 76,
+    tag: "🐛 bug hunter",
+    rating: "🔍🔍🔍🔍",
+    color: "#39FF14",
+    power: "TESTER",
+    city: "warszawa"
+  },
+  {
+    name: "Jakub Sawulski",
+    subject: "📊 Data Science • ML",
+    photo: "./Nauczyciele _ Techni Schools_files/jakub-Sawulski_uid_66f12b22e6e9d.jpg",
+    quote: '"Dane nie kłamią. Ale mogą być strategicznie prezentowane. Uczę obu metod."',
+    memeCaption: "DATA WIZARD SUPREME 🧙",
+    hard: 82, meme: 88, sigma: 82,
+    tag: "🧙 data wizard",
+    rating: "📊📊📊📊📊",
+    color: "#BF5FFF",
+    power: "DATA",
+    city: "warszawa"
+  },
+  {
+    name: "K. Pietrzak",
+    subject: "📉 Statystyka • Matematyka",
+    photo: "./Nauczyciele _ Techni Schools_files/k-pietrzak_uid_64477cec76585.jpg",
+    quote: '"Prawdopodobieństwo zdania egzaminu: p < 0.05 jeśli nie uczysz się. Statystycznie."',
+    memeCaption: "STATISTICALLY TERRIFYING",
+    hard: 86, meme: 76, sigma: 82,
+    tag: "📉 stats enjoyer",
+    rating: "📉📉📉📉📉",
+    color: "#FFE500",
+    power: "STATISTICAL",
+    city: "wroclaw"
+  },
+  {
+    name: "Maciej Zwierzchowski",
+    subject: "📋 Zarządzanie Projektem",
+    photo: "./Nauczyciele _ Techni Schools_files/maciej-zwierzchowski_uid_646f36af55ab5.jpg",
+    quote: '"SCRUM sprint. Brzmi szybko. Jest chaosem. Ale kontrolowanym chaosem. Trochę."',
+    memeCaption: "AGILE OR FRAGILE",
+    hard: 70, meme: 82, sigma: 76,
+    tag: "📋 agile appreciator",
+    rating: "📋📋📋📋",
+    color: "#00D4FF",
+    power: "PM",
+    city: "warszawa"
+  },
+  {
+    name: "Małgorzata Zgiet",
+    subject: "✍️ Humanistyka • Komunikacja",
+    photo: "./Nauczyciele _ Techni Schools_files/magorzata-zgiet_uid_646f36b12f571.jpg",
+    quote: '"Nie wszystko da się wyrazić w kodzie. Ale próbujemy. Ciągle próbujemy."',
+    memeCaption: "POET IN A STEM WORLD",
+    hard: 60, meme: 68, sigma: 65,
+    tag: "✍️ words > code",
+    rating: "✍️✍️✍️",
+    color: "#FF6B00",
+    power: "CREATIVE",
+    city: "wroclaw"
+  },
+  {
+    name: "Matthias Mueller",
+    subject: "🇩🇪 Programowanie • Inżynieria",
+    photo: "./Nauczyciele _ Techni Schools_files/matthias-mueller_uid_646f36accd38c.jpg",
+    quote: '"Effizienz ist alles. Albo po polsku: rób szybciej i nie marnuj RAM-u."',
+    memeCaption: "GERMAN PRECISION™ ENGAGED",
+    hard: 93, meme: 72, sigma: 96,
+    tag: "🇩🇪 efficiency mode",
+    rating: "🏆🏆🏆🏆🏆",
+    color: "#39FF14",
+    power: "GERMAN™",
+    city: "warszawa"
+  },
+  {
+    name: "Michał Taborowski",
+    subject: "☁️ Cloud Computing • AWS",
+    photo: "./Nauczyciele _ Techni Schools_files/micha-taborowski_uid_646f36af8986b.jpg",
+    quote: '"Everything is on the cloud. Ale gdzie jest ta chmura? Na serwerach w innym kraju."',
+    memeCaption: "THE CLOUD IS SOMEONE ELSE'S PC",
+    hard: 76, meme: 82, sigma: 80,
+    tag: "☁️ cloud evangelist",
+    rating: "☁️☁️☁️☁️",
+    color: "#00D4FF",
+    power: "CLOUDED",
+    city: "warszawa"
+  },
+  {
+    name: "N. Łaba",
+    subject: "🔬 Analiza Danych",
+    photo: "./Nauczyciele _ Techni Schools_files/n-197129aba_uid_64477cef2ba7a.jpg",
+    quote: '"Cicho ale skutecznie. Jak dobrze napisany malware. (To był żart. Chyba.)"',
+    memeCaption: "STEALTH MODE: ON 🥷",
+    hard: 66, meme: 78, sigma: 72,
+    tag: "🥷 stealth mode",
+    rating: "🔬🔬🔬🔬",
+    color: "#BF5FFF",
+    power: "SILENT",
+    city: "warszawa"
+  },
+  {
+    name: "Wojciech Oczkowski",
+    subject: "🍃 NoSQL • MongoDB",
+    photo: "./Nauczyciele _ Techni Schools_files/wojciech-oczkowski_uid_646f36ae94198.jpg",
+    quote: '"SQL jest dla traditionalistów. MongoDB to wolność. Nieustrukturyzowana wolność."',
+    memeCaption: "NoSQL MISSIONARY 🍃",
+    hard: 76, meme: 88, sigma: 76,
+    tag: "🍃 NoSQL apostle",
+    rating: "🍃🍃🍃🍃",
+    color: "#39FF14",
+    power: "NOSQL",
+    city: "warszawa"
+  }
+];
+
+// ===== RENDER CARDS =====
+const colors = {
+  '#FFE500': '#FFE500',
+  '#FF006E': '#FF006E',
+  '#00D4FF': '#00D4FF',
+  '#39FF14': '#39FF14',
+  '#BF5FFF': '#BF5FFF',
+  '#FF6B00': '#FF6B00',
+};
+
+function createCard(t) {
+  const card = document.createElement('div');
+  card.className = 'teacher-card';
+  card.dataset.name = t.name.toLowerCase();
+  card.dataset.city = t.city;
+  card.dataset.sigma = t.sigma;
+  card.dataset.meme = t.meme;
+  card.style.setProperty('--card-color', t.color);
+
+  const bar = (label, val, color) => `
+    <div class="stat-row">
+      <span class="stat-name">${label}</span>
+      <div class="stat-bar">
+        <div class="stat-fill" style="width:${val}%; background:${color};"></div>
+      </div>
+      <span class="stat-val">${val}%</span>
+    </div>`;
+
+  card.innerHTML = `
+    <div class="teacher-photo-wrap">
+      <img src="${t.photo}" alt="${t.name}" loading="lazy" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22280%22 height=%22260%22><rect fill=%22%23222%22 width=%22280%22 height=%22260%22/><text x=%22140%22 y=%22140%22 text-anchor=%22middle%22 dy=%22.3em%22 font-size=%2260%22>👤</text></svg>'">
+      <div class="photo-overlay"></div>
+      <div class="meme-caption">
+        <div class="meme-caption-text">${t.memeCaption}</div>
+      </div>
+      <div class="city-badge">${t.city === 'warszawa' ? '🏙️ Warszawa' : t.city === 'lublin' ? '🏘️ Lublin' : '🌉 Wrocław'}</div>
+      <div class="power-badge">${t.power}</div>
+    </div>
+    <div class="teacher-info">
+      <div class="teacher-name">${t.name}</div>
+      <div class="teacher-subject">${t.subject}</div>
+      <div class="teacher-quote">${t.quote}</div>
+      <div class="stats-section">
+        ${bar('💀 Hardcorość', t.hard, '#FF006E')}
+        ${bar('🤣 Meme Level', t.meme, '#FFE500')}
+        ${bar('🗿 Sigma Rating', t.sigma, '#00D4FF')}
+      </div>
+      <div class="card-footer">
+        <span class="tag-badge">${t.tag}</span>
+        <span class="emoji-rating">${t.rating}</span>
+      </div>
+    </div>`;
+
+  card.addEventListener('click', () => {
+    card.classList.add('card-wiggle');
+    setTimeout(() => card.classList.remove('card-wiggle'), 400);
+  });
+
+  return card;
+}
+
+function renderAll(teachers) {
+  const grid = document.getElementById('teachers-grid');
+  const noRes = document.getElementById('no-results');
+  grid.innerHTML = '';
+  if (teachers.length === 0) {
+    noRes.style.display = 'block';
+    document.getElementById('showing-count').innerHTML = `Wyświetlam <strong>0</strong> nauczycieli 😭`;
+  } else {
+    noRes.style.display = 'none';
+    teachers.forEach((t, i) => {
+      const card = createCard(t);
+      card.style.animationDelay = (i * 0.05) + 's';
+      card.style.animation = 'popIn 0.4s ease both';
+      card.style.animationDelay = (i * 0.04) + 's';
+      grid.appendChild(card);
+    });
+    document.getElementById('showing-count').innerHTML = `Wyświetlam <strong>${teachers.length}</strong> z ${TEACHERS.length} nauczycieli (wszyscy zatwierdzeni)`;
+  }
+}
+
+renderAll(TEACHERS);
+document.getElementById('total-count').textContent = TEACHERS.length;
+
+// ===== FILTERS =====
+let currentCity = 'all';
+let currentSearch = '';
+
+function filterTeachers(city, btn) {
+  currentCity = city;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  applyFilters();
+}
+
+document.getElementById('searchInput').addEventListener('input', function() {
+  currentSearch = this.value.toLowerCase().trim();
+  applyFilters();
+});
+
+function applyFilters() {
+  let filtered = TEACHERS;
+  if (currentCity === 'warszawa') filtered = filtered.filter(t => t.city === 'warszawa');
+  else if (currentCity === 'lublin') filtered = filtered.filter(t => t.city === 'lublin');
+  else if (currentCity === 'wroclaw') filtered = filtered.filter(t => t.city === 'wroclaw');
+  else if (currentCity === 'sigmas') filtered = filtered.filter(t => t.sigma > 80);
+  else if (currentCity === 'memes') filtered = filtered.filter(t => t.meme > 80);
+  if (currentSearch) filtered = filtered.filter(t => t.name.toLowerCase().includes(currentSearch) || t.subject.toLowerCase().includes(currentSearch));
+  renderAll(filtered);
+}
+
+// ===== CURSOR =====
+const cursor = document.getElementById('cursor');
+const trailEmojis = ['⭐','💫','✨','🌟','❄️'];
+document.addEventListener('mousemove', e => {
+  cursor.style.left = e.clientX + 'px';
+  cursor.style.top = e.clientY + 'px';
+  if (Math.random() < 0.12) {
+    const trail = document.createElement('div');
+    trail.className = 'cursor-trail';
+    trail.style.cssText = `left:${e.clientX}px;top:${e.clientY}px;transform:translate(-50%,-50%)`;
+    trail.textContent = trailEmojis[Math.floor(Math.random() * trailEmojis.length)];
+    document.body.appendChild(trail);
+    setTimeout(() => trail.remove(), 800);
+  }
+});
+
+// ===== EMOJI BACKGROUND GRID =====
+const grid2 = document.getElementById('emojiGrid');
+const bgEmojis = ['💻','🔥','⚡','🧠','🚀','👾','⌨️','🎮','📱','🐛','☕','📚','🏆'];
+for (let i = 0; i < 120; i++) {
+  const span = document.createElement('span');
+  span.textContent = bgEmojis[Math.floor(Math.random() * bgEmojis.length)];
+  grid2.appendChild(span);
+}
+
+// ===== POPUPS =====
+const popupMessages = [
+  {e:'🎓', t:'PSST!', m:'Hover na kartę żeby zobaczyć meme caption 👀'},
+  {e:'🔥', t:'CIEKAWOSTKA:', m:'Matthias Mueller ma najwyższy Sigma Rating (96%). Niemcy.'},
+  {e:'🤖', t:'AI TRIVIA:', m:'Mateusz Kozłowski potrafi zhakować twój router. To oficjalny program nauczania.'},
+  {e:'💀', t:'OSTRZEŻENIE:', m:'Dariusz Wardecki deployuje w piątek. Modl się za serwery.'},
+  {e:'🗿', t:'SIGMA MOMENT:', m:'Patrycja Sawicka ma 96% Meme Level. Szanować.'},
+];
+let pi = 0;
+function showPopup() {
+  const p = popupMessages[pi++ % popupMessages.length];
+  document.getElementById('popupEmoji').textContent = p.e;
+  document.getElementById('popupTitle').textContent = p.t;
+  document.getElementById('popupText').textContent = p.m;
+  const pop = document.getElementById('memePopup');
+  pop.classList.remove('visible');
+  void pop.offsetWidth;
+  pop.classList.add('visible');
+  setTimeout(() => pop.classList.remove('visible'), 7000);
+}
+setTimeout(showPopup, 8000);
+setInterval(showPopup, 40000);
+
+// ===== EMOJI RAIN =====
+const rainEmojis2 = ['📚','💻','🔥','⚡','🧠','🎮','☕','🐛','🏆'];
+function makeRain() {
+  const e = document.createElement('div');
+  e.className = 'emoji-rain';
+  e.textContent = rainEmojis2[Math.floor(Math.random() * rainEmojis2.length)];
+  e.style.left = Math.random() * 100 + 'vw';
+  e.style.animationDuration = (Math.random() * 3 + 5) + 's';
+  document.body.appendChild(e);
+  setTimeout(() => e.remove(), 9000);
+}
+setInterval(makeRain, 1200);
+</script>
+</body>
+</html>
