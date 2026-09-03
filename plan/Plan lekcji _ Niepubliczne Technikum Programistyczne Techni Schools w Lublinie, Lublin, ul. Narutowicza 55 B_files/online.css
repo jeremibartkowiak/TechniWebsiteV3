@@ -1,0 +1,838 @@
+.ttonline {
+	width: 100%;
+	border-spacing: 0px;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+}
+
+#ttonline_ribbon {
+	flex-shrink: 0;
+	flex-grow: 0;
+	/*height: 105px;*/
+	position: relative;
+	min-width: initial;
+}
+
+#ttonline_ribbon .asc-ribbon {
+	margin-bottom: 0px;
+}
+
+.ui-dialog-content #ttonline_ribbon .asc-ribbon {
+	margin: 0px; /* oprava zobrazenia v okne kde pride margin -10 */
+}
+
+#ttonline_content {
+	flex: 1 1 1px;
+	min-height: 1px;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	cursor: default;
+}
+
+#ttonline_printpreview {
+	flex: 1 1 100px;
+	min-height: 1px;
+	background-color: #a0a0a0;
+	overflow: auto;
+}
+
+#ttonline_printpreview.ttviewer {
+	background-color: #ffffff;
+}
+
+#ttonline_printpreview .print-sheet {
+	margin-bottom: 5px;
+}
+
+#ttonline_printpreview.ttviewer .print-sheet {
+	border: none;
+	box-shadow: none;
+	margin-bottom: 5px;
+}
+
+.ttonline .cursorcard {
+	width: 20px;
+	height: 20px;
+	border: 1px solid black;
+	position: fixed;
+	z-index: 1;
+	top: 20px;
+	box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
+	pointer-events: none;
+}
+
+.ttonline .cursorcard .viachodinovka {
+	position: absolute;
+	right: 1px;
+	top: 1px;
+	width: 6px;
+	height: 3px;
+	background: url(/timetable/pics/app/viachodinovka.png);
+}
+
+#ttonline_ribbon .top .right {
+	padding-top: 3px;
+	padding-right: 5px;
+	height: 20px;
+}
+
+#ttonline_ribbon .top .right .user {
+	display: inline-block;
+	padding: 2px 4px;
+	margin-left: 5px;
+	max-width: 150px;
+	text-overflow: ellipsis;
+	border-radius: 3px;
+}
+
+/*//////////////////////////////////////////////////////////////////////
+// CTriedyView
+////////////////////////////////////////////////////////////////////// */
+.triedyview {
+	background-color: #797990;
+	cursor: inherit;
+	display: flex;
+	flex-direction: column;
+}
+
+.triedyview .toolbar {
+	flex: none;
+	position: relative;
+	border-left: 1px solid black;
+}
+
+.triedyview .header {
+	flex-shrink: 0;
+	position: relative;
+	height: 21px;
+	background-color: #ceced3;
+	border-left: 1px solid black;
+	border-bottom: 1px solid black;
+}
+
+.triedyview .content {
+	flex: 1 1 1px;
+	min-height: 1px;
+	position: relative;
+	background-color: #ceced3;
+	border-left: 1px solid black;
+	padding: 0px;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+.triedyview .content.related {
+	flex: 0 0 auto;
+	overflow: hidden;
+	background-color: #e6e6e9;
+	border-bottom: 1px solid black;
+}
+
+.triedyview .content.related .vriadok.classroom {
+	background-color: #ceced3;
+}
+
+/*//////////////////////////////////////////////////////////////////////
+// CVRiadok
+////////////////////////////////////////////////////////////////////// */
+.triedyview .content .vriadok {
+	border-bottom: 1px solid #000000;
+	position: relative;
+
+	/* 2021-07-01 toto tu bolo pred tym zakomentovane (netusim preco), ale potom bolo pomale layotovanie stranky, takze comment zruseny. */
+	overflow: hidden; 
+}
+
+.triedyview .content.related .vriadok {
+	border-right: 1px solid #000000;
+}
+
+.triedyview .content .vriadok .name {
+	border-right: 1px solid #000000;
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	bottom: 0px;
+	box-sizing: border-box;
+	font-size: 12px;
+	overflow: hidden;
+
+	display: flex;
+	white-space: pre;
+	flex-direction: column;
+	justify-content: safe center;
+	align-items: safe center;
+}
+
+.triedyview .content .vriadok .name:before {
+	display: block;
+	position: absolute;
+	left: 0px;
+	right: 0px;
+	top: 0px;
+	bottom: 0px;
+	border: 2px solid transparent;
+	content: '';
+}
+
+.triedyview .content .vriadok.dimrad {
+	background-color: #e8e8e8;
+}
+
+.triedyview .content .vriadok.dimrad .card {
+	opacity: 0.4;
+}
+
+.triedyview .content .vriadok.dimrad:hover .card {
+	opacity: 1;
+}
+
+.triedyview .content .vriadok.selrad .name {
+	background-color: #00ffff;
+}
+
+.triedyview .content .vriadok.cursor .name {
+	background-color: #fffc33;
+}
+
+.triedyview .content .vriadok .name.mozesem {
+	background-color: #00ff00;
+}
+
+.triedyview .content .vriadok.cursor .name.mozesem:before {
+	border-color: #fffc33;
+}
+
+.triedyview .content .vriadok .name .neumiestnenych {
+	display: block;
+	position: absolute;
+	right: 1px;
+	bottom: 0px;
+	font-size: 7px;
+	font-weight: bold;
+	color: #808080;
+}
+
+.triedyview .content .vriadok .name.users {
+	padding-right: 3px;
+}
+
+.triedyview .content .vriadok .name .users {
+	position: absolute;
+	right: 0px;
+	top: 0px;
+	bottom: 0px;
+	width: 3px;
+}
+
+.triedyview .content .vriadok .vline {
+	position: absolute;
+	top: 0px;
+	bottom: 0px;
+	width: 1px;
+	background-color: #b4b4b4;
+}
+
+.triedyview .content .vriadok .vline.first {
+	background-color: #000000;
+}
+
+.triedyview .content .vriadok .krizik {
+	position: absolute;
+	background: url('/timetable/pics/app/tv_krizik.png') no-repeat center;
+}
+
+.triedyview .content .vriadok .obed {
+	position: absolute;
+	background: url('/timetable/pics/app/tv_obed.png') no-repeat center;
+}
+
+.triedyview .content .vriadok .card, .rozview .rvcard .card, .cursorcard .card
+{
+	position: absolute;
+	box-sizing: border-box;
+	text-align: center;
+	font-size: 11px;
+	overflow: hidden;
+	overflow-wrap: break-word;
+
+	display: flex;
+	flex-direction: column;
+	justify-content: safe center;
+}
+
+.triedyview .content .vriadok .card .pruzok {
+	position: absolute;
+	right: 1px;
+	top: 1px;
+	bottom: 1px;
+	width: 2px;
+	box-shadow: inset 1px 1px 0px rgba(0, 0, 0, 0.5);
+}
+
+.triedyview .content .vriadok .card .pruzok_l {
+	position:absolute;
+	left:0px;
+	top:0px;
+	bottom:0px;
+	width:2px;
+}
+
+.triedyview .content .vriadok .dozor {
+	position:absolute;
+	border: 1px solid black;
+}
+
+.triedyview .content .vriadok .dozor .pruzok_l {
+	position:absolute;
+	left:0px;
+	top:0px;
+	bottom:0px;
+	width:1px;
+}
+
+.triedyview .content .vriadok .dozor.otaznik {
+	background: url('/timetable/pics/app/tv_otaznik.png') no-repeat center;
+}
+
+.triedyview .content .vriadok .cyklus {
+	position: absolute;
+	height: 0px;
+	border-top: 1px dashed white;
+}
+
+.triedyview .content .vriadok .card .locked,
+.triedyview .content .vriadok .dozor .locked {
+	position: absolute;
+	right: 0px;
+	bottom: 0px;
+	width: 5px;
+	height: 5px;
+	background: url(card_locked.png);
+}
+
+@keyframes vysvietpos_blik_border { 
+	0% {
+		border-width: 2px;
+	}
+	50% {
+		border-width: 2px;
+	}
+	55% {
+		border-width: 3px;
+	}
+	100% {
+		border-width: 3px;
+	}
+}
+
+@keyframes vysvietpos_blik_inset { 
+	0% {
+		box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.5)
+	}
+	100% {
+		box-shadow: inset 0 0 0 1px rgba(255,255,255,0.1)
+	}
+}
+
+@keyframes vysvietpos_blik_outline { 
+	0% {
+		outline: 1px solid rgba(255, 255, 255, 0.75)
+	}
+	100% {
+		outline: 1px solid rgba(0,0,0,0.5)
+	}
+}
+
+.triedyview .content .vriadok .vysvietpos {
+	border: 2px solid white;
+	box-sizing: border-box;
+	position: absolute;
+	top: 0px;
+	bottom: 0px;
+	box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+	pointer-events: none;
+	/*animation-name: vysvietpos_blik_outline;*/
+	animation-duration: 1s;
+	animation-timing-function: ease-in-out;
+	animation-iteration-count: infinite;
+	animation-direction: alternate;
+}
+
+/*//////////////////////////////////////////////////////////////////////
+// CVPolicko
+////////////////////////////////////////////////////////////////////// */
+.triedyview .header .vpolicko {
+	position: absolute;
+	top: 50%;
+	bottom: 0px;
+	border: 1px solid #808080;
+	border-bottom: none;
+	color: #808080;
+	font-size: 8px;
+	font-weight: bold;
+	text-align: center;
+}
+.triedyview .header .vpolicko.break {
+	border-left: 2px solid black;
+}
+
+.triedyview .header .vpolicko:before {
+	display: block;
+	position: absolute;
+	left: 0px;
+	right: 0px;
+	top: 0px;
+	bottom: 0px;
+	border: 2px solid transparent;
+	content: '';
+}
+
+.triedyview .header .vpolicko.cursor {
+	background-color: #fffc33;
+}
+
+.triedyview .header .vpolicko.obsadene {
+	background-color: red;
+}
+
+.triedyview .header .vpolicko.volne {
+	background-color: #00ff00;
+}
+
+.triedyview .header .vpolicko.otaznikove {
+	background-color: #4444ff;
+}
+
+.triedyview .header .vpolicko.cursor.obsadene:before, .triedyview .header .vpolicko.cursor.volne:before,
+	.triedyview .header .vpolicko.cursor.otaznikove:before {
+	border-color: #fffc33;
+}
+
+.triedyview .header .vpolicko.first {
+	border-left: 1px solid #000000;
+}
+
+.triedyview .header .vpolicko.last {
+	border-right: 1px solid #000000;
+}
+
+/*//////////////////////////////////////////////////////////////////////
+// CVPolickoGroup
+////////////////////////////////////////////////////////////////////// */
+.triedyview .header .vpolickogroup {
+	position: absolute;
+	top: 0px;
+	bottom: 50%;
+	border: 1px solid #000000;
+	border-bottom: none;
+	color: #808080;
+	font-size: 8px;
+	font-weight: bold;
+	text-align: center;
+}
+
+/*//////////////////////////////////////////////////////////////////////
+// rvcard
+//////////////////////////////////////////////////////////////////////*/
+.rvcard {
+	border-top: 1px solid white;
+	border-left: 1px solid white;
+	border-bottom: 1px solid black;
+	border-right: 1px solid black;
+	position: relative;
+}
+
+/*//////////////////////////////////////////////////////////////////////
+// CRozView
+//////////////////////////////////////////////////////////////////////*/
+.rozview {
+	flex-shrink: 0;
+	background-color: #797990;
+	/*margin-top:3px;
+	border-top:1px solid white;*/
+	position: relative;
+}
+
+.rozview .pending-area {
+	background-color: #ceced3;
+	position: absolute;
+	left: 300px;
+	top: 0px;
+	bottom: 0px;
+	right: 0px;
+	border: 1px solid black;
+	overflow: auto;
+	padding-bottom: 18px;
+}
+
+.rozview .rvcard {
+	display: inline-block;
+	margin: 2px 3px;
+	position: relative;
+}
+
+.rvcard .viac {
+	position: absolute;
+	display: block;
+	width: 100%;
+	height: 100%;
+	right: -2px;
+	bottom: -2px;
+}
+
+.rvcard .viac:after {
+	position: absolute;
+	top: -1px;
+	bottom: -1px;
+	right: -1px;
+	width: 1px;
+	border: 1px solid #7f7f7f;
+	border-left: none;
+	content: " ";
+}
+
+.rvcard .viac:before {
+	position: absolute;
+	bottom: -1px;
+	right: -1px;
+	left: -1px;
+	height: 1px;
+	border: 1px solid #7f7f7f;
+	border-top: none;
+	content: " ";
+}
+
+.rozview .podkurzorom {
+	position: absolute;
+	left: 10px;
+	top: 10px;
+	width: 190px;
+	min-height: 60px;
+	border-top: 1px solid white;
+	border-left: 1px solid white;
+	border-bottom: 1px solid black;
+	border-right: 1px solid black;
+	background-color: #9090a1;
+	padding-bottom: 1px;
+}
+
+.rozview .rad_icons {
+	position: absolute;
+	left: 310px;
+	bottom: 3px;
+	z-index: 1;
+	font-size: 11px;
+	background-color: #ceced3;
+	box-shadow: 0px 0px 1px 2px #ceced3;
+}
+
+.rozview .rad_icons>span {
+	margin-right: 10px;
+	font-weight: bold;
+	color: #0000ff;
+}
+
+.rozview .rad_icons>span>img {
+	height: 16px;
+	vertical-align: middle;
+	margin-right: 5px;
+}
+
+.rozview .podkurzorom .rvcard {
+	position: absolute;
+	border: none;
+	width: 28px !important;
+	height: 27px;
+	left: 4px;
+	top: 3px;
+}
+
+.rozview .podkurzorom .detail {
+	margin-left: 40px;
+	color: #ffff00;
+	font-size: 11px;
+}
+
+.rozview .podkurzorom .detail IMG {
+	max-height: 12px;
+	max-width: 12px;
+	margin-right: 3px;
+	vertical-align: middle;
+}
+
+.rozview .kontrola {
+	position: absolute;
+	left: 0px;
+	right: 0px;
+	top: 0px;
+	bottom: 0px;
+	background-color: white;
+	z-index: 2;
+}
+
+.rozview .kontrola .chyby {
+	position: absolute;
+	left: 300px;
+	top: 0px;
+	bottom: 0px;
+	right: 0px;
+}
+
+.rozview .kontrola .detail {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	bottom: 0px;
+	box-sizing: border-box;
+	width: 300px;
+	white-space: pre-wrap;
+	background-color: #c2ffc2;
+	padding: 8px;
+}
+
+.rozview .kontrola {
+	position: absolute;
+	left: 0px;
+	right: 0px;
+	top: 0px;
+	bottom: 0px;
+	background-color: white;
+	z-index: 2;
+}
+
+.rozview .kontrola .kontrola_podkurzorom {
+	position: absolute;
+	left: 0px;
+	bottom: 0px;
+	padding: 2px;
+	background-color: #c0c0c0;
+}
+
+.rozview .kontrola .kontrola_podkurzorom>img {
+	height: 12px;
+	margin-right: 3px;
+	vertical-align: middle;
+}
+
+/*//////////////////////////////////////////////////////////////////////
+// CPohladSwitcher
+//////////////////////////////////////////////////////////////////////*/
+
+.pohladswitcher {
+	width: 17px;
+	background-color: #797990;
+	padding-top: 10px;
+	overflow: hidden;
+	font-size: 12px;
+}
+
+.pohladswitcher .tab {
+	background-color: #ceced3;
+	border-left: 1px solid black;
+	margin-bottom: 5px;
+	position:relative;
+}
+
+.pohladswitcher .tab.selected {
+	background-color: #ffffff;
+	z-index: 1;
+}
+
+.pohladswitcher .tab span {
+	display: block;
+	position: absolute;
+	height: 20px;
+	padding: 0px 3px;
+	z-index: 1;
+	left:1px;
+	white-space: pre;
+	transform-origin: 0% 0%;
+	transform: rotate(-90deg);
+	bottom: -20px;
+}
+
+.pohladswitcher .tab::before,
+.pohladswitcher .tab::after {
+	width:30px;
+	height:5px;
+	content: ' ';
+	display: block;
+	position: absolute;
+	left: 1px;
+	background-color: inherit;
+}
+
+.pohladswitcher .tab::before {
+	border-top: 1px solid black;
+	top: -1px;
+	transform: rotate(-20deg);
+	transform-origin: 0% 0%;
+}
+
+.pohladswitcher .tab::after {
+	border-bottom: 1px solid black;
+	bottom: -1px;
+	transform: rotate(20deg);
+	transform-origin: 0% 100%;
+}
+
+/*//////////////////////////////////////////////////////////////////////
+// CPingingDlg
+//////////////////////////////////////////////////////////////////////*/
+.pingingdlg .progress {
+	border: 1px solid #b2b2b2;
+	border-radius: 2px;
+	position: relative;
+	height: 16px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+.pingingdlg .progress div {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	bottom: 0px;
+	width: 0%;
+	background-color: #01d429;
+}
+
+/*//////////////////////////////////////////////////////////////////////
+// CGenerProgressDlg
+//////////////////////////////////////////////////////////////////////*/
+.generprogressdlg .top {
+	height: 45;
+	padding-left: 130px;
+	padding-right: 100px;
+	position: relative;
+}
+
+.generprogressdlg .speed {
+	border: 1px solid black;
+	border-top-color: white;
+	border-left-color: white;
+	height: 14px;
+	margin-bottom: 2px;
+	background-color: #c0c0c0;
+	font-size: 12px;
+	padding-right: 4px;
+	position: relative;
+}
+
+.generprogressdlg .speed div {
+	background-color: #8080ff;
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	bottom: 0px;
+}
+
+.generprogressdlg .speed span {
+	position: absolute;
+	left: 2px;
+	top: 0px;
+	bottom: 0px;
+}
+
+.generprogressdlg .speed img {
+	position: absolute;
+	left: -20px;
+	top: 0px;
+	height: 100%;
+}
+
+/*//////////////////////////////////////////////////////////////////////
+// ZadanieDiv
+//////////////////////////////////////////////////////////////////////*/
+.ttonline_zadanie_tabs .tab {
+	width: 70px;
+	height: 60px;
+	background-repeat: no-repeat;
+	background-position: center;
+	position: relative;
+	box-sizing: border-box;
+}
+
+.ttonline_zadanie_tabs .tab:hover {
+	border: 1px solid #F1C43F;
+	background-color: #fdeeb3;
+	border-radius: 3px;
+}
+
+/*//////////////////////////////////////////////////////////////////////
+// DeleniaDlg
+//////////////////////////////////////////////////////////////////////*/
+.ttonline_delenie {
+	display:flex;
+	min-height: 30px;
+}
+
+.ttonline_delenie .ttonline_skupina {
+	flex: 1 0 20px;
+	padding: 8px 2px;
+	text-align: center;
+	color: #000000;
+	margin-left: 5px;
+	margin-right: 5px;
+	position: relative;
+}
+
+.ttonline_delenie .ttonline_skupina .students_count {
+	position: absolute;
+	right: 3px;
+	top: 1px;
+	color: #808080;
+	font-size: 11px;
+}
+
+/*//////////////////////////////////////////////////////////////////////
+// PrintPosField
+//////////////////////////////////////////////////////////////////////*/
+.ttonline-print-pos-field {
+	display: inline-block;
+	border: 1px solid #808080;
+	font-size: 2px;
+	vertical-align: middle;
+}
+
+.ttonline-print-pos-field > div {
+	display: inline-block;
+	border: 1px solid #808080;
+	width:10px;
+	height:10px;
+	margin:2px;
+}
+
+.ttonline-print-pos-field > div:hover {
+	background-color: #808080;
+}
+
+.ttonline-print-pos-field > div.selected {
+	background-color: #000000;
+}
+
+.dropDownPanel.asc-context-menu li.tt-card-metaclassroom-optimal,
+.dropDownPanel.asc-context-menu li.tt-card-metaclassroom-normal,
+.dropDownPanel.asc-context-menu li.tt-card-metaclassroom-bad,
+.dropDownPanel.asc-context-menu li.tt-card-metaclassroom-emergency {
+	pointer-events: none;
+	height: 6px;
+	overflow: hidden;
+}
+
+.dropDownPanel.asc-context-menu li.tt-card-metaclassroom-optimal {
+	background-color: #22B14C;
+}
+.dropDownPanel.asc-context-menu li.tt-card-metaclassroom-normal {
+	background-color: #3498DB;
+}
+.dropDownPanel.asc-context-menu li.tt-card-metaclassroom-bad {
+	background-color: #F1C40F;
+}
+.dropDownPanel.asc-context-menu li.tt-card-metaclassroom-emergency {
+	background-color: #FF311D;
+}

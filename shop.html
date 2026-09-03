@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Techni Sklep 🛒 | Energetyki & Sprzęt | Techni Schools</title>
+  <meta name="description" content="Oficjalny sklep Techni Schools. Energetyki, sprzęt i wszystko czego potrzebuje programista. Koszyk działa. Płatność? Niebawem.">
+  <link rel="stylesheet" href="meme.css">
+  <style>
+    /* ===== SHOP HERO ===== */
+    .shop-hero {
+      background: linear-gradient(135deg, #0a0a0a 0%, #0d1b2e 40%, #1a0d0a 100%);
+      padding: 5rem 2rem 2.5rem;
+      text-align: center;
+      position: relative; overflow: hidden;
+      border-bottom: 1px solid rgba(255,229,0,0.2);
+    }
+    .shop-hero::before {
+      content: '🛒🛒🛒🛒🛒🛒🛒🛒🛒🛒🛒🛒🛒🛒🛒🛒🛒🛒🛒🛒🛒🛒🛒🛒🛒🛒🛒🛒🛒🛒🛒🛒🛒🛒🛒🛒🛒🛒🛒🛒';
+      position: absolute; inset: 0; font-size: 3rem;
+      opacity: 0.03; word-break: break-all; overflow: hidden;
+      pointer-events: none; user-select: none;
+    }
+    .shop-hero h1 { font-size: clamp(3rem, 10vw, 7rem); line-height: 0.9; position: relative; z-index: 1; }
+    .shop-hero p { color: rgba(255,255,255,0.55); font-size: 1rem; margin: 1rem 0 0; position: relative; z-index: 1; }
+    .shop-hero p em { color: var(--yellow); font-style: normal; }
+
+    /* ===== SHOP STATS BAR ===== */
+    .shop-stats {
+      display: flex; gap: 0; justify-content: center;
+      background: rgba(255,255,255,0.03);
+      border-bottom: 1px solid var(--border);
+    }
+    .shop-stat {
+      padding: 0.8rem 2rem; text-align: center;
+      border-right: 1px solid var(--border);
+      flex: 1; max-width: 200px;
+    }
+    .shop-stat:last-child { border-right: none; }
+    .shop-stat-num { font-family: 'Bebas Neue', Impact, cursive; font-size: 1.5rem; color: var(--yellow); display: block; }
+    .shop-stat-label { font-size: 0.65rem; color: rgba(255,255,255,0.4); }
+
+    /* ===== SHOP LAYOUT ===== */
+    .shop-layout { display: flex; gap: 0; max-width: 100%; }
+    .shop-main { flex: 1; padding: 2rem; min-width: 0; }
+
+    /* ===== FILTER & SORT BAR ===== */
+    .filter-sort-bar {
+      display: flex; gap: 1rem; align-items: center;
+      flex-wrap: wrap; margin-bottom: 2rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px; padding: 1rem 1.2rem;
+    }
+    .cat-filters { display: flex; gap: 0.5rem; flex-wrap: wrap; flex: 1; }
+    .cat-btn {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border);
+      color: rgba(255,255,255,0.7);
+      padding: 6px 16px; border-radius: 100px;
+      font-family: 'Comic Sans MS', cursive;
+      font-size: 0.8rem; cursor: pointer;
+      transition: all 0.2s; white-space: nowrap;
+    }
+    .cat-btn.active, .cat-btn:hover {
+      background: var(--yellow); color: #000;
+      border-color: var(--yellow); font-weight: bold;
+    }
+    .sort-select {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border);
+      color: white; padding: 6px 12px;
+      border-radius: 8px; font-family: 'Comic Sans MS', cursive;
+      font-size: 0.8rem; cursor: pointer; outline: none;
+    }
+    .sort-select option { background: #1a1a2e; }
+    .search-shop {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border);
+      color: white; padding: 6px 14px;
+      border-radius: 100px; font-family: 'Comic Sans MS', cursive;
+      font-size: 0.8rem; outline: none; min-width: 180px;
+    }
+    .search-shop:focus { border-color: var(--yellow); }
+    .search-shop::placeholder { color: rgba(255,255,255,0.3); }
+
+    /* ===== PRODUCTS GRID ===== */
+    #products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+
+    /* ===== PRODUCT CARD ===== */
+    .product-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px; overflow: hidden;
+      position: relative; transition: all 0.4s;
+      display: flex; flex-direction: column;
+    }
+    .product-card:hover {
+      transform: translateY(-8px);
+      border-color: var(--pcolor, var(--yellow));
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 30px rgba(255,229,0,0.1);
+    }
+    .product-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 3px; background: var(--pcolor, var(--yellow));
+    }
+    /* badges */
+    .product-badge {
+      position: absolute; top: 12px; left: 12px; z-index: 3;
+      background: var(--pcolor, var(--yellow));
+      color: #000; font-family: 'Bebas Neue', cursive;
+      font-size: 0.75rem; letter-spacing: 1px;
+      padding: 3px 10px; border-radius: 6px;
+    }
+    .product-badge.new { background: var(--green); }
+    .product-badge.hot { background: var(--pink); color: white; }
+    .product-badge.out { background: rgba(255,255,255,0.2); color: rgba(255,255,255,0.5); }
+    .product-badge.promo { background: var(--orange); color: white; }
+
+    /* image */
+    .product-img-wrap {
+      height: 220px; background: rgba(255,255,255,0.04);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; position: relative;
+      border-bottom: 1px solid var(--border);
+    }
+    .product-img-wrap img {
+      max-height: 195px; max-width: 90%;
+      object-fit: contain;
+      transition: all 0.5s;
+      filter: drop-shadow(0 8px 20px rgba(0,0,0,0.5));
+    }
+    .product-card:hover .product-img-wrap img {
+      transform: scale(1.08) rotate(-2deg);
+      filter: drop-shadow(0 12px 30px rgba(255,229,0,0.2));
+    }
+    .product-img-bg {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at center, var(--pcolor-dim, rgba(255,229,0,0.04)) 0%, transparent 70%);
+      transition: all 0.5s;
+    }
+    .product-card:hover .product-img-bg {
+      background: radial-gradient(ellipse at center, var(--pcolor-dim, rgba(255,229,0,0.1)) 0%, transparent 70%);
+    }
+
+    /* info */
+    .product-info { padding: 1rem 1.1rem; flex: 1; display: flex; flex-direction: column; gap: 0.4rem; }
+    .product-category { font-size: 0.65rem; color: var(--pcolor, var(--yellow)); text-transform: uppercase; letter-spacing: 1px; }
+    .product-name { font-family: 'Bebas Neue', Impact, cursive; font-size: 1.3rem; letter-spacing: 1px; line-height: 1.1; color: white; }
+    .product-meme { font-size: 0.72rem; color: rgba(255,255,255,0.5); font-style: italic; line-height: 1.4; flex: 1; }
+    .product-rating { display: flex; align-items: center; gap: 6px; margin-top: 2px; }
+    .stars { color: var(--yellow); font-size: 0.8rem; letter-spacing: -1px; }
+    .rating-count { font-size: 0.65rem; color: rgba(255,255,255,0.3); }
+    .product-tags { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 2px; }
+    .product-tag {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      color: rgba(255,255,255,0.4);
+      font-size: 0.6rem; padding: 2px 7px; border-radius: 100px;
+    }
+
+    /* price & add */
+    .product-footer {
+      padding: 0.8rem 1.1rem 1rem;
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;
+    }
+    .product-price-wrap {}
+    .product-price-old { font-size: 0.75rem; color: rgba(255,255,255,0.3); text-decoration: line-through; display: block; }
+    .product-price { font-family: 'Bebas Neue', cursive; font-size: 1.8rem; color: var(--pcolor, var(--yellow)); line-height: 1; }
+    .product-price-sub { font-size: 0.6rem; color: rgba(255,255,255,0.3); }
+    .add-to-cart-btn {
+      background: var(--pcolor, var(--yellow));
+      color: #000; border: none; border-radius: 10px;
+      padding: 10px 18px; cursor: pointer;
+      font-family: 'Bebas Neue', cursive;
+      font-size: 1rem; letter-spacing: 1px;
+      transition: all 0.3s; white-space: nowrap;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .add-to-cart-btn:hover { transform: scale(1.05); filter: brightness(1.2); box-shadow: 0 0 20px var(--pcolor, var(--yellow)); }
+    .add-to-cart-btn:active { transform: scale(0.96); }
+    .add-to-cart-btn.out-btn {
+      background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.4); cursor: not-allowed;
+    }
+    .add-to-cart-btn.out-btn:hover { transform: none; filter: none; box-shadow: none; }
+    .qty-wrap { display: flex; align-items: center; gap: 6px; }
+    .qty-btn {
+      background: rgba(255,255,255,0.1); border: 1px solid var(--border);
+      color: white; width: 28px; height: 28px; border-radius: 8px;
+      cursor: pointer; font-size: 1rem; font-weight: bold;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+    }
+    .qty-btn:hover { background: var(--yellow); color: #000; border-color: var(--yellow); }
+    .qty-num { font-family: 'Bebas Neue', cursive; font-size: 1.1rem; min-width: 24px; text-align: center; }
+    .stock-indicator { font-size: 0.65rem; text-align: center; margin-top: 2px; }
+    .in-stock { color: var(--green); }
+    .low-stock { color: var(--orange); }
+
+    /* ===== CART BUTTON (sticky) ===== */
+    .cart-float-btn {
+      position: fixed; top: 105px; right: 20px; z-index: 900;
+      background: var(--yellow); color: #000;
+      border: none; border-radius: 50%; width: 58px; height: 58px;
+      cursor: pointer; font-size: 1.4rem;
+      box-shadow: 0 4px 20px rgba(255,229,0,0.5);
+      transition: all 0.3s; display: flex; align-items: center; justify-content: center;
+    }
+    .cart-float-btn:hover { transform: scale(1.1); box-shadow: 0 6px 30px rgba(255,229,0,0.7); }
+    .cart-badge {
+      position: absolute; top: -4px; right: -4px;
+      background: var(--pink); color: white;
+      border-radius: 50%; width: 22px; height: 22px;
+      font-family: 'Bebas Neue', cursive; font-size: 0.85rem;
+      display: flex; align-items: center; justify-content: center;
+      animation: badgePop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    @keyframes badgePop { from { transform: scale(0); } to { transform: scale(1); } }
+
+    /* ===== CART SIDEBAR ===== */
+    .cart-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+      z-index: 1000; opacity: 0; pointer-events: none;
+      transition: opacity 0.3s; backdrop-filter: blur(4px);
+    }
+    .cart-overlay.open { opacity: 1; pointer-events: all; }
+    .cart-sidebar {
+      position: fixed; top: 0; right: -420px; width: 400px; max-width: 95vw;
+      height: 100vh; z-index: 1001;
+      background: #111827;
+      border-left: 1px solid var(--yellow);
+      display: flex; flex-direction: column;
+      transition: right 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: -10px 0 60px rgba(0,0,0,0.8);
+    }
+    .cart-sidebar.open { right: 0; }
+
+    .cart-header {
+      padding: 1.2rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(255,229,0,0.05);
+    }
+    .cart-title { font-family: 'Bebas Neue', cursive; font-size: 1.5rem; letter-spacing: 2px; color: var(--yellow); }
+    .cart-close {
+      background: none; border: 1px solid var(--border);
+      color: white; width: 36px; height: 36px; border-radius: 8px;
+      cursor: pointer; font-size: 1rem; transition: all 0.2s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .cart-close:hover { background: rgba(255,255,255,0.1); border-color: var(--yellow); color: var(--yellow); }
+
+    .cart-items { flex: 1; overflow-y: auto; padding: 1rem 1.2rem; }
+    .cart-items::-webkit-scrollbar { width: 4px; }
+    .cart-items::-webkit-scrollbar-track { background: transparent; }
+    .cart-items::-webkit-scrollbar-thumb { background: rgba(255,229,0,0.3); border-radius: 2px; }
+
+    .cart-empty {
+      text-align: center; padding: 3rem 1rem;
+      color: rgba(255,255,255,0.4);
+    }
+    .cart-empty-icon { font-size: 4rem; display: block; margin-bottom: 1rem; }
+    .cart-empty-title { font-family: 'Bebas Neue', cursive; font-size: 1.3rem; color: rgba(255,255,255,0.3); }
+    .cart-empty-sub { font-size: 0.78rem; font-style: italic; margin-top: 0.4rem; }
+
+    .cart-item {
+      display: flex; gap: 0.8rem; align-items: center;
+      padding: 0.8rem 0; border-bottom: 1px solid var(--border);
+      animation: slideIn 0.3s ease;
+    }
+    @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: none; } }
+    .cart-item-img {
+      width: 60px; height: 60px; background: rgba(255,255,255,0.05);
+      border-radius: 10px; object-fit: contain; padding: 5px;
+      border: 1px solid var(--border); flex-shrink: 0;
+    }
+    .cart-item-info { flex: 1; min-width: 0; }
+    .cart-item-name { font-family: 'Bebas Neue', cursive; font-size: 1rem; letter-spacing: 0.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .cart-item-price { font-size: 0.75rem; color: var(--yellow); margin-top: 2px; }
+    .cart-item-meme { font-size: 0.6rem; color: rgba(255,255,255,0.3); font-style: italic; margin-top: 1px; }
+    .cart-item-controls { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+    .cart-item-qty { display: flex; align-items: center; gap: 5px; }
+    .cqty-btn {
+      background: rgba(255,255,255,0.08); border: 1px solid var(--border);
+      color: white; width: 24px; height: 24px; border-radius: 6px;
+      cursor: pointer; font-size: 0.9rem; font-weight: bold;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.15s;
+    }
+    .cqty-btn:hover { background: var(--yellow); color: #000; border-color: var(--yellow); }
+    .cqty-num { font-family: 'Bebas Neue', cursive; font-size: 1rem; min-width: 20px; text-align: center; }
+    .cart-item-total { font-family: 'Bebas Neue', cursive; font-size: 1rem; color: white; }
+    .cart-item-remove {
+      background: none; border: none; color: rgba(255,255,255,0.25);
+      cursor: pointer; font-size: 0.85rem; padding: 2px;
+      transition: color 0.2s; line-height: 1;
+    }
+    .cart-item-remove:hover { color: var(--pink); }
+
+    /* CART FOOTER */
+    .cart-footer {
+      padding: 1.2rem 1.5rem;
+      border-top: 1px solid var(--border);
+      background: rgba(0,0,0,0.3);
+    }
+    .cart-promo {
+      display: flex; gap: 0.5rem; margin-bottom: 1rem;
+    }
+    .promo-input {
+      flex: 1; background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border); color: white;
+      padding: 8px 12px; border-radius: 8px;
+      font-family: 'Comic Sans MS', cursive; font-size: 0.8rem; outline: none;
+    }
+    .promo-input:focus { border-color: var(--yellow); }
+    .promo-input::placeholder { color: rgba(255,255,255,0.25); }
+    .promo-btn {
+      background: rgba(255,229,0,0.1); border: 1px solid var(--yellow);
+      color: var(--yellow); padding: 8px 14px; border-radius: 8px;
+      font-family: 'Bebas Neue', cursive; font-size: 0.9rem; cursor: pointer;
+      transition: all 0.2s; white-space: nowrap;
+    }
+    .promo-btn:hover { background: var(--yellow); color: #000; }
+
+    .cart-summary { margin-bottom: 1rem; }
+    .summary-row {
+      display: flex; justify-content: space-between;
+      font-size: 0.82rem; color: rgba(255,255,255,0.6); margin: 4px 0;
+    }
+    .summary-row.total {
+      font-family: 'Bebas Neue', cursive; font-size: 1.3rem;
+      color: var(--yellow); border-top: 1px solid var(--border);
+      margin-top: 8px; padding-top: 8px;
+    }
+    .summary-row.total span { letter-spacing: 1px; }
+    .promo-applied { font-size: 0.7rem; color: var(--green); margin: 4px 0; display: none; }
+
+    .checkout-btn {
+      width: 100%; padding: 14px; border-radius: 12px;
+      font-family: 'Bebas Neue', cursive; font-size: 1.3rem;
+      letter-spacing: 2px; cursor: pointer; border: none;
+      transition: all 0.3s; margin-bottom: 0.5rem;
+    }
+    .checkout-btn.disabled {
+      background: linear-gradient(135deg, rgba(255,0,110,0.3), rgba(255,107,0,0.3));
+      border: 2px solid rgba(255,0,110,0.4);
+      color: rgba(255,255,255,0.6); cursor: not-allowed;
+      position: relative; overflow: hidden;
+    }
+    .checkout-btn.disabled::after {
+      content: '🚧 WKRÓTCE 🚧';
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(0,0,0,0.85);
+      font-family: 'Bebas Neue', cursive; font-size: 1.1rem;
+      color: var(--yellow); opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .checkout-btn.disabled:hover::after { opacity: 1; }
+    .checkout-btn.disabled:hover { border-color: var(--yellow); }
+    .clear-cart-btn {
+      width: 100%; padding: 8px;
+      background: none; border: 1px solid rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.4); border-radius: 8px;
+      font-family: 'Comic Sans MS', cursive; font-size: 0.75rem;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .clear-cart-btn:hover { border-color: var(--pink); color: var(--pink); }
+
+    .checkout-disclaimer {
+      font-size: 0.6rem; color: rgba(255,255,255,0.2);
+      text-align: center; margin-top: 0.5rem; font-style: italic; line-height: 1.4;
+    }
+
+    /* ===== ADD-TO-CART TOAST ===== */
+    .toast-container {
+      position: fixed; bottom: 30px; left: 30px;
+      z-index: 9999; display: flex; flex-direction: column; gap: 8px;
+    }
+    .toast {
+      background: var(--card); border: 1px solid var(--yellow);
+      border-radius: 12px; padding: 0.8rem 1rem;
+      display: flex; align-items: center; gap: 10px;
+      max-width: 320px; animation: toastIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+    }
+    @keyframes toastIn { from { opacity: 0; transform: translateX(-40px) scale(0.8); } to { opacity: 1; transform: none; } }
+    .toast-icon { font-size: 1.4rem; flex-shrink: 0; }
+    .toast-body {}
+    .toast-title { font-family: 'Bebas Neue', cursive; font-size: 0.9rem; color: var(--yellow); letter-spacing: 0.5px; }
+    .toast-sub { font-size: 0.7rem; color: rgba(255,255,255,0.5); }
+
+    /* ===== ADD ANIMATION PARTICLE ===== */
+    .fly-particle {
+      position: fixed; z-index: 9998; pointer-events: none;
+      font-size: 1.5rem; animation: flyToCart 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+    @keyframes flyToCart {
+      to { transform: translate(var(--tx), var(--ty)) scale(0.2); opacity: 0; }
+    }
+
+    /* ===== PROMO MODAL ===== */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+      z-index: 5000; display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; transition: opacity 0.3s;
+      backdrop-filter: blur(8px);
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal-box {
+      background: #111827; border: 2px solid var(--yellow);
+      border-radius: 24px; padding: 2.5rem 2rem;
+      max-width: 440px; width: 90%; text-align: center;
+      transform: scale(0.8);
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .modal-overlay.open .modal-box { transform: scale(1); }
+    .modal-emoji { font-size: 4rem; display: block; margin-bottom: 1rem; }
+    .modal-title { font-family: 'Bebas Neue', cursive; font-size: 2rem; color: var(--yellow); letter-spacing: 2px; margin-bottom: 0.5rem; }
+    .modal-text { font-size: 0.9rem; color: rgba(255,255,255,0.7); line-height: 1.6; margin-bottom: 1.5rem; }
+    .modal-text em { color: var(--yellow); font-style: normal; }
+    .modal-close-btn {
+      background: linear-gradient(135deg, var(--pink), var(--orange));
+      color: white; border: none; padding: 12px 30px;
+      border-radius: 10px; font-family: 'Bebas Neue', cursive;
+      font-size: 1.2rem; letter-spacing: 1px; cursor: pointer;
+      transition: all 0.3s;
+    }
+    .modal-close-btn:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(255,0,110,0.5); }
+
+    /* ===== FEATURED BANNER ===== */
+    .featured-banner {
+      background: linear-gradient(135deg, rgba(255,229,0,0.08), rgba(255,0,110,0.06));
+      border: 1px solid rgba(255,229,0,0.2);
+      border-radius: 16px; padding: 1.2rem 1.5rem;
+      margin-bottom: 2rem;
+      display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+    }
+    .featured-tag {
+      background: var(--yellow); color: #000;
+      font-family: 'Bebas Neue', cursive; font-size: 0.85rem;
+      letter-spacing: 1px; padding: 4px 12px; border-radius: 6px;
+      white-space: nowrap;
+    }
+    .featured-text { font-size: 0.85rem; color: rgba(255,255,255,0.7); flex: 1; }
+    .featured-text strong { color: var(--yellow); }
+
+    /* ===== NO RESULTS ===== */
+    #no-results-shop {
+      display: none; text-align: center; padding: 4rem 1rem;
+      color: rgba(255,255,255,0.4);
+    }
+
+    @media (max-width: 768px) {
+      .cart-sidebar { width: 100%; max-width: 100%; }
+      .filter-sort-bar { flex-direction: column; align-items: flex-start; }
+      .shop-stats { flex-wrap: wrap; }
+      .shop-stat { flex: 1 1 45%; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div class="custom-cursor" id="cursor">🛒</div>
+
+<!-- TOAST CONTAINER -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- CART FLOAT BTN -->
+<button class="cart-float-btn" id="cartFloatBtn" onclick="openCart()" aria-label="Koszyk">
+  🛒
+  <span class="cart-badge" id="cartBadge" style="display:none">0</span>
+</button>
+
+<!-- CART OVERLAY -->
+<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+
+<!-- CART SIDEBAR -->
+<aside class="cart-sidebar" id="cartSidebar">
+  <div class="cart-header">
+    <div>
+      <div class="cart-title">🛒 KOSZYK</div>
+      <div style="font-size:0.65rem;color:rgba(255,255,255,0.3);font-style:italic;">Załaduj koszyk. Płatność... wkrótce™</div>
+    </div>
+    <button class="cart-close" onclick="closeCart()">✕</button>
+  </div>
+
+  <div class="cart-items" id="cartItems">
+    <div class="cart-empty" id="cartEmpty">
+      <span class="cart-empty-icon">😢</span>
+      <div class="cart-empty-title">KOSZYK JEST PUSTY</div>
+      <div class="cart-empty-sub">"Puste jak twoja wiedza przed pierwszą lekcją"<br>— Piotr Brodzik, matematyk</div>
+    </div>
+  </div>
+
+  <div class="cart-footer">
+    <div class="cart-promo">
+      <input class="promo-input" id="promoInput" placeholder="Kod promocyjny 🎫" type="text">
+      <button class="promo-btn" onclick="applyPromo()">UŻYJ</button>
+    </div>
+    <div class="promo-applied" id="promoApplied">✅ Kod aktywowany! -10% na wszystko 🎉</div>
+    <div class="cart-summary">
+      <div class="summary-row"><span>Produkty (<span id="totalItems">0</span>)</span><span id="subtotal">0,00 zł</span></div>
+      <div class="summary-row"><span>Dostawa 🚚</span><span id="shippingCost">0,00 zł</span></div>
+      <div class="summary-row" id="discountRow" style="display:none;color:var(--green)"><span>Rabat 🎉</span><span id="discountAmt">-0,00 zł</span></div>
+      <div class="summary-row total"><span>RAZEM</span><span id="cartTotal">0,00 zł</span></div>
+    </div>
+    <button class="checkout-btn disabled" id="checkoutBtn" onclick="showCheckoutBlock()">
+      💳 PRZEJDŹ DO PŁATNOŚCI
+    </button>
+    <button class="clear-cart-btn" onclick="clearCart()">🗑️ Wyczyść koszyk</button>
+    <div class="checkout-disclaimer">
+      * Płatności chwilowo niedostępne. Techni Sklep jest w fazie beta.<br>
+      Jak wszystkie projekty uczniów — działa lokalnie, na serwerze wkrótce™
+    </div>
+  </div>
+</aside>
+
+<!-- CHECKOUT BLOCKED MODAL -->
+<div class="modal-overlay" id="checkoutModal">
+  <div class="modal-box">
+    <span class="modal-emoji">🚧</span>
+    <div class="modal-title">PŁATNOŚCI WKRÓTCE!</div>
+    <div class="modal-text">
+      Płatności są chwilowo niedostępne bo nasz <em>student od backendu</em> jest w trakcie wdrożenia systemu płatności.<br><br>
+      Ostatni commit: <em style="color:var(--green);font-family:monospace;font-size:0.85rem;">"fix: payments hopefully"</em><br>
+      Status build: <em style="color:var(--pink);">❌ FAILED (jak zawsze)</em><br><br>
+      Tymczasem możesz <em>podziwiac koszyk</em> i marzyć o energetykach. Wróć niedługo!
+    </div>
+    <button class="modal-close-btn" onclick="closeModal()">OK, POCZEKAM 😭</button>
+  </div>
+</div>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-content">
+    🛒 TECHNI SKLEP - OFICJALNY DOSTAWCA ENERGETYKÓW DLA PROGRAMISTÓW &nbsp;|&nbsp;
+    ⚡ PRIME ENERGY: BO JESTEŚ TYM WYBRAŃCEM &nbsp;|&nbsp;
+    🔴 RED BULL DAJE SKRZYDŁA. DO DEBUGGERA NIE. &nbsp;|&nbsp;
+    💻 LENOVO THINKPAD: BO MACBOOK TO ZA DROGIE &nbsp;|&nbsp;
+    🟢 MONSTER: M JAK MATEMATYKA. M JAK MASAKRA. &nbsp;|&nbsp;
+    🚀 DARMOWA DOSTAWA OD 50 ZŁ (czyli 2 energetyki i ThinkPad) &nbsp;|&nbsp;
+    💳 PŁATNOŚCI WKRÓTCE™. MOŻE. &nbsp;|&nbsp;
+    🛒 TECHNI SKLEP - OFICJALNY DOSTAWCA ENERGETYKÓW DLA PROGRAMISTÓW &nbsp;|&nbsp;
+    ⚡ PRIME ENERGY: BO JESTEŚ TYM WYBRAŃCEM &nbsp;|&nbsp;
+  </div>
+</div>
+
+<!-- NAV -->
+<nav class="meme-nav">
+  <a href="index.html" class="nav-logo">
+    <svg data-name="ts_logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 857.03 304.17">
+      <path d="M13.14 46v239h240V46Zm224 223h-49v-17h33v-16H78v16h94.14v17h-143v-73h17v56h16v-91h-16v19h-17V62h144v15h-96v16h128v96h16V77h-32V62h48Z"></path>
+      <path d="M162 145v16h-18.14v59H78.14V110H128v16H94.14v78h33.72v-43H110v-16h52z"></path>
+      <path d="M221 204v16h-63v-16h14.14v-78h-29.26v-16H188v12h.14v82H221zM46.14 77h16v68h-16zM373.64 69.34h-31.08v89h-24.62v-89H287v-20h86.63ZM453.66 158.33h-65.35v-109h62.85v20h-38.3v24.25h35.64v19.91h-35.64v24.93h40.8ZM549.26 154.46q-11.93 5.78-31.15 5.77-25.08 0-39.44-14.74T464.3 106.2q0-26.15 16.15-42.41t41.91-16.26q16 0 26.9 4v23.66a47.7 47.7 0 0 0-24.92-6.53q-15.36 0-24.78 9.65t-9.42 26.14q0 15.81 8.89 25.19T523 139a51 51 0 0 0 26.29-7ZM662.57 158.33H638V114h-45.19v44.38h-24.55v-109h24.55v43.44H638V49.36h24.62ZM785.53 158.33h-24.78l-44.91-68.47a99.83 99.83 0 0 1-5.47-9h-.3q.6 5.78.61 17.63v59.88H687.5v-109h26.44l43.24 66.34q3 4.48 5.47 8.89h.35a115.42 115.42 0 0 1-.61-15V49.36h23.18ZM835 158.33h-24.55v-109H835ZM292.63 277.93v-15a23.43 23.43 0 0 0 4.81 3.32 38 38 0 0 0 5.92 2.48 46.18 46.18 0 0 0 6.26 1.56 33.09 33.09 0 0 0 5.76.56q9.21 0 13.71-3.07a10.09 10.09 0 0 0 4.51-8.89 9.7 9.7 0 0 0-1.5-5.43 15.7 15.7 0 0 0-4.21-4.2 43.51 43.51 0 0 0-6.34-3.65c-2.44-1.17-5-2.39-7.82-3.65q-4.49-2.4-8.35-4.85a35.52 35.52 0 0 1-6.71-5.43 22.66 22.66 0 0 1-4.48-6.71 22 22 0 0 1-1.62-8.77 20.28 20.28 0 0 1 2.79-10.77 23.54 23.54 0 0 1 7.36-7.54 33.51 33.51 0 0 1 10.39-4.42A49.44 49.44 0 0 1 325 192q13.8 0 20.12 3.13v14.41q-7.49-5.4-19.26-5.4a34.42 34.42 0 0 0-6.47.62 19.3 19.3 0 0 0-5.77 2 12.64 12.64 0 0 0-4.14 3.62 8.89 8.89 0 0 0-1.59 5.34 10.07 10.07 0 0 0 1.23 5.09 13 13 0 0 0 3.58 3.92 37.06 37.06 0 0 0 5.77 3.47q3.4 1.68 7.88 3.65 4.61 2.38 8.68 5a41.44 41.44 0 0 1 7.18 5.82 25.58 25.58 0 0 1 4.9 7.09 20.75 20.75 0 0 1 1.81 8.86 20.81 20.81 0 0 1-10 18.77 32.54 32.54 0 0 1-10.52 4.17 59.28 59.28 0 0 1-12.58 1.29 52.3 52.3 0 0 1-5.43-.34q-3.21-.33-6.59-1a62 62 0 0 1-6.38-1.56 20.22 20.22 0 0 1-4.79-2.02ZM426.4 277.75q-9.94 5.14-24.72 5.15-19.14 0-30.67-12.08t-11.53-31.71q0-21.11 13-34.11t32.79-13q12.75 0 21.16 3.62v14.47a37.82 37.82 0 0 0-19.63-5.27q-14.29 0-23.15 9.14t-8.87 24.41q0 14.53 8.28 23.15t21.78 8.62q12.45 0 21.59-5.89ZM513.74 281.43h-14.66v-38.15h-41.4v38.15h-14.6v-88h14.6v37h41.4v-37h14.66ZM571.7 282.9q-19 0-30.45-12.33t-11.44-32.08q0-21.23 11.65-33.85T573.11 192q18.52 0 29.84 12.27t11.32 32.08q0 21.53-11.59 34T571.7 282.9Zm.68-78.08a24.44 24.44 0 0 0-19.66 9q-7.58 9-7.58 23.73t7.36 23.62a23.74 23.74 0 0 0 19.26 8.95q12.65 0 19.94-8.52t7.3-23.86q0-15.76-7.09-24.35t-19.53-8.57ZM666.65 282.9q-19 0-30.45-12.33t-11.44-32.08q0-21.23 11.65-33.85T668.06 192q18.53 0 29.84 12.27t11.31 32.08q0 21.53-11.59 34t-30.97 12.55Zm.67-78.08a24.46 24.46 0 0 0-19.66 9q-7.57 9-7.57 23.73t7.36 23.62a23.74 23.74 0 0 0 19.26 8.95q12.63 0 19.93-8.52t7.3-23.86q0-15.76-7.08-24.35t-19.54-8.57ZM774.05 281.43h-48.7v-88h14.59v75.67h34.11ZM782.69 277.93v-15a23.51 23.51 0 0 0 4.82 3.32 37.63 37.63 0 0 0 5.92 2.48 46 46 0 0 0 6.25 1.56 33.29 33.29 0 0 0 5.77.56q9.19 0 13.71-3.07a10.11 10.11 0 0 0 4.51-8.89 9.71 9.71 0 0 0-1.51-5.43 15.51 15.51 0 0 0-4.2-4.2 43.13 43.13 0 0 0-6.35-3.65q-3.65-1.76-7.82-3.65-4.47-2.4-8.34-4.85a35.52 35.52 0 0 1-6.71-5.43 22.47 22.47 0 0 1-4.48-6.71 21.79 21.79 0 0 1-1.63-8.77 20.28 20.28 0 0 1 2.79-10.77 23.65 23.65 0 0 1 7.36-7.54 33.67 33.67 0 0 1 10.4-4.42 49.38 49.38 0 0 1 11.9-1.44q13.8 0 20.12 3.13v14.41q-7.49-5.4-19.26-5.4a34.34 34.34 0 0 0-6.47.62 19.3 19.3 0 0 0-5.77 2 12.44 12.44 0 0 0-4.14 3.62 8.89 8.89 0 0 0-1.59 5.34 10.17 10.17 0 0 0 1.22 5.09 13.15 13.15 0 0 0 3.59 3.92 36.59 36.59 0 0 0 5.77 3.47c2.27 1.12 4.89 2.34 7.88 3.65q4.61 2.38 8.68 5a41 41 0 0 1 7.17 5.82 25.62 25.62 0 0 1 4.91 7.09 20.75 20.75 0 0 1 1.81 8.86 20.79 20.79 0 0 1-10 18.77 32.36 32.36 0 0 1-10.52 4.17 59.12 59.12 0 0 1-12.57 1.29 52.3 52.3 0 0 1-5.43-.34q-3.21-.33-6.59-1a61.4 61.4 0 0 1-6.38-1.56 20.5 20.5 0 0 1-4.82-2.05Z"></path>
+    </svg>
+    <span class="nav-logo-badge">V.MEME</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">🏠 Główna</a></li>
+    <li><a href="teachers.html">👨‍🏫 Nauczyciele</a></li>
+    <li><a href="schedule.html">📅 Plan Lekcji</a></li>
+    <li><a href="shop.html" class="active">🛒 Sklep</a></li>
+    <li><a href="index.html#hero" class="nav-cta">APLIKUJ 🔥</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="shop-hero">
+  <h1>
+    <span class="impact-outlined glitch" data-text="TECHNI">TECHNI</span><br>
+    <span class="impact-outlined rainbow">SKLEP</span>
+  </h1>
+  <p>
+    Oficjalny dostawca <em>energetyków, sprzętu i sensu istnienia</em> dla uczniów Techni Schools.<br>
+    Koszyk działa w 100%. Płatności — <em>wkrótce™ (serio tym razem)</em>
+  </p>
+</div>
+
+<!-- STATS -->
+<div class="shop-stats">
+  <div class="shop-stat"><span class="shop-stat-num">8</span><span class="shop-stat-label">produktów (na razie)</span></div>
+  <div class="shop-stat"><span class="shop-stat-num">420</span><span class="shop-stat-label">zadowolonych klientów*</span></div>
+  <div class="shop-stat"><span class="shop-stat-num">0%</span><span class="shop-stat-label">szans na pracującą płatność</span></div>
+  <div class="shop-stat"><span class="shop-stat-num">∞</span><span class="shop-stat-label">energetyków w magazynie</span></div>
+</div>
+
+<!-- MAIN SHOP -->
+<div class="shop-main">
+
+  <!-- FEATURED BANNER -->
+  <div class="featured-banner">
+    <span class="featured-tag">🔥 NOWOŚĆ</span>
+    <div class="featured-text">
+      <strong>Lenovo ThinkPad E16</strong> teraz dostępny w sklepie! Idealny na lekcje programowania i płakanie nad CSS.
+      Wychowawca PP zalecił WF zamiast laptopa — <strong>my polecamy obie opcje</strong>.
+    </div>
+    <span style="font-size:0.65rem;color:rgba(255,255,255,0.2);font-style:italic;">*dostawa 3-5 dni roboczych albo nigdy</span>
+  </div>
+
+  <!-- FILTER & SORT -->
+  <div class="filter-sort-bar">
+    <div class="cat-filters">
+      <button class="cat-btn active" data-cat="all" onclick="filterCat('all',this)">🌍 Wszystko (8)</button>
+      <button class="cat-btn" data-cat="energia" onclick="filterCat('energia',this)">⚡ Energetyki (7)</button>
+      <button class="cat-btn" data-cat="sprzet" onclick="filterCat('sprzet',this)">💻 Sprzęt (1)</button>
+      <button class="cat-btn" data-cat="promo" onclick="filterCat('promo',this)">🔥 Promocje</button>
+    </div>
+    <input class="search-shop" id="shopSearch" placeholder="🔍 Szukaj produktu..." oninput="filterSearch()" type="text">
+    <select class="sort-select" id="sortSelect" onchange="sortProducts()">
+      <option value="default">Sortuj: Domyślnie</option>
+      <option value="price-asc">Cena: rosnąco</option>
+      <option value="price-desc">Cena: malejąco</option>
+      <option value="name">Nazwa A-Z</option>
+      <option value="pain">Poziom Bólu</option>
+    </select>
+  </div>
+
+  <!-- PRODUCTS -->
+  <div id="products-grid"></div>
+  <div id="no-results-shop" style="display:none;text-align:center;padding:4rem 1rem;color:rgba(255,255,255,0.4);">
+    <div style="font-size:4rem">😢</div>
+    <div style="font-family:'Bebas Neue',cursive;font-size:1.5rem;color:rgba(255,255,255,0.3);">Brak wyników</div>
+    <div style="font-size:0.8rem;margin-top:0.5rem;">Jak twój projekt przed deadline'm</div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="meme-footer">
+  <div style="font-size:2rem;margin-bottom:1rem;">🛒</div>
+  <div style="font-family:'Bebas Neue',cursive;font-size:1.5rem;color:var(--yellow);letter-spacing:3px;">TECHNI SKLEP</div>
+  <div style="font-size:0.7rem;color:rgba(255,255,255,0.3);margin:0.5rem 0 1.5rem;">Oficjalny sklep Techni Schools • Warszawa • Lublin • Wrocław</div>
+  <div class="footer-links">
+    <a href="index.html">🏠 Główna</a>
+    <a href="teachers.html">👨‍🏫 Nauczyciele</a>
+    <a href="schedule.html">📅 Plan Lekcji</a>
+    <a href="shop.html">🛒 Sklep</a>
+  </div>
+  <p>© 2025/2026 Techni Sklep | Płatności wkrótce™ | Energetyki polecane przez 0 lekarzy</p>
+  <p style="font-size:0.65rem;color:rgba(255,255,255,0.15);margin-top:0.5rem;">* 420 zadowolonych klientów to szacunkowa liczba oparta na optymizmie i braku danych</p>
+</footer>
+
+<!-- MEME POPUP -->
+<div class="meme-popup" id="memePopup">
+  <button class="popup-close" onclick="document.getElementById('memePopup').classList.remove('visible')">✕</button>
+  <div style="font-size:1.5rem;margin-bottom:0.5rem;" id="popupEmoji">🛒</div>
+  <div style="font-family:'Bebas Neue',cursive;font-size:1.1rem;color:var(--yellow);margin-bottom:0.3rem;" id="popupTitle">TECHNI SKLEP!</div>
+  <div style="font-size:0.8rem;color:rgba(255,255,255,0.7);" id="popupText">Dodaj energetyk do koszyka. Zrób to. Teraz.</div>
+</div>
+
+<script>
+// ===== PRODUCTS DATA =====
+const PRODUCTS = [
+  {
+    id: 1,
+    name: "Black Energy",
+    file: "BLACKenergy.png",
+    cat: "energia",
+    price: 4.99,
+    oldPrice: null,
+    color: "#1a1a1a",
+    colorAccent: "#FFE500",
+    colorDim: "rgba(255,229,0,0.06)",
+    badge: "KLASYK",
+    badgeClass: "",
+    rating: 4.2,
+    reviews: 133,
+    stock: 69,
+    stockLabel: "in-stock",
+    meme: "Czarny jak dusza programisty o 3 w nocy. Dla tych którzy próbowali wszystkich innych i nadal nie ma sensu istnienia.",
+    tags: ["250ml", "kofeina: 80mg", "smak: despair"],
+    pain: 3,
+    emoji: "⚡",
+    toastMsg: "Dobry wybór. Ciemność cię nie zaskoczy."
+  },
+  {
+    id: 2,
+    name: "Monster Energy",
+    file: "Monster_Energy_drink.png",
+    cat: "energia",
+    price: 8.99,
+    oldPrice: 10.99,
+    color: "#0a1a0a",
+    colorAccent: "#39FF14",
+    colorDim: "rgba(57,255,20,0.06)",
+    badge: "PROMO",
+    badgeClass: "promo",
+    rating: 4.7,
+    reviews: 420,
+    stock: 42,
+    stockLabel: "in-stock",
+    meme: "M jak Matematyka. M jak Monster. Obie są zielone, przerażające i trwają zbyt długo. Przynajmniej Monster jest smaczny.",
+    tags: ["500ml", "kofeina: 160mg", "smak: pain"],
+    pain: 4,
+    emoji: "🟢",
+    toastMsg: "M jak Monster. M jak Mądry wybór. 🟢"
+  },
+  {
+    id: 3,
+    name: "Plus Red Elixir",
+    file: "plusREDElixir.png",
+    cat: "energia",
+    price: 5.49,
+    oldPrice: null,
+    color: "#1a0a0a",
+    colorAccent: "#FF006E",
+    colorDim: "rgba(255,0,110,0.06)",
+    badge: "LOKALNY",
+    badgeClass: "",
+    rating: 3.8,
+    reviews: 57,
+    stock: 100,
+    stockLabel: "in-stock",
+    meme: "Czerwony jak twój kompilator po merge confliccie w piątek 16:58. Polecany przez 0 lekarzy, za to przez 420 studentów.",
+    tags: ["250ml", "kofeina: 75mg", "smak: regret"],
+    pain: 2,
+    emoji: "🔴",
+    toastMsg: "Plus Red Elixir. Bo Plus za kod też byś chciał. 🔴"
+  },
+  {
+    id: 4,
+    name: "PRIME Blue Raspberry",
+    file: "PRIME-Energy-Drink-Blue-Raspberry-355ml.png",
+    cat: "energia",
+    price: 13.99,
+    oldPrice: 17.99,
+    color: "#0a0a1a",
+    colorAccent: "#00D4FF",
+    colorDim: "rgba(0,212,255,0.08)",
+    badge: "HYPE",
+    badgeClass: "hot",
+    rating: 4.9,
+    reviews: 1337,
+    stock: 8,
+    stockLabel: "low-stock",
+    meme: "PRIME to nie napój. To status społeczny. Drogi jak ThinkPad ale mniejszy. Influencer approved. Lekarz nie.",
+    tags: ["355ml", "kofeina: 200mg", "smak: clout"],
+    pain: 5,
+    emoji: "💎",
+    toastMsg: "PRIME! Jesteś wyjątkowy. PRIME też to mówi. 💎"
+  },
+  {
+    id: 5,
+    name: "Red Bull",
+    file: "REDBULL.png",
+    cat: "energia",
+    price: 9.49,
+    oldPrice: null,
+    color: "#1a0a05",
+    colorAccent: "#FF6B00",
+    colorDim: "rgba(255,107,0,0.06)",
+    badge: "LEGENDA",
+    badgeClass: "",
+    rating: 4.5,
+    reviews: 9999,
+    stock: 500,
+    stockLabel: "in-stock",
+    meme: "Daje skrzydła. Do debuggera nie. Ale do 5 godzin siedzenia z algorytmami bez snu? Absolutnie tak.",
+    tags: ["250ml", "kofeina: 80mg", "smak: legendary"],
+    pain: 3,
+    emoji: "🐂",
+    toastMsg: "Red Bull daje skrzydła. I obecność na lekcji. 🐂"
+  },
+  {
+    id: 6,
+    name: "Rockstar",
+    file: "rockstar.png",
+    cat: "energia",
+    price: 6.49,
+    oldPrice: null,
+    color: "#1a1205",
+    colorAccent: "#FFE500",
+    colorDim: "rgba(255,229,0,0.05)",
+    badge: "ROCKSTAR",
+    badgeClass: "",
+    rating: 4.1,
+    reviews: 234,
+    stock: 55,
+    stockLabel: "in-stock",
+    meme: "Rockstar developer potrzebuje Rockstar napoju. Logika niezaprzeczalna. Pan Kozłowski z AI potwierdza algorytmicznie.",
+    tags: ["500ml", "kofeina: 160mg", "smak: 10x"],
+    pain: 3,
+    emoji: "🎸",
+    toastMsg: "Rockstar! Twój kod jest już 10x lepszy. Statystycznie. 🎸"
+  },
+  {
+    id: 7,
+    name: "Burn Energy",
+    file: "burn_energy_drink.png",
+    cat: "energia",
+    price: 5.99,
+    oldPrice: 7.49,
+    color: "#2a0a00",
+    colorAccent: "#FF3300",
+    colorDim: "rgba(255,51,0,0.08)",
+    badge: "HOT 🔥",
+    badgeClass: "hot",
+    rating: 4.6,
+    reviews: 312,
+    stock: 30,
+    stockLabel: "in-stock",
+    meme: "Płonie jak twój serwer po nieudanym deployu w piątek o 17:00. Prawdziwa ogień dla prawdziwych ogarów.",
+    tags: ["250ml", "kofeina: 80mg", "smak: fire"],
+    pain: 4,
+    emoji: "🔥",
+    toastMsg: "Burn Energy! Płoń do pracy, nie wypalaj się! 🔥"
+  },
+  {
+    id: 8,
+    name: "Lenovo ThinkPad E16",
+    file: "lenovo thinkpad e16png.png",
+    cat: "sprzet",
+    price: 5999.00,
+    oldPrice: 7299.00,
+    color: "#0a0a0a",
+    colorAccent: "#BF5FFF",
+    colorDim: "rgba(191,95,255,0.08)",
+    badge: "OKAZJA",
+    badgeClass: "new",
+    rating: 4.8,
+    reviews: 42,
+    stock: 3,
+    stockLabel: "low-stock",
+    meme: "Bo MacBook to za drogie, a desktop nie jedzie z Tobą na WF. Wychowawca PP zalecił WF zamiast laptopa. My polecamy obie opcje.",
+    tags: ["Intel i7", "16GB RAM", "512GB SSD", "nie dla gier (prawie)"],
+    pain: 1,
+    emoji: "💻",
+    toastMsg: "ThinkPad dodany! Twój kredyt studencki właśnie zapłakał. 💻"
+  }
+];
+
+let cart = JSON.parse(localStorage.getItem('techni_cart') || '{}');
+let promoApplied = false;
+let currentCat = 'all';
+let currentSearch = '';
+
+// ===== RENDER PRODUCTS =====
+function renderProducts(list) {
+  const grid = document.getElementById('products-grid');
+  const noRes = document.getElementById('no-results-shop');
+  grid.innerHTML = '';
+  if (!list.length) { noRes.style.display = 'block'; return; }
+  noRes.style.display = 'none';
+
+  list.forEach((p, i) => {
+    const stars = '★'.repeat(Math.floor(p.rating)) + (p.rating % 1 >= 0.5 ? '½' : '') + '☆'.repeat(5 - Math.ceil(p.rating));
+    const stockHtml = p.stockLabel === 'low-stock'
+      ? `<span class="stock-indicator low-stock">⚠️ Ostatnie ${p.stock} sztuk!</span>`
+      : `<span class="stock-indicator in-stock">✅ W magazynie (${p.stock}+)</span>`;
+
+    const card = document.createElement('div');
+    card.className = 'product-card';
+    card.dataset.id = p.id;
+    card.dataset.cat = p.cat;
+    card.dataset.price = p.price;
+    card.dataset.name = p.name.toLowerCase();
+    card.dataset.pain = p.pain;
+    card.style.setProperty('--pcolor', p.colorAccent);
+    card.style.setProperty('--pcolor-dim', p.colorDim);
+    card.style.animationDelay = (i * 0.07) + 's';
+    card.style.animation = 'popIn 0.4s ease both';
+
+    const qty = cart[p.id] ? cart[p.id].qty : 1;
+
+    card.innerHTML = `
+      <div class="product-badge ${p.badgeClass}">${p.badge}</div>
+      <div class="product-img-wrap">
+        <div class="product-img-bg"></div>
+        <img src="./sklep/${p.file}" alt="${p.name}" loading="lazy"
+          onerror="this.style.fontSize='4rem';this.style.display='flex';this.alt='${p.emoji}'">
+      </div>
+      <div class="product-info">
+        <div class="product-category">${p.cat === 'energia' ? '⚡ ENERGETYK' : '💻 SPRZĘT'}</div>
+        <div class="product-name">${p.name}</div>
+        <div class="product-meme">"${p.meme}"</div>
+        <div class="product-rating">
+          <span class="stars">${stars}</span>
+          <span class="rating-count">${p.rating} (${p.reviews.toLocaleString()} recenzji)</span>
+        </div>
+        <div class="product-tags">${p.tags.map(t=>`<span class="product-tag">${t}</span>`).join('')}</div>
+      </div>
+      <div class="product-footer">
+        <div class="product-price-wrap">
+          ${p.oldPrice ? `<span class="product-price-old">${p.oldPrice.toFixed(2)} zł</span>` : ''}
+          <span class="product-price">${p.price.toFixed(2)} zł</span>
+          <span class="product-price-sub">brutto • VAT 23%</span>
+          ${stockHtml}
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end;">
+          <div class="qty-wrap">
+            <button class="qty-btn" onclick="changeQty(${p.id},-1,event)">−</button>
+            <span class="qty-num" id="qty-${p.id}">${qty}</span>
+            <button class="qty-btn" onclick="changeQty(${p.id},+1,event)">+</button>
+          </div>
+          <button class="add-to-cart-btn" id="atc-${p.id}" onclick="addToCart(${p.id}, event)"
+            style="background:${p.colorAccent};color:${p.colorAccent==='#FFE500'||p.colorAccent==='#39FF14'?'#000':'white'}">
+            🛒 DO KOSZYKA
+          </button>
+        </div>
+      </div>`;
+
+    grid.appendChild(card);
+  });
+}
+
+// ===== FILTER & SORT =====
+function getFiltered() {
+  let list = [...PRODUCTS];
+  if (currentCat === 'energia') list = list.filter(p => p.cat === 'energia');
+  else if (currentCat === 'sprzet') list = list.filter(p => p.cat === 'sprzet');
+  else if (currentCat === 'promo') list = list.filter(p => p.oldPrice !== null);
+  if (currentSearch) list = list.filter(p => p.name.toLowerCase().includes(currentSearch) || p.meme.toLowerCase().includes(currentSearch));
+  const sort = document.getElementById('sortSelect').value;
+  if (sort === 'price-asc') list.sort((a,b) => a.price - b.price);
+  else if (sort === 'price-desc') list.sort((a,b) => b.price - a.price);
+  else if (sort === 'name') list.sort((a,b) => a.name.localeCompare(b.name));
+  else if (sort === 'pain') list.sort((a,b) => b.pain - a.pain);
+  return list;
+}
+
+function filterCat(cat, btn) {
+  currentCat = cat;
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderProducts(getFiltered());
+}
+function filterSearch() {
+  currentSearch = document.getElementById('shopSearch').value.toLowerCase();
+  renderProducts(getFiltered());
+}
+function sortProducts() { renderProducts(getFiltered()); }
+
+renderProducts(PRODUCTS);
+
+// ===== QTY =====
+function changeQty(id, delta, e) {
+  e.stopPropagation();
+  const el = document.getElementById('qty-' + id);
+  if (!el) return;
+  let v = parseInt(el.textContent) + delta;
+  if (v < 1) v = 1;
+  if (v > 99) v = 99;
+  el.textContent = v;
+}
+
+// ===== ADD TO CART =====
+function addToCart(id, e) {
+  e.stopPropagation();
+  const p = PRODUCTS.find(x => x.id === id);
+  const qtyEl = document.getElementById('qty-' + id);
+  const qty = qtyEl ? parseInt(qtyEl.textContent) : 1;
+
+  if (!cart[id]) cart[id] = { qty: 0, product: p };
+  cart[id].qty += qty;
+  saveCart();
+  updateCartUI();
+  flyAnimation(e, p);
+  showToast(p.emoji, p.name, p.toastMsg);
+
+  // Button animation
+  const btn = document.getElementById('atc-' + id);
+  if (btn) {
+    btn.textContent = '✅ DODANO!';
+    btn.style.background = '#39FF14';
+    btn.style.color = '#000';
+    setTimeout(() => {
+      btn.textContent = '🛒 DO KOSZYKA';
+      btn.style.background = p.colorAccent;
+      btn.style.color = p.colorAccent === '#FFE500' || p.colorAccent === '#39FF14' ? '#000' : 'white';
+    }, 1200);
+  }
+}
+
+function flyAnimation(e, p) {
+  const particle = document.createElement('div');
+  particle.className = 'fly-particle';
+  particle.textContent = p.emoji;
+  particle.style.left = e.clientX + 'px';
+  particle.style.top = e.clientY + 'px';
+  const cartBtn = document.getElementById('cartFloatBtn');
+  const cr = cartBtn.getBoundingClientRect();
+  const tx = cr.left + cr.width/2 - e.clientX;
+  const ty = cr.top + cr.height/2 - e.clientY;
+  particle.style.setProperty('--tx', tx + 'px');
+  particle.style.setProperty('--ty', ty + 'px');
+  document.body.appendChild(particle);
+  setTimeout(() => particle.remove(), 700);
+}
+
+// ===== CART OPERATIONS =====
+function saveCart() { localStorage.setItem('techni_cart', JSON.stringify(cart)); }
+
+function updateCartUI() {
+  const totalItems = Object.values(cart).reduce((s, i) => s + i.qty, 0);
+  const badge = document.getElementById('cartBadge');
+  badge.textContent = totalItems;
+  badge.style.display = totalItems > 0 ? 'flex' : 'none';
+  if (totalItems > 0) {
+    badge.style.animation = 'none';
+    void badge.offsetWidth;
+    badge.style.animation = 'badgePop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+  }
+  renderCartItems();
+}
+
+function renderCartItems() {
+  const container = document.getElementById('cartItems');
+  const empty = document.getElementById('cartEmpty');
+  const items = Object.values(cart).filter(i => i.qty > 0);
+
+  if (!items.length) {
+    empty.style.display = 'block';
+    container.querySelectorAll('.cart-item').forEach(el => el.remove());
+    document.getElementById('totalItems').textContent = 0;
+    document.getElementById('subtotal').textContent = '0,00 zł';
+    document.getElementById('shippingCost').textContent = '0,00 zł';
+    document.getElementById('cartTotal').textContent = '0,00 zł';
+    return;
+  }
+  empty.style.display = 'none';
+  container.querySelectorAll('.cart-item').forEach(el => el.remove());
+
+  let subtotal = 0;
+  let totalQty = 0;
+
+  items.forEach(item => {
+    const p = item.product;
+    const lineTotal = p.price * item.qty;
+    subtotal += lineTotal;
+    totalQty += item.qty;
+
+    const div = document.createElement('div');
+    div.className = 'cart-item';
+    div.id = 'citem-' + p.id;
+    div.innerHTML = `
+      <img class="cart-item-img" src="./sklep/${p.file}" alt="${p.name}"
+        onerror="this.style.fontSize='2rem';this.alt='${p.emoji}'">
+      <div class="cart-item-info">
+        <div class="cart-item-name">${p.name}</div>
+        <div class="cart-item-price">${p.price.toFixed(2)} zł / szt.</div>
+        <div class="cart-item-meme">${p.emoji} "${p.toastMsg}"</div>
+      </div>
+      <div class="cart-item-controls">
+        <button class="cart-item-remove" onclick="removeFromCart(${p.id})" title="Usuń">🗑️</button>
+        <div class="cart-item-qty">
+          <button class="cqty-btn" onclick="cartQty(${p.id},-1)">−</button>
+          <span class="cqty-num" id="cqty-${p.id}">${item.qty}</span>
+          <button class="cqty-btn" onclick="cartQty(${p.id},+1)">+</button>
+        </div>
+        <div class="cart-item-total">${lineTotal.toFixed(2)} zł</div>
+      </div>`;
+    container.appendChild(div);
+  });
+
+  const shipping = subtotal >= 50 ? 0 : 9.99;
+  let discount = 0;
+  if (promoApplied) discount = subtotal * 0.1;
+  const total = subtotal + shipping - discount;
+
+  document.getElementById('totalItems').textContent = totalQty;
+  document.getElementById('subtotal').textContent = subtotal.toFixed(2).replace('.',',') + ' zł';
+  document.getElementById('shippingCost').textContent = shipping === 0 ? '🎉 GRATIS!' : shipping.toFixed(2).replace('.',',') + ' zł';
+  if (promoApplied) {
+    document.getElementById('discountRow').style.display = 'flex';
+    document.getElementById('discountAmt').textContent = '-' + discount.toFixed(2).replace('.',',') + ' zł';
+  }
+  document.getElementById('cartTotal').textContent = total.toFixed(2).replace('.',',') + ' zł';
+}
+
+function cartQty(id, delta) {
+  if (!cart[id]) return;
+  cart[id].qty += delta;
+  if (cart[id].qty <= 0) delete cart[id];
+  saveCart();
+  updateCartUI();
+}
+
+function removeFromCart(id) {
+  if (cart[id]) {
+    const el = document.getElementById('citem-' + id);
+    if (el) { el.style.opacity = '0'; el.style.transform = 'translateX(30px)'; el.style.transition = 'all 0.3s'; }
+    setTimeout(() => { delete cart[id]; saveCart(); updateCartUI(); }, 300);
+  }
+}
+
+function clearCart() {
+  if (!Object.keys(cart).length) return;
+  if (confirm('Wyczyścić koszyk? Tak jakby to miało sens skoro i tak nie możesz zapłacić 😂')) {
+    cart = {};
+    saveCart();
+    updateCartUI();
+    showToast('🗑️', 'KOSZYK WYCZYSZCZONY', 'Świeży start. Jak rebase po katastrofie.');
+  }
+}
+
+// ===== PROMO CODE =====
+const PROMO_CODES = {
+  'TECHNI10': true, 'ENERGETYK': true, 'PP_WF': true,
+  'PRINT_HELLO': true, 'SIGMA': true, 'MEME': true
+};
+function applyPromo() {
+  const code = document.getElementById('promoInput').value.toUpperCase().trim();
+  if (!code) { showToast('❌', 'BŁĄD', 'Wpisz kod promocyjny najpierw'); return; }
+  if (PROMO_CODES[code]) {
+    promoApplied = true;
+    document.getElementById('promoApplied').style.display = 'block';
+    document.getElementById('promoInput').disabled = true;
+    document.querySelector('.promo-btn').disabled = true;
+    document.querySelector('.promo-btn').textContent = '✅ OK!';
+    updateCartUI();
+    showToast('🎉', 'KOD AKTYWOWANY!', '-10% na wszystko! Kod: ' + code);
+  } else {
+    showToast('❌', 'NIEPRAWIDŁOWY KOD', '"' + code + '" nie istnieje. Spróbuj: TECHNI10 😉');
+    document.getElementById('promoInput').style.borderColor = 'var(--pink)';
+    setTimeout(() => document.getElementById('promoInput').style.borderColor = '', 2000);
+  }
+}
+
+// ===== CART OPEN/CLOSE =====
+function openCart() {
+  document.getElementById('cartSidebar').classList.add('open');
+  document.getElementById('cartOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeCart() {
+  document.getElementById('cartSidebar').classList.remove('open');
+  document.getElementById('cartOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// ===== CHECKOUT BLOCK =====
+function showCheckoutBlock() {
+  const items = Object.values(cart).filter(i => i.qty > 0);
+  if (!items.length) {
+    showToast('🛒', 'PUSTY KOSZYK', 'Dodaj coś do koszyka najpierw!');
+    return;
+  }
+  document.getElementById('checkoutModal').classList.add('open');
+}
+function closeModal() { document.getElementById('checkoutModal').classList.remove('open'); }
+document.getElementById('checkoutModal').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeModal();
+});
+
+// ===== TOAST =====
+function showToast(emoji, title, sub) {
+  const container = document.getElementById('toastContainer');
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.innerHTML = `<div class="toast-icon">${emoji}</div><div class="toast-body"><div class="toast-title">${title}</div><div class="toast-sub">${sub}</div></div>`;
+  container.appendChild(toast);
+  setTimeout(() => {
+    toast.style.opacity = '0';
+    toast.style.transform = 'translateX(-40px)';
+    toast.style.transition = 'all 0.3s';
+    setTimeout(() => toast.remove(), 300);
+  }, 3500);
+}
+
+// ===== CURSOR =====
+const cursor = document.getElementById('cursor');
+const cE = ['🛒','🧾','💳','⚡','💎','🎸','💻','🐂'];
+let ci = 0;
+const tE = ['✨','⭐','💫','💰','🛍️'];
+document.addEventListener('mousemove', e => {
+  cursor.style.left = e.clientX + 'px';
+  cursor.style.top = e.clientY + 'px';
+  if (Math.random() < 0.08) {
+    const t = document.createElement('div');
+    t.className = 'cursor-trail';
+    t.style.cssText = `left:${e.clientX}px;top:${e.clientY}px;transform:translate(-50%,-50%)`;
+    t.textContent = tE[Math.floor(Math.random() * tE.length)];
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 800);
+  }
+});
+document.addEventListener('click', () => { ci = (ci+1)%cE.length; cursor.textContent = cE[ci]; });
+
+// ===== POPUPS =====
+const popups = [
+  {e:'💡',t:'PRO TIP:',m:'Użyj kodu "TECHNI10" dla -10% na wszystko 👀'},
+  {e:'🛒',t:'HEJ!',m:'Twój koszyk czeka. Energetyki też czekają. Bądź rozważny.'},
+  {e:'💻',t:'OKAZJA!',m:'ThinkPad E16 -18% taniej! Twój kredyt studencki płacze.'},
+  {e:'⚡',t:'CIEKAWOSTKA:',m:'PRIME Energy to najdroższy energetyk. Też najlepiej smakuje według influencerów.'},
+];
+let pi = 0;
+setTimeout(() => {
+  const p = popups[pi++ % popups.length];
+  document.getElementById('popupEmoji').textContent = p.e;
+  document.getElementById('popupTitle').textContent = p.t;
+  document.getElementById('popupText').textContent = p.m;
+  document.getElementById('memePopup').classList.add('visible');
+  setTimeout(() => document.getElementById('memePopup').classList.remove('visible'), 7000);
+}, 12000);
+
+// ===== EMOJI RAIN =====
+const rainE = ['⚡','🛒','💎','🎸','🐂','💻','🟢','🔴'];
+setInterval(() => {
+  const e = document.createElement('div');
+  e.className = 'emoji-rain';
+  e.textContent = rainE[Math.floor(Math.random() * rainE.length)];
+  e.style.left = Math.random() * 100 + 'vw';
+  e.style.animationDuration = (Math.random() * 3 + 5) + 's';
+  document.body.appendChild(e);
+  setTimeout(() => e.remove(), 9000);
+}, 1800);
+
+// Init
+updateCartUI();
+</script>
+</body>
+</html>

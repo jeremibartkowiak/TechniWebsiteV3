@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plan Lekcji 💀 | Techni Schools Meme Edition</title>
+  <meta name="description" content="Plan lekcji Techni Schools - tygodniowy harmonogram bólu. Klasa 3MD Lublin. Przeżyjesz. Może.">
+  <link rel="stylesheet" href="meme.css">
+  <style>
+    /* ===== HERO ===== */
+    .sched-hero {
+      background: linear-gradient(135deg, #0a0a0a, #0d1b2e, #1a0a0a);
+      padding: 5rem 2rem 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      border-bottom: 1px solid rgba(255,229,0,0.2);
+    }
+    .sched-hero::before {
+      content: '📅📅📅📅📅📅📅📅📅📅📅📅📅📅📅📅📅📅📅📅📅📅📅📅📅📅📅📅📅📅';
+      position: absolute; inset: 0;
+      font-size: 3rem; opacity: 0.03;
+      word-break: break-all; overflow: hidden;
+      pointer-events: none; user-select: none;
+    }
+    .hero-title-plan {
+      font-size: clamp(3rem, 10vw, 7rem);
+      line-height: 0.9;
+      position: relative; z-index: 1;
+    }
+    .hero-subtitle-plan {
+      color: rgba(255,255,255,0.55);
+      font-size: 1rem;
+      margin: 1rem 0 0.5rem;
+      position: relative; z-index: 1;
+    }
+    .hero-subtitle-plan em { color: var(--yellow); font-style: normal; }
+
+    /* ===== LEGEND BAR ===== */
+    .legend-bar {
+      background: rgba(255,255,255,0.03);
+      border-bottom: 1px solid var(--border);
+      padding: 0.75rem 2rem;
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .legend-item {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 0.75rem; color: rgba(255,255,255,0.6);
+    }
+    .legend-dot {
+      width: 14px; height: 14px;
+      border-radius: 4px; flex-shrink: 0;
+    }
+
+    /* ===== MODE SELECTOR ===== */
+    .mode-bar {
+      background: rgba(0,0,0,0.4);
+      border-bottom: 1px solid var(--border);
+      padding: 0.6rem 2rem;
+      display: flex; gap: 0.75rem;
+      justify-content: center; flex-wrap: wrap;
+      position: sticky; top: 98px; z-index: 50;
+      backdrop-filter: blur(20px);
+    }
+    .mode-btn {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border);
+      color: rgba(255,255,255,0.7);
+      padding: 7px 18px; border-radius: 100px;
+      font-family: 'Comic Sans MS', cursive;
+      font-size: 0.8rem; cursor: pointer;
+      transition: all 0.3s;
+    }
+    .mode-btn.active, .mode-btn:hover {
+      background: var(--yellow); color: #000;
+      border-color: var(--yellow); font-weight: bold;
+      transform: translateY(-2px);
+    }
+
+    /* ===== MAIN SCHEDULE SECTION ===== */
+    .schedule-section { padding: 2rem; }
+    .schedule-wrap { max-width: 1400px; margin: 0 auto; }
+
+    /* ===== PANIC METER ===== */
+    .panic-wrap {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.2rem 1.5rem;
+      margin-bottom: 2rem;
+      display: flex; gap: 2rem; flex-wrap: wrap;
+      align-items: center; justify-content: space-between;
+    }
+    .panic-title {
+      font-family: 'Bebas Neue', Impact, cursive;
+      font-size: 1.2rem; letter-spacing: 1px;
+      color: var(--yellow);
+    }
+    .panic-meters { display: flex; gap: 1.5rem; flex-wrap: wrap; flex: 1; }
+    .panic-meter { flex: 1; min-width: 150px; }
+    .panic-label { font-size: 0.7rem; color: rgba(255,255,255,0.5); margin-bottom: 4px; }
+    .panic-bar-wrap {
+      background: rgba(255,255,255,0.08);
+      border-radius: 100px; height: 10px; overflow: hidden;
+    }
+    .panic-fill {
+      height: 100%; border-radius: 100px;
+      animation: fillBar 2s ease-out forwards;
+    }
+    .panic-val { font-size: 0.75rem; color: rgba(255,255,255,0.6); margin-top: 2px; text-align: right; }
+
+    /* ===== TIMETABLE ===== */
+    #timetable-view { overflow-x: auto; }
+    .timetable {
+      width: 100%; border-collapse: collapse;
+      min-width: 800px;
+      border-radius: 16px; overflow: hidden;
+    }
+    .timetable th {
+      background: rgba(255,229,0,0.1);
+      border: 1px solid rgba(255,229,0,0.15);
+      padding: 0.75rem 0.5rem;
+      font-family: 'Bebas Neue', Impact, cursive;
+      font-size: 1.1rem; letter-spacing: 1px;
+      color: var(--yellow); text-align: center;
+    }
+    .timetable th.time-col {
+      background: rgba(0,0,0,0.4);
+      color: rgba(255,255,255,0.4);
+      font-size: 0.75rem; letter-spacing: 0;
+      font-family: 'Comic Sans MS', cursive;
+      width: 100px;
+    }
+    .timetable td {
+      border: 1px solid rgba(255,255,255,0.06);
+      padding: 0; vertical-align: top;
+      position: relative; height: 90px;
+    }
+    .timetable td.empty-cell {
+      background: rgba(0,0,0,0.2);
+    }
+    .timetable td.time-td {
+      background: rgba(0,0,0,0.3);
+      text-align: center; vertical-align: middle;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+    .time-label { font-size: 0.75rem; color: rgba(255,255,255,0.35); font-family: monospace; }
+    .lesson-num { font-family: 'Bebas Neue',cursive; font-size: 1.2rem; color: rgba(255,255,255,0.15); }
+
+    /* ===== LESSON CELL ===== */
+    .lesson {
+      width: 100%; height: 100%;
+      padding: 6px 8px;
+      display: flex; flex-direction: column;
+      justify-content: space-between;
+      cursor: pointer;
+      position: relative; overflow: hidden;
+      transition: all 0.3s;
+    }
+    .lesson::before {
+      content: '';
+      position: absolute; top: 0; left: 0;
+      width: 3px; height: 100%;
+      background: var(--lcolor, var(--yellow));
+    }
+    .lesson:hover { filter: brightness(1.3); transform: scale(1.02); z-index: 10; }
+    .lesson-name {
+      font-family: 'Bebas Neue', Impact, cursive;
+      font-size: 0.95rem; letter-spacing: 0.5px;
+      color: white; line-height: 1.1;
+    }
+    .lesson-teacher {
+      font-size: 0.65rem; color: rgba(255,255,255,0.5);
+      font-family: 'Comic Sans MS', cursive;
+    }
+    .lesson-meme {
+      font-size: 0.6rem; color: var(--lcolor, var(--yellow));
+      font-style: italic; line-height: 1.2;
+      opacity: 0;
+      transition: opacity 0.2s;
+      position: absolute; bottom: 6px; left: 8px; right: 8px;
+    }
+    .lesson:hover .lesson-meme { opacity: 1; }
+    .lesson-emoji {
+      position: absolute; top: 5px; right: 6px;
+      font-size: 1.1rem; opacity: 0.6;
+    }
+    /* Pain level backgrounds */
+    .pain-0 { background: rgba(57,255,20,0.06); --lcolor: #39FF14; }
+    .pain-1 { background: rgba(0,212,255,0.06); --lcolor: #00D4FF; }
+    .pain-2 { background: rgba(255,229,0,0.06); --lcolor: #FFE500; }
+    .pain-3 { background: rgba(255,107,0,0.06); --lcolor: #FF6B00; }
+    .pain-4 { background: rgba(255,0,110,0.08); --lcolor: #FF006E; }
+    .pain-5 { background: rgba(191,95,255,0.08); --lcolor: #BF5FFF; }
+
+    /* ===== BREAK ROW ===== */
+    .break-row td {
+      background: rgba(255,255,255,0.02);
+      height: 28px;
+      border-top: 1px dashed rgba(255,255,255,0.06);
+      border-bottom: 1px dashed rgba(255,255,255,0.06);
+    }
+    .break-label {
+      font-size: 0.6rem; color: rgba(255,255,255,0.2);
+      font-style: italic; text-align: center;
+      padding: 0 8px; line-height: 28px;
+    }
+
+    /* ===== IFRAME VIEW ===== */
+    #iframe-view { display: none; }
+    .iframe-wrap {
+      border: 2px solid var(--yellow);
+      border-radius: 16px; overflow: hidden;
+      position: relative;
+    }
+    .iframe-badge {
+      position: absolute; top: 10px; left: 10px; z-index: 5;
+      background: rgba(0,0,0,0.8);
+      border: 1px solid var(--yellow);
+      color: var(--yellow);
+      font-family: 'Bebas Neue', cursive;
+      font-size: 0.9rem; letter-spacing: 1px;
+      padding: 4px 12px; border-radius: 6px;
+    }
+    .iframe-wrap iframe {
+      width: 100%; height: 700px; border: none;
+      background: white;
+    }
+
+    /* ===== SURVIVAL GUIDE ===== */
+    .survival-section { background: #0d1117; padding: 3rem 2rem; }
+    .survival-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1rem; max-width: 1200px; margin: 0 auto;
+    }
+    .survival-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px; padding: 1.2rem;
+      transition: all 0.3s;
+    }
+    .survival-card:hover {
+      border-color: var(--sc, var(--yellow));
+      transform: translateY(-4px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    }
+    .survival-icon { font-size: 2.5rem; display: block; margin-bottom: 0.7rem; }
+    .survival-title {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 1.2rem; letter-spacing: 1px;
+      color: var(--sc, var(--yellow)); margin-bottom: 0.4rem;
+    }
+    .survival-text { font-size: 0.8rem; color: rgba(255,255,255,0.55); line-height: 1.6; }
+
+    /* ===== DAY STAT BADGES ===== */
+    .day-badges {
+      display: flex; gap: 0.75rem; flex-wrap: wrap;
+      max-width: 1400px; margin: 0 auto 1.5rem;
+    }
+    .day-badge {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 0.7rem 1.2rem;
+      flex: 1; min-width: 130px; text-align: center;
+      transition: all 0.3s;
+    }
+    .day-badge:hover { border-color: var(--yellow); transform: translateY(-3px); }
+    .day-badge-name {
+      font-family: 'Bebas Neue', cursive; font-size: 1rem;
+      letter-spacing: 1px; color: var(--yellow);
+    }
+    .day-badge-pain { font-size: 0.65rem; color: rgba(255,255,255,0.4); margin-top: 2px; }
+    .day-badge-emoji { font-size: 1.5rem; }
+
+    /* ===== WEEK SELECTOR ===== */
+    .week-selector {
+      display: flex; gap: 0.5rem; justify-content: center;
+      flex-wrap: wrap; margin: 1rem 0 1.5rem;
+    }
+    .week-btn {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      color: rgba(255,255,255,0.5);
+      padding: 5px 14px; border-radius: 8px;
+      font-family: 'Comic Sans MS', cursive;
+      font-size: 0.75rem; cursor: pointer;
+      transition: all 0.2s;
+    }
+    .week-btn.active {
+      background: rgba(255,229,0,0.1);
+      border-color: var(--yellow); color: var(--yellow);
+    }
+    .week-btn:hover { border-color: var(--yellow); color: var(--yellow); }
+
+    /* ===== TOOLTIP ===== */
+    .lesson-tooltip {
+      position: fixed;
+      background: rgba(0,0,0,0.95);
+      border: 1px solid var(--yellow);
+      border-radius: 12px;
+      padding: 1rem 1.2rem;
+      max-width: 280px;
+      z-index: 9999;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s;
+      font-size: 0.82rem;
+    }
+    .lesson-tooltip.show { opacity: 1; }
+    .tooltip-name {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 1.2rem; color: var(--yellow);
+      letter-spacing: 1px;
+    }
+    .tooltip-body { color: rgba(255,255,255,0.7); margin-top: 0.4rem; line-height: 1.5; }
+    .tooltip-meme { color: var(--pink); font-style: italic; margin-top: 0.4rem; font-size: 0.75rem; }
+
+    @media (max-width: 768px) {
+      .panic-meters { flex-direction: column; }
+      .day-badges { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div class="custom-cursor" id="cursor">📅</div>
+
+<!-- TOOLTIP -->
+<div class="lesson-tooltip" id="tooltip">
+  <div class="tooltip-name" id="tt-name"></div>
+  <div class="tooltip-body" id="tt-body"></div>
+  <div class="tooltip-meme" id="tt-meme"></div>
+</div>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-content">
+    📅 PLAN LEKCJI: OFICJALNY HARMONOGRAM TWOJEGO CIERPIENIA &nbsp;|&nbsp;
+    ⚠️ PONIEDZIAŁEK: NAJTRUDNIEJSZY DZIEŃ TYGODNIA (obiektywnie) &nbsp;|&nbsp;
+    ☕ PRZERWA OBIADOWA: 10 MINUT. NIEMOŻLIWE. ALE PRÓBUJ. &nbsp;|&nbsp;
+    💀 MATEMATYKA O 8:00: CZEMU. KTO TO ZROBIŁ. &nbsp;|&nbsp;
+    🔥 WF PO PROGRAMOWANIU: LOGISTYCZNE ARCYDZIEŁO &nbsp;|&nbsp;
+    📚 LEKTURY NA JUTRO: TAK. WSZYSTKIE. &nbsp;|&nbsp;
+    🐛 LEKCJA KODOWANIA: DEPLOY NA KONIEC LEKCJI LUB ŚMIERĆ &nbsp;|&nbsp;
+    📅 PLAN LEKCJI: OFICJALNY HARMONOGRAM TWOJEGO CIERPIENIA &nbsp;|&nbsp;
+    ⚠️ PONIEDZIAŁEK: NAJTRUDNIEJSZY DZIEŃ TYGODNIA (obiektywnie) &nbsp;|&nbsp;
+  </div>
+</div>
+
+<!-- NAV -->
+<nav class="meme-nav">
+  <a href="../index.html" class="nav-logo">
+    <svg data-name="ts_logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 857.03 304.17">
+      <path d="M13.14 46v239h240V46Zm224 223h-49v-17h33v-16H78v16h94.14v17h-143v-73h17v56h16v-91h-16v19h-17V62h144v15h-96v16h128v96h16V77h-32V62h48Z"></path>
+      <path d="M162 145v16h-18.14v59H78.14V110H128v16H94.14v78h33.72v-43H110v-16h52z"></path>
+      <path d="M221 204v16h-63v-16h14.14v-78h-29.26v-16H188v12h.14v82H221zM46.14 77h16v68h-16zM373.64 69.34h-31.08v89h-24.62v-89H287v-20h86.63ZM453.66 158.33h-65.35v-109h62.85v20h-38.3v24.25h35.64v19.91h-35.64v24.93h40.8ZM549.26 154.46q-11.93 5.78-31.15 5.77-25.08 0-39.44-14.74T464.3 106.2q0-26.15 16.15-42.41t41.91-16.26q16 0 26.9 4v23.66a47.7 47.7 0 0 0-24.92-6.53q-15.36 0-24.78 9.65t-9.42 26.14q0 15.81 8.89 25.19T523 139a51 51 0 0 0 26.29-7ZM662.57 158.33H638V114h-45.19v44.38h-24.55v-109h24.55v43.44H638V49.36h24.62ZM785.53 158.33h-24.78l-44.91-68.47a99.83 99.83 0 0 1-5.47-9h-.3q.6 5.78.61 17.63v59.88H687.5v-109h26.44l43.24 66.34q3 4.48 5.47 8.89h.35a115.42 115.42 0 0 1-.61-15V49.36h23.18ZM835 158.33h-24.55v-109H835ZM292.63 277.93v-15a23.43 23.43 0 0 0 4.81 3.32 38 38 0 0 0 5.92 2.48 46.18 46.18 0 0 0 6.26 1.56 33.09 33.09 0 0 0 5.76.56q9.21 0 13.71-3.07a10.09 10.09 0 0 0 4.51-8.89 9.7 9.7 0 0 0-1.5-5.43 15.7 15.7 0 0 0-4.21-4.2 43.51 43.51 0 0 0-6.34-3.65c-2.44-1.17-5-2.39-7.82-3.65q-4.49-2.4-8.35-4.85a35.52 35.52 0 0 1-6.71-5.43 22.66 22.66 0 0 1-4.48-6.71 22 22 0 0 1-1.62-8.77 20.28 20.28 0 0 1 2.79-10.77 23.54 23.54 0 0 1 7.36-7.54 33.51 33.51 0 0 1 10.39-4.42A49.44 49.44 0 0 1 325 192q13.8 0 20.12 3.13v14.41q-7.49-5.4-19.26-5.4a34.42 34.42 0 0 0-6.47.62 19.3 19.3 0 0 0-5.77 2 12.64 12.64 0 0 0-4.14 3.62 8.89 8.89 0 0 0-1.59 5.34 10.07 10.07 0 0 0 1.23 5.09 13 13 0 0 0 3.58 3.92 37.06 37.06 0 0 0 5.77 3.47q3.4 1.68 7.88 3.65 4.61 2.38 8.68 5a41.44 41.44 0 0 1 7.18 5.82 25.58 25.58 0 0 1 4.9 7.09 20.75 20.75 0 0 1 1.81 8.86 20.81 20.81 0 0 1-10 18.77 32.54 32.54 0 0 1-10.52 4.17 59.28 59.28 0 0 1-12.58 1.29 52.3 52.3 0 0 1-5.43-.34q-3.21-.33-6.59-1a62 62 0 0 1-6.38-1.56 20.22 20.22 0 0 1-4.79-2.02ZM426.4 277.75q-9.94 5.14-24.72 5.15-19.14 0-30.67-12.08t-11.53-31.71q0-21.11 13-34.11t32.79-13q12.75 0 21.16 3.62v14.47a37.82 37.82 0 0 0-19.63-5.27q-14.29 0-23.15 9.14t-8.87 24.41q0 14.53 8.28 23.15t21.78 8.62q12.45 0 21.59-5.89ZM513.74 281.43h-14.66v-38.15h-41.4v38.15h-14.6v-88h14.6v37h41.4v-37h14.66ZM571.7 282.9q-19 0-30.45-12.33t-11.44-32.08q0-21.23 11.65-33.85T573.11 192q18.52 0 29.84 12.27t11.32 32.08q0 21.53-11.59 34T571.7 282.9Zm.68-78.08a24.44 24.44 0 0 0-19.66 9q-7.58 9-7.58 23.73t7.36 23.62a23.74 23.74 0 0 0 19.26 8.95q12.65 0 19.94-8.52t7.3-23.86q0-15.76-7.09-24.35t-19.53-8.57ZM666.65 282.9q-19 0-30.45-12.33t-11.44-32.08q0-21.23 11.65-33.85T668.06 192q18.53 0 29.84 12.27t11.31 32.08q0 21.53-11.59 34t-30.97 12.55Zm.67-78.08a24.46 24.46 0 0 0-19.66 9q-7.57 9-7.57 23.73t7.36 23.62a23.74 23.74 0 0 0 19.26 8.95q12.63 0 19.93-8.52t7.3-23.86q0-15.76-7.08-24.35t-19.54-8.57ZM774.05 281.43h-48.7v-88h14.59v75.67h34.11ZM782.69 277.93v-15a23.51 23.51 0 0 0 4.82 3.32 37.63 37.63 0 0 0 5.92 2.48 46 46 0 0 0 6.25 1.56 33.29 33.29 0 0 0 5.77.56q9.19 0 13.71-3.07a10.11 10.11 0 0 0 4.51-8.89 9.71 9.71 0 0 0-1.51-5.43 15.51 15.51 0 0 0-4.2-4.2 43.13 43.13 0 0 0-6.35-3.65q-3.65-1.76-7.82-3.65-4.47-2.4-8.34-4.85a35.52 35.52 0 0 1-6.71-5.43 22.47 22.47 0 0 1-4.48-6.71 21.79 21.79 0 0 1-1.63-8.77 20.28 20.28 0 0 1 2.79-10.77 23.65 23.65 0 0 1 7.36-7.54 33.67 33.67 0 0 1 10.4-4.42 49.38 49.38 0 0 1 11.9-1.44q13.8 0 20.12 3.13v14.41q-7.49-5.4-19.26-5.4a34.34 34.34 0 0 0-6.47.62 19.3 19.3 0 0 0-5.77 2 12.44 12.44 0 0 0-4.14 3.62 8.89 8.89 0 0 0-1.59 5.34 10.17 10.17 0 0 0 1.22 5.09 13.15 13.15 0 0 0 3.59 3.92 36.59 36.59 0 0 0 5.77 3.47c2.27 1.12 4.89 2.34 7.88 3.65q4.61 2.38 8.68 5a41 41 0 0 1 7.17 5.82 25.62 25.62 0 0 1 4.91 7.09 20.75 20.75 0 0 1 1.81 8.86 20.79 20.79 0 0 1-10 18.77 32.36 32.36 0 0 1-10.52 4.17 59.12 59.12 0 0 1-12.57 1.29 52.3 52.3 0 0 1-5.43-.34q-3.21-.33-6.59-1a61.4 61.4 0 0 1-6.38-1.56 20.5 20.5 0 0 1-4.82-2.05Z"></path>
+    </svg>
+    <span class="nav-logo-badge">V.MEME</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">🏠 Główna</a></li>
+    <li><a href="teachers.html">👨‍🏫 Nauczyciele</a></li>
+    <li><a href="schedule.html" class="active">📅 Plan Lekcji</a></li>
+    <li><a href="index.html#gallery">📸 Galeria</a></li>
+    <li><a href="index.html#hero" class="nav-cta">APLIKUJ 🔥</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="sched-hero">
+  <div class="hero-title-plan">
+    <span class="impact-outlined glitch" data-text="PLAN">PLAN</span><br>
+    <span class="impact-outlined rainbow">LEKCJI</span>
+  </div>
+  <p class="hero-subtitle-plan">
+    Klasa <em>3MD • Lublin</em> • Wychowawca: <em>PP (Paweł Powęzka, tak - WF-ista jest wychowawcą 💪)</em><br>
+    Ważność: <em>02.09.2026 – 25.06.2027</em> • Powodzenia żołnierzu. Naprawdę.
+  </p>
+  <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:1rem;position:relative;z-index:1;">
+    <a href="#" onclick="switchMode('meme');return false;" class="btn-meme btn-primary" style="font-size:1rem;padding:10px 24px;">🤣 Widok MEME</a>
+    <a href="#" onclick="switchMode('real');return false;" class="btn-meme btn-secondary" style="font-size:1rem;padding:10px 24px;">📋 Prawdziwy Plan</a>
+  </div>
+</div>
+
+<!-- LEGEND -->
+<div class="legend-bar">
+  <span style="font-size:0.75rem;color:rgba(255,255,255,0.4);font-family:'Bebas Neue',cursive;letter-spacing:1px;">POZIOM BÓLU:</span>
+  <div class="legend-item"><div class="legend-dot" style="background:rgba(57,255,20,0.4)"></div>Przyjemne</div>
+  <div class="legend-item"><div class="legend-dot" style="background:rgba(0,212,255,0.4)"></div>OK</div>
+  <div class="legend-item"><div class="legend-dot" style="background:rgba(255,229,0,0.4)"></div>Średnie</div>
+  <div class="legend-item"><div class="legend-dot" style="background:rgba(255,107,0,0.4)"></div>Trudne</div>
+  <div class="legend-item"><div class="legend-dot" style="background:rgba(255,0,110,0.4)"></div>MASAKRA</div>
+  <div class="legend-item"><div class="legend-dot" style="background:rgba(191,95,255,0.4)"></div>???</div>
+  <span style="font-size:0.7rem;color:rgba(255,255,255,0.2);font-style:italic;">* hover na lekcję aby zobaczyć komentarz eksperta</span>
+</div>
+
+<!-- MODE BAR -->
+<div class="mode-bar">
+  <button class="mode-btn active" onclick="switchMode('meme');this.closest('.mode-bar').querySelectorAll('.mode-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active')">🤣 Widok Meme</button>
+  <button class="mode-btn" onclick="switchMode('real');this.closest('.mode-bar').querySelectorAll('.mode-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active')">📋 Prawdziwy Plan (aSc)</button>
+  <div class="week-selector">
+    <button class="week-btn active" onclick="setWeek(this,'02.09')">02.09 (now)</button>
+    <button class="week-btn" onclick="setWeek(this,'09.09')">09.09</button>
+    <button class="week-btn" onclick="setWeek(this,'16.09')">16.09</button>
+    <button class="week-btn" onclick="setWeek(this,'losowy')">🎲 Losowy</button>
+  </div>
+</div>
+
+<!-- SCHEDULE SECTION -->
+<section class="schedule-section">
+  <div class="schedule-wrap">
+
+    <!-- PANIC METERS -->
+    <div class="panic-wrap">
+      <div>
+        <div class="panic-title">📊 STATYSTYKI TYGODNIA</div>
+        <div style="font-size:0.7rem;color:rgba(255,255,255,0.3);font-style:italic;">na podstawie danych historycznych i przeczucia</div>
+      </div>
+      <div class="panic-meters">
+        <div class="panic-meter">
+          <div class="panic-label">☕ Potrzebne kawy</div>
+          <div class="panic-bar-wrap"><div class="panic-fill" style="width:87%;background:linear-gradient(90deg,#FF6B00,#FF006E)"></div></div>
+          <div class="panic-val">8.7 / dzień</div>
+        </div>
+        <div class="panic-meter">
+          <div class="panic-label">😤 Poziom stresu</div>
+          <div class="panic-bar-wrap"><div class="panic-fill" style="width:73%;background:linear-gradient(90deg,#FFE500,#FF006E)"></div></div>
+          <div class="panic-val">73% (poniedziałek: 420%)</div>
+        </div>
+        <div class="panic-meter">
+          <div class="panic-label">💻 Godzin przy komp.</div>
+          <div class="panic-bar-wrap"><div class="panic-fill" style="width:95%;background:linear-gradient(90deg,#00D4FF,#39FF14)"></div></div>
+          <div class="panic-val">~9.5h / dzień</div>
+        </div>
+        <div class="panic-meter">
+          <div class="panic-label">🧠 Wytrzymałość mózgu</div>
+          <div class="panic-bar-wrap"><div class="panic-fill" style="width:42%;background:linear-gradient(90deg,#39FF14,#FFE500)"></div></div>
+          <div class="panic-val">42% (piątek: 0%)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAY SUMMARY BADGES -->
+    <div class="day-badges">
+      <div class="day-badge"><div class="day-badge-emoji">😩</div><div class="day-badge-name">PONIEDZIAŁEK</div><div class="day-badge-pain">Ból: ████████░░ | "dlaczego ja tu jestem"</div></div>
+      <div class="day-badge"><div class="day-badge-emoji">😐</div><div class="day-badge-name">WTOREK</div><div class="day-badge-pain">Ból: ██████░░░░ | "jest do zniesienia"</div></div>
+      <div class="day-badge"><div class="day-badge-emoji">🙂</div><div class="day-badge-name">ŚRODA</div><div class="day-badge-pain">Ból: █████░░░░░ | "połowa, żyję"</div></div>
+      <div class="day-badge"><div class="day-badge-emoji">😤</div><div class="day-badge-name">CZWARTEK</div><div class="day-badge-pain">Ból: ███████░░░ | "już prawie piątek"</div></div>
+      <div class="day-badge"><div class="day-badge-emoji">🎉</div><div class="day-badge-name">PIĄTEK</div><div class="day-badge-pain">Ból: ██░░░░░░░░ | "WOLNOŚĆ (za 8h)"</div></div>
+    </div>
+
+    <!-- MEME TIMETABLE VIEW -->
+    <div id="timetable-view">
+      <div style="overflow-x:auto;">
+        <table class="timetable" id="mainTable">
+          <thead>
+            <tr>
+              <th class="time-col">⏰ LEKCJA</th>
+              <th>😩 PONIEDZIAŁEK</th>
+              <th>😐 WTOREK</th>
+              <th>🙂 ŚRODA</th>
+              <th>😤 CZWARTEK</th>
+              <th>🎉 PIĄTEK</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+      <p style="text-align:center;font-size:0.65rem;color:rgba(255,255,255,0.2);margin-top:1rem;font-style:italic;">
+        * Plan jest fikcyjny i humorystyczny. Prawdziwy plan znajdziesz klikając "Prawdziwy Plan (aSc)" powyżej.
+        Wychowawca klasy 3MD: PP. Powodzenia.
+      </p>
+    </div>
+
+    <!-- IFRAME VIEW -->
+    <div id="iframe-view">
+      <div style="text-align:center;margin-bottom:1rem;">
+        <p style="color:rgba(255,255,255,0.5);font-size:0.85rem;">🔄 Ładowanie prawdziwego planu z systemu aSc EduPage...<br>
+        <span style="font-size:0.7rem;color:rgba(255,255,255,0.3);">Jeśli nie załaduje - <a href="./plan/Plan lekcji _ Niepubliczne Technikum Programistyczne Techni Schools w Lublinie, Lublin, ul. Narutowicza 55 B.html" target="_blank" style="color:var(--yellow)">otwórz w nowej karcie 🔗</a></span>
+        </p>
+      </div>
+      <div class="iframe-wrap">
+        <div class="iframe-badge">📋 PRAWDZIWY PLAN LEKCJI</div>
+        <iframe id="planIframe" title="Plan lekcji Techni Schools Lublin" loading="lazy"></iframe>
+      </div>
+      <div style="text-align:center;margin-top:1rem;">
+        <a href="./plan/Plan lekcji _ Niepubliczne Technikum Programistyczne Techni Schools w Lublinie, Lublin, ul. Narutowicza 55 B.html" target="_blank" class="btn-meme btn-secondary" style="display:inline-block;font-size:0.9rem;padding:10px 24px;">
+          🔗 Otwórz Plan w Nowej Karcie
+        </a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SURVIVAL GUIDE -->
+<section class="survival-section">
+  <div class="container">
+    <h2 class="section-title glow-yellow">SURVIVAL GUIDE 📖</h2>
+    <p class="section-subtitle">nieoficjalny poradnik przeżycia tygodnia w Techni Schools</p>
+    <div class="survival-grid">
+      <div class="survival-card" style="--sc:#39FF14">
+        <span class="survival-icon">☕</span>
+        <div class="survival-title">KAWA TO OBOWIĄZEK</div>
+        <div class="survival-text">Minimum 2 kawy przed 9:00. Matematyka o 8:00 bez kofeiny to przestępstwo przeciwko prawom człowieka. Energetyk opcjonalnie.</div>
+      </div>
+      <div class="survival-card" style="--sc:#FF006E">
+        <span class="survival-icon">💻</span>
+        <div class="survival-title">LAPTOP ZAWSZE NAŁADOWANY</div>
+        <div class="survival-text">Zapomniałeś ładowarki? Gratulacje, właśnie stworzyłeś problem, który rozwiążesz tylko przez pożyczenie od kogoś kto też zapomniał.</div>
+      </div>
+      <div class="survival-card" style="--sc:#00D4FF">
+        <span class="survival-icon">📝</span>
+        <div class="survival-title">RÓB NOTATKI (MOŻE)</div>
+        <div class="survival-text">Albo nie. ChatGPT i tak to wie. Ale wiesz co? Napisz coś żeby nauczyciel myślał że słuchasz. Zdjęcie tablicy też jest OK.</div>
+      </div>
+      <div class="survival-card" style="--sc:#FFE500">
+        <span class="survival-icon">🍕</span>
+        <div class="survival-title">PRZERWA OBIADOWA</div>
+        <div class="survival-text">10 minut to za mało na normalny obiad, ale wystarczy na zjedzenie batonika i zastanowienie się nad sensem istnienia. Priorytetuj mądrze.</div>
+      </div>
+      <div class="survival-card" style="--sc:#BF5FFF">
+        <span class="survival-icon">🤝</span>
+        <div class="survival-title">PRZYJACIEL OD MATEMATYKI</div>
+        <div class="survival-text">Znajdź jedną osobę w klasie która ogarnia całkowanie. Traktuj ją jak skarb. Zaproś ją na obiad. Zrób co chcesz ale trzymaj ją blisko.</div>
+      </div>
+      <div class="survival-card" style="--sc:#FF6B00">
+        <span class="survival-icon">🐛</span>
+        <div class="survival-title">KOD NA LEKCJĘ</div>
+        <div class="survival-text">Zrób to wieczór wcześniej. Jeśli nie - zrób to 5 minut przed. Jeśli nie możesz - "działa na moim komputerze" to oficjalne rozwiązanie.</div>
+      </div>
+      <div class="survival-card" style="--sc:#39FF14">
+        <span class="survival-icon">😴</span>
+        <div class="survival-title">SEN JEST OVERRATED</div>
+        <div class="survival-text">Programiści nie śpią. Śpią tylko ci którzy nie mają deadline'u. Ty zawsze masz deadline. Statystycznie 3 jednocześnie. Dobranoc.</div>
+      </div>
+      <div class="survival-card" style="--sc:#FF006E">
+        <span class="survival-icon">💪</span>
+        <div class="survival-title">WF NIE JEST OPCJONALNE</div>
+        <div class="survival-text">Pan Powęzka wie. PAN POWĘZKA ZAWSZE WIE. Przyjdź, rób pompki, nie narzekaj. I tak jest lepszy niż pisanie dokumentacji do projektu.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section style="background:var(--dark);padding:3rem 2rem;text-align:center;">
+  <h2 class="section-title rainbow">PRZEŻYJESZ 💪</h2>
+  <p style="color:rgba(255,255,255,0.5);margin-bottom:2rem;font-size:0.9rem;">Plan może wyglądać strasznie. Ale absolwenci żyją. Większość.<br>I zarabiają dobrze. Podobno. Ufaj procesowi.</p>
+  <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+    <a href="index.html" class="btn-meme btn-primary" style="display:inline-block;">🏠 Wróć do Głównej</a>
+    <a href="teachers.html" class="btn-meme btn-secondary" style="display:inline-block;">👨‍🏫 Poznaj Nauczycieli</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="meme-footer">
+  <div style="font-size:2rem;margin-bottom:1rem;">📅</div>
+  <div style="font-family:'Bebas Neue',cursive;font-size:1.5rem;color:var(--yellow);letter-spacing:3px;">TECHNI SCHOOLS</div>
+  <div style="font-size:0.7rem;color:rgba(255,255,255,0.3);margin:0.5rem 0 1.5rem;">Warszawa • Lublin • Wrocław</div>
+  <div class="footer-links">
+    <a href="index.html">🏠 Główna</a>
+    <a href="teachers.html">👨‍🏫 Nauczyciele</a>
+    <a href="schedule.html">📅 Plan Lekcji</a>
+    <a href="https://technischools.com" target="_blank">🔗 Prawdziwa Strona</a>
+  </div>
+  <p>© 2025/2026 Techni Schools Meme Edition | Plan ważny do 25.06.2027 (dasz radę)</p>
+</footer>
+
+<!-- MEME POPUP -->
+<div class="meme-popup" id="memePopup">
+  <button class="popup-close" onclick="document.getElementById('memePopup').classList.remove('visible')">✕</button>
+  <div style="font-size:1.5rem;margin-bottom:0.5rem;" id="popupEmoji">⏰</div>
+  <div style="font-family:'Bebas Neue',cursive;font-size:1.1rem;color:var(--yellow);margin-bottom:0.3rem;" id="popupTitle">PRZYPOMNIENIE!</div>
+  <div style="font-size:0.8rem;color:rgba(255,255,255,0.7);" id="popupText">Jutro masz matematykę o 8:00. Nie zapomnij kawy.</div>
+</div>
+
+<script>
+// ===== TIMETABLE DATA =====
+// pain: 0=relax, 1=ok, 2=medium, 3=hard, 4=brutal, 5=unknown
+const HOURS = [
+  { num: '0', time: '7:10\n7:55' },
+  { num: '1', time: '8:00\n8:45' },
+  { num: '2', time: '8:50\n9:35' },
+  { num: '3', time: '9:40\n10:25' },
+  { num: '4', time: '10:30\n11:15' },
+  { num: '5', time: '11:20\n12:05' },
+  { num: '6', time: '12:10\n12:55' },
+  { num: '7', time: '13:00\n13:45' },
+  { num: '8', time: '13:50\n14:35' },
+];
+
+// [subject, teacher, room, pain, emoji, meme_tip, full_teacher_name]
+const NULL = null;
+const SCHED = [
+  // Godz 0 (7:10)
+  [ NULL, NULL, NULL, NULL, NULL ],
+  // Godz 1 (8:00)
+  [
+    ['Matematyka','PB','A201',4,'🔢','8 rano matematyka. Ktoś to zaplanował. I nie spiął się. Cud.','Piotr Brodzik'],
+    ['Programowanie','PN','Lab1',3,'💻','print("dzień dobry") i masz obecność? Nie. Nie masz.','Paweł Nowak'],
+    ['Angielski','KK','A103',2,'🇬🇧','Good morning! Your homework was due yesterday fr fr','Karol Piekut'],
+    ['Algorytmy','KR','Lab2',4,'🔄','O(n²) o 8 rano to przestępstwo algorytmiczne','Kamil Rolek'],
+    ['Język Polski','BZS','B201',3,'📚','Mickiewicz o 8:00. Przeżyjesz. (może)','Beata Zatorska-Słoboda'],
+  ],
+  // Godz 2 (8:50)
+  [
+    ['Fizyka','NM','A301',3,'⚡','F=ma. Twoja wola do życia = 0. Oblicz przyspieszenie.','Nauczyciel Fizyki'],
+    ['Matematyka','PB','A201',4,'🔢','Znowu. Drugi raz. Dzisiaj. PB po prostu tak ma.','Piotr Brodzik'],
+    ['Programowanie','PN','Lab1',2,'💻','Tu już wiesz co robisz (mniej więcej)','Paweł Nowak'],
+    ['Angielski','KK','A103',2,'🇬🇧','Vocabulary test. Learn these 50 words. All of them.','Karol Piekut'],
+    ['WF','PP','Sala Gym',1,'💪','Jedyna lekcja gdzie nie siedzisz. Doceniaj PP.','Paweł Powęzka'],
+  ],
+  // Godz 3 (9:40)
+  [
+    ['Programowanie','PN','Lab1',2,'💻','Teraz już coś działa. Nie wiesz dlaczego. Zostaw.','Paweł Nowak'],
+    ['Fizyka','NM','A301',3,'⚡','Grawitacja to nie metafora. To egzamin.','Nauczyciel Fizyki'],
+    ['Matematyka','PB','A201',4,'🔢','Środa to "mały poniedziałek" mówią. PB nie zna tego pojęcia.','Piotr Brodzik'],
+    ['Bazy Danych','EK','Lab3',3,'🗃️','SELECT * FROM mozg WHERE obudzony = 1 -- empty set','Ewa Kozłowska'],
+    ['Angielski','KK','A103',1,'🇬🇧','Ostatnia angielski w tygodniu. Powodzenia z gramatyką.','Karol Piekut'],
+  ],
+  // Przerwa obiadowa
+  [ 'BREAK','BREAK','BREAK','BREAK','BREAK' ],
+  // Godz 4 (10:30)
+  [
+    ['Chemia','AK','Lab Chem',3,'⚗️','NaCl + H₂O = łzy ucznia. Katalizator: brak snu','Agnieszka Kierys'],
+    ['Cyberbezp.','MK_CS','Lab4',2,'🔒','Etyczny hacking. Etyczny. Pamiętaj o tym słowie.','Marcin Stefanowicz'],
+    ['Angielski','KK','A103',1,'🇬🇧','Pop quiz! Don\'t panic. (Panic a little.)','Karol Piekut'],
+    ['Programowanie','AT','Lab1',2,'💻','Aplikacja mobilna. Działa na Androidzie. Na iOS? Płaczesz.','Artur Ciszewski'],
+    ['Matematyka','PB','A201',5,'🔢','PIĄTKOWA MATEMATYKA. DLACZEGO. KTO TO ZROBIŁ.','Piotr Brodzik'],
+  ],
+  // Godz 5 (11:20)
+  [
+    ['WF','PP','Sala Gym',0,'💪','PP nie przyjmuje usprawiedliwień. PP też nie rozumie "mój kod się nie kompiluje"','Paweł Powęzka'],
+    ['Chemia','AK','Lab Chem',3,'⚗️','Eksperyment. Coś wybuchło. To planuję.','Agnieszka Kierys'],
+    ['Cyberbezp.','MS','Lab4',2,'🔒','VPN włączony? Dobra. A po co? Też dobra.','Marcin Stefanowicz'],
+    ['Fizyka','NM','A301',3,'⚡','Elektromagnetyzm jest wszędzie. Nawet tu. Teraz.','Nauczyciel Fizyki'],
+    ['Data Science','JS','Lab5',1,'📊','Python + pandas = miłość. Albo frustracja. Jedno i drugie.','Jakub Sawulski'],
+  ],
+  // Godz 6 (12:10)
+  [
+    ['Algorytmy','KR','Lab2',4,'🔄','Sortowanie bąbelkowe to jak nauka języka polskiego: powolne i bolesne','Kamil Rolek'],
+    ['WF','PP','Sala Gym',0,'💪','Drugi WF? Pan Powęzka mówi że masz za dużo energii. Nie masz.','Paweł Powęzka'],
+    ['Bazy Danych','EK','Lab3',2,'🗃️','JOIN to ból. Ale piękny ból. Jak każda relacja.','Ewa Kozłowska'],
+    ['Filozofia','MK','B301',5,'🧠','Czwartkowa filozofia. "Czy program który nie działa istnieje?"','Monika Krzykała'],
+    [ NULL ],
+  ],
+  // Godz 7 (13:00)
+  [
+    ['Język Polski','BZS','B201',3,'📚','Lektury. Tak. Na jutro. Wszystkie. Serio.','Beata Zatorska-Słoboda'],
+    ['Algorytmy','KR','Lab2',4,'🔄','Koniec dnia algorytmy. Złożoność obliczeniowa = twoja złożoność emocjonalna.','Kamil Rolek'],
+    [ NULL ],
+    ['DevOps','DW','Lab4',3,'🚢','CI/CD pipeline setup. Działa lokalnie. Na serwerze? Heh.','Dariusz Wardecki'],
+    [ NULL ],
+  ],
+  // Godz 8 (13:50)
+  [
+    [ NULL ],
+    ['Systemy Wbudowane','ST','Lab HW',3,'🤖','Arduino i prąd. Nie dotykaj czerwonego kabla. JESZCZE RAZ.','Sebastian Tyda'],
+    ['Proj. Oprogramowania','KZ','Lab2',2,'📐','UML diagram który wygląda jak twoje życie: skomplikowany i nieczytelny','Kamil Zieliński'],
+    [ NULL ],
+    [ NULL ],
+  ],
+];
+
+// Build table
+function buildTable() {
+  const tbody = document.getElementById('tableBody');
+  tbody.innerHTML = '';
+  const days = ['pon','wt','sr','czw','pt'];
+
+  HOURS.forEach((hour, hi) => {
+    const row = document.createElement('tr');
+    // check if break row
+    const rowData = SCHED[hi];
+    if (rowData && rowData[0] === 'BREAK') {
+      row.classList.add('break-row');
+      row.innerHTML = `<td colspan="6"><div class="break-label">🍔 PRZERWA OBIADOWA (10 min. Tyle. Nie marudź.) 🍔</div></td>`;
+      tbody.appendChild(row);
+      return;
+    }
+
+    // Time cell
+    const timeTd = document.createElement('td');
+    timeTd.className = 'time-td';
+    timeTd.innerHTML = `<div class="lesson-num">${hour.num}</div><div class="time-label">${hour.time.replace('\n','<br>')}</div>`;
+    row.appendChild(timeTd);
+
+    // Day cells
+    for (let d = 0; d < 5; d++) {
+      const td = document.createElement('td');
+      const lesson = rowData ? rowData[d] : null;
+      if (!lesson || lesson === null || (Array.isArray(lesson) && lesson[0] === null)) {
+        td.className = 'empty-cell';
+        td.innerHTML = '<div style="height:100%;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.06);font-size:1.5rem;">—</div>';
+      } else {
+        const [subj, teacher, room, pain, emoji, meme, fullTeacher] = lesson;
+        td.innerHTML = `
+          <div class="lesson pain-${pain}"
+            data-subj="${subj}" data-teacher="${fullTeacher || teacher}"
+            data-room="${room}" data-meme="${meme}" data-emoji="${emoji}">
+            <span class="lesson-emoji">${emoji}</span>
+            <div class="lesson-name">${subj}</div>
+            <div class="lesson-teacher">${teacher} • ${room}</div>
+            <div class="lesson-meme">"${meme}"</div>
+          </div>`;
+      }
+      row.appendChild(td);
+    }
+    tbody.appendChild(row);
+  });
+
+  // Add tooltip events
+  const tooltip = document.getElementById('tooltip');
+  document.querySelectorAll('.lesson').forEach(el => {
+    el.addEventListener('mousemove', e => {
+      tooltip.querySelector('#tt-name').textContent = el.dataset.emoji + ' ' + el.dataset.subj;
+      tooltip.querySelector('#tt-body').innerHTML =
+        `👨‍🏫 <b>${el.dataset.teacher}</b> • 🏫 Sala ${el.dataset.room}`;
+      tooltip.querySelector('#tt-meme').textContent = '"' + el.dataset.meme + '"';
+      tooltip.style.left = Math.min(e.clientX + 15, window.innerWidth - 300) + 'px';
+      tooltip.style.top = Math.min(e.clientY + 15, window.innerHeight - 150) + 'px';
+      tooltip.classList.add('show');
+    });
+    el.addEventListener('mouseleave', () => tooltip.classList.remove('show'));
+  });
+}
+buildTable();
+
+// ===== MODE SWITCH =====
+function switchMode(mode) {
+  const tv = document.getElementById('timetable-view');
+  const iv = document.getElementById('iframe-view');
+  document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+  if (mode === 'meme') {
+    tv.style.display = 'block';
+    iv.style.display = 'none';
+    document.querySelectorAll('.mode-btn')[0].classList.add('active');
+  } else {
+    tv.style.display = 'none';
+    iv.style.display = 'block';
+    document.querySelectorAll('.mode-btn')[1].classList.add('active');
+    const iframe = document.getElementById('planIframe');
+    if (!iframe.src) {
+      // Try to load the plan file
+      iframe.src = './plan/Plan\u00a0lekcji _ Niepubliczne Technikum Programistyczne Techni Schools w Lublinie, Lublin, ul. Narutowicza 55 B.html';
+    }
+  }
+}
+
+// ===== WEEK BUTTONS (fake but fun) =====
+const weekMessages = {
+  '02.09': ['Pierwszy tydzień. Nauczyciele są mili. To nie potrwa.', '🌸'],
+  '09.09': ['Drugi tydzień. Pierwszy kartkówka. Powodzenia.', '📝'],
+  '16.09': ['Trzeci tydzień. Rutyna wchodzi. Ból normalizuje się.', '😐'],
+  'losowy': ['Randomowy tydzień. Równie bolesny jak inne.', '🎲'],
+};
+function setWeek(btn, week) {
+  document.querySelectorAll('.week-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const msg = weekMessages[week] || ['Ten tydzień. Jak zawsze.', '📅'];
+  showPopupMsg(msg[1], 'TYDZIEŃ ' + week.toUpperCase(), msg[0]);
+}
+
+// ===== POPUPS =====
+const popupMsgs = [
+  {e:'⏰', t:'JUTRO O 8:00', m:'Matematyka. Kawa obowiązkowa. Piotr Brodzik nie czeka.'},
+  {e:'💀', t:'PRZYPOMNIENIE:', m:'Masz project deadline w piątek. Tak. Ten piątek. Nie tamten.'},
+  {e:'☕', t:'PRO TIP:', m:'Hover na lekcję aby zobaczyć komentarz eksperta od bólu szkolnego.'},
+  {e:'🔒', t:'CYBERBEZP. FACT:', m:'Twoje hasło "haslo123" zostało już złamane 17 razy. Marcin wie.'},
+  {e:'💪', t:'PAN POWĘZKA MÓWI:', m:'"50 pompek dzisiaj. Nie pytaj dlaczego. Rób."'},
+];
+let pi2 = 0;
+function showPopupMsg(e, t, m) {
+  document.getElementById('popupEmoji').textContent = e;
+  document.getElementById('popupTitle').textContent = t;
+  document.getElementById('popupText').textContent = m;
+  const pop = document.getElementById('memePopup');
+  pop.classList.remove('visible'); void pop.offsetWidth;
+  pop.classList.add('visible');
+  setTimeout(() => pop.classList.remove('visible'), 7000);
+}
+setTimeout(() => {
+  const p = popupMsgs[pi2++ % popupMsgs.length];
+  showPopupMsg(p.e, p.t, p.m);
+}, 10000);
+setInterval(() => {
+  const p = popupMsgs[pi2++ % popupMsgs.length];
+  showPopupMsg(p.e, p.t, p.m);
+}, 40000);
+
+// ===== CURSOR =====
+const cursor = document.getElementById('cursor');
+const cEmojis = ['📅','⏰','💻','📚','☕','💀','🔥','⚡'];
+let cei = 0;
+const trailE = ['✨','⭐','💫','🌟'];
+document.addEventListener('mousemove', e => {
+  cursor.style.left = e.clientX + 'px';
+  cursor.style.top = e.clientY + 'px';
+  if (Math.random() < 0.1) {
+    const t = document.createElement('div');
+    t.className = 'cursor-trail';
+    t.style.cssText = `left:${e.clientX}px;top:${e.clientY}px;transform:translate(-50%,-50%)`;
+    t.textContent = trailE[Math.floor(Math.random() * trailE.length)];
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 800);
+  }
+});
+document.addEventListener('click', () => {
+  cei = (cei + 1) % cEmojis.length;
+  cursor.textContent = cEmojis[cei];
+});
+
+// ===== EMOJI RAIN =====
+const rainE = ['📅','💻','📚','☕','🐛','⚡','🔢'];
+setInterval(() => {
+  const e = document.createElement('div');
+  e.className = 'emoji-rain';
+  e.textContent = rainE[Math.floor(Math.random() * rainE.length)];
+  e.style.left = Math.random() * 100 + 'vw';
+  e.style.animationDuration = (Math.random() * 3 + 5) + 's';
+  document.body.appendChild(e);
+  setTimeout(() => e.remove(), 9000);
+}, 1500);
+</script>
+</body>
+</html>
