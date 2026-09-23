@@ -1,9 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Press+Start+2P&display=swap');
+@import url('fonts/AppleColorEmoji.css');
 
 /* ===== RESET & BASE ===== */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
+  --font-emoji: "Apple Color Emoji", -apple-system, BlinkMacSystemFont, "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", sans-serif;
   --yellow: #FFE500;
   --pink: #FF006E;
   --blue: #00D4FF;
@@ -22,7 +24,7 @@
 html { scroll-behavior: smooth; }
 
 body {
-  font-family: 'Comic Sans MS', 'Comic Sans', cursive;
+  font-family: 'Comic Sans MS', 'Comic Sans', 'Apple Color Emoji', -apple-system, BlinkMacSystemFont, 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji', cursive, sans-serif;
   background-color: var(--dark);
   color: var(--white);
   overflow-x: hidden;
@@ -71,7 +73,7 @@ body {
 .ticker-content {
   display: inline-block;
   animation: tickerScroll 30s linear infinite;
-  font-family: 'Press Start 2P', cursive;
+  font-family: 'Press Start 2P', 'Apple Color Emoji', cursive, sans-serif;
   font-size: 10px;
   color: #000;
   font-weight: 900;
@@ -115,7 +117,7 @@ body {
 .nav-logo-badge {
   background: var(--pink);
   color: white;
-  font-family: 'Press Start 2P', cursive;
+  font-family: 'Press Start 2P', 'Apple Color Emoji', cursive, sans-serif;
   font-size: 7px;
   padding: 3px 6px;
   border-radius: 4px;
@@ -134,7 +136,7 @@ body {
 .nav-links a {
   color: var(--white);
   text-decoration: none;
-  font-family: 'Comic Sans MS', cursive;
+  font-family: 'Comic Sans MS', 'Apple Color Emoji', cursive, sans-serif;
   font-size: 0.85rem;
   transition: all 0.2s;
   position: relative;
@@ -152,7 +154,7 @@ body {
   padding: 8px 18px;
   border-radius: 8px;
   font-weight: bold;
-  font-family: 'Bebas Neue', cursive !important;
+  font-family: 'Bebas Neue', 'Apple Color Emoji', cursive, sans-serif !important;
   font-size: 1rem !important;
   letter-spacing: 1px;
   transition: all 0.3s !important;
@@ -165,12 +167,12 @@ body {
 
 /* ===== IMPACT TEXT (classic meme style) ===== */
 .impact {
-  font-family: Impact, 'Bebas Neue', 'Arial Black', sans-serif;
+  font-family: Impact, 'Bebas Neue', 'Arial Black', 'Apple Color Emoji', sans-serif;
   text-transform: uppercase;
   letter-spacing: 2px;
 }
 .impact-outlined {
-  font-family: Impact, 'Bebas Neue', 'Arial Black', sans-serif;
+  font-family: Impact, 'Bebas Neue', 'Arial Black', 'Apple Color Emoji', sans-serif;
   text-transform: uppercase;
   color: white;
   -webkit-text-stroke: 3px black;
@@ -180,7 +182,7 @@ body {
 
 /* ===== SECTION STYLES ===== */
 .section-title {
-  font-family: 'Bebas Neue', Impact, cursive;
+  font-family: 'Bebas Neue', Impact, 'Apple Color Emoji', cursive, sans-serif;
   font-size: clamp(2.5rem, 5vw, 4rem);
   letter-spacing: 3px;
   text-align: center;
